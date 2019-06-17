@@ -5,13 +5,14 @@ import org.json.JSONObject;
 import util.DatabaseHelper;
 import util.MD5Util;
 import util.QueryBuilder;
-
 import java.io.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.management.Query;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import java.util.regex.*;
 
 /**
  * Created by silenus on 2019/4/29.
@@ -19,6 +20,8 @@ import javax.servlet.http.*;
 @WebServlet("/AccountAction")
 public class AccountAction extends HttpServlet
 {
+    private static QueryBuilder queryBuilder = new QueryBuilder("userinfo");
+
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
@@ -52,90 +55,67 @@ public class AccountAction extends HttpServlet
     private void login(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
         System.out.println("enter AccountAction.login");
 
-        request.setCharacterEncoding("UTF-8");
-        String username = request.getParameter("username");
-        String password = request.getParameter("password");
-
         HttpSession session = request.getSession();
         session.removeAttribute("guid");
         session.removeAttribute("username");
         session.removeAttribute("login_time");
+        session.removeAttribute("authorization");
         session.removeAttribute("check");
 
-        boolean success=true;
-        if(username==null || password==null || password.length()<4)
+        request.setCharacterEncoding("UTF-8");
+        String email = request.getParameter("email");
+        session.setAttribute("email", email);
+        String password = request.getParameter("password");
+
+        if(email==null || password==null || email.length()==0 || password.length()==0)
         {
-            success=false;
+            session.setAttribute("login_errno", 1);
+            session.setAttribute("login_msg", "邮箱或密码不能为空");
+            response.sendRedirect("login.jsp");
+            return;
         }
-        for(int i=0; i<username.length() && success; i++)
+        if(!Pattern.matches("[_0-9A-Za-z]+@[_0-9A-Za-z]+(\\.com)?", email))
         {
-            char ch=username.charAt(i);
-            if(!('A'<=ch && ch<='Z' || 'a'<=ch && ch<='z' || '0'<=ch && ch<='9' || ch=='_'))
-            {
-                success=false;
-            }
+            session.setAttribute("login_errno", 2);
+            session.setAttribute("login_msg", "邮箱格式不正确");
+            response.sendRedirect("login.jsp");
+            return;
         }
 
         ResultSet rs=null;
-        if(success)
-        {
-            password = MD5Util.MD5(password);
-
-            DatabaseHelper db = new DatabaseHelper();
-            String sql = String.format("select * from `userinfo` " +
-                            "where `username`='%s' and `password`='%s'",
-                    username, password);
-            rs = db.executeQuery(sql);
-            if(!rs.next()) {
-                success = false;
-            }
+        password = MD5Util.MD5(password);
+        queryBuilder.clear();
+        queryBuilder.setEmail(email);
+        queryBuilder.setPassword(password);
+        DatabaseHelper db = new DatabaseHelper();
+        String sql=queryBuilder.getSelectStmt();
+        rs = db.executeQuery(sql);
+        if(!rs.next()) {
+            session.setAttribute("login_errno", 3);
+            session.setAttribute("login_msg", "邮箱或密码错误");
+            response.sendRedirect("login.jsp");
+            return;
         }
 
-        if(success)
-        {
-            int guid = rs.getInt("guid");
-            int auth = rs.getInt("authorization");
-
-            /**
-             * WARNING
-             */
-            // 辛大师的代码混进来了
-            session.setAttribute("user_id", String.valueOf(guid));
-            session.setAttribute("user_name", username);
-            // emmmmmm
-
-            session.setAttribute("guid", guid);
-            session.setAttribute("username", username);
-            session.setAttribute("authorization", auth);
-            session.setAttribute("login_time", System.currentTimeMillis());
-            session.setAttribute("check", (long)1); // reserved
-            response.sendRedirect("templates/admin/index.jsp");
-        }
-        else
-        {
-            session.setAttribute("username", username);
-            response.sendRedirect("templates/admin/login.jsp");
-        }
+        session.setAttribute("guid", rs.getInt("guid"));
+        session.setAttribute("username", rs.getString("username"));
+        session.setAttribute("authorization", rs.getInt("authorization"));
+        session.setAttribute("login_time", System.currentTimeMillis());
+        session.setAttribute("check", (long)1); // reserved
+        session.setAttribute("login_errno", 0);
+        response.sendRedirect("index.jsp");
     }
 
     private void logout(HttpServletRequest request, HttpServletResponse response) throws SQLException, IOException, ServletException {
         System.out.println("enter AccountAction.logout");
         HttpSession session = request.getSession();
 
-        /**
-         * WARNING
-         */
-        // 辛大师的代码混进来了
-        session.removeAttribute("user_id");
-        session.removeAttribute("user_name");
-        // emmmmmm
-
         session.removeAttribute("guid");
         session.removeAttribute("username");
         session.removeAttribute("login_time");
         session.removeAttribute("authorization");
         session.removeAttribute("check");
-        response.sendRedirect("templates/admin/login.jsp");
+        response.sendRedirect("login.jsp");
     }
 
     private void register(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, ServletException, SQLException {
@@ -155,8 +135,8 @@ public class AccountAction extends HttpServlet
         JSONObject res = new JSONObject();
         if (password == null || password.length() == 0)
         {
-            res.put("errno", 1);
-            res.put("msg", "密码不能为空");
+            res.put("register_errno", 1);
+            res.put("register_msg", "密码不能为空");
         }
         else {
             DatabaseHelper db = new DatabaseHelper();
@@ -164,8 +144,8 @@ public class AccountAction extends HttpServlet
             ResultSet rs=db.executeQuery(sql);
             if(rs.next())
             {
-                res.put("errno", 1);
-                res.put("msg", String.format("邮箱'%s'已经注册", q.getEmail()));
+                res.put("register_errno", 2);
+                res.put("register_msg", String.format("邮箱\"%s\"已经注册", q.getEmail()));
             }
             else {
                 password = MD5Util.MD5(password);
@@ -173,7 +153,7 @@ public class AccountAction extends HttpServlet
                 sql = q.getInsertStmt();
                 System.out.println(sql);
                 db.execute(sql);
-                res.put("errno", 0);
+                res.put("register_errno", 0);
             }
         }
         response.setContentType("application/json; charset=UTF-8");

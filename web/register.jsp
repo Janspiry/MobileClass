@@ -23,7 +23,9 @@
 
     <link href="css/style.css" rel="stylesheet">
     <style>
-
+        .form-group select option{
+            color:black;
+        }
     </style>
 </head>
 
@@ -67,7 +69,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label>性别</label>
-                                    <input name="gender" type="text" class="form-control" placeholder="Gender">
+                                        <select class="form-control" name="gender">
+                                            <option value="0">-- Gender --</option>
+                                            <option value="1">男</option>
+                                            <option value="2">女</option>
+                                        </select>
                                 </div>
                                 <div class="form-group">
                                     <label>学号</label>
@@ -82,7 +88,7 @@
                                         <input name="tnc" type="checkbox"> 同意xxx条款
                                     </label>
                                 </div>
-                                <button id="register-btn" type="button" class="btn btn-primary btn-flat m-b-30 m-t-30">提交</button>
+                                <button id="register-btn" type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">提交</button>
                                 <div class="register-link m-t-15 text-center">
                                     <p>已经有账号？<a href="login.jsp"> 点这里登录</a></p>
                                 </div>

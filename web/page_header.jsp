@@ -129,13 +129,9 @@
                     <div class="dropdown-menu dropdown-menu-right animated slideInRight">
                         <ul class="dropdown-user">
                             <li role="separator" class="divider"></li>
-                            <li><a href="#"> Profile</a></li>
-                            <li><a href="#"> Balance</a></li>
-                            <li><a href="#"> Inbox</a></li>
+                            <li><a href="<%=request.getContextPath()%>/indiv/index.jsp"> 个人信息</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#"> Setting</a></li>
-                            <li role="separator" class="divider"></li>
-                            <li><a href="#"> Logout</a></li>
+                            <li><a href="<%=request.getContextPath()%>/AccountAction?action=logout"> 退出登录</a></li>
                         </ul>
                     </div>
                 </li>

@@ -164,9 +164,9 @@ public class QueryBuilder {
                 case '%':
                     esc.append("\\%");
                     break;
-                case '_':
-                    esc.append("\\_");
-                    break;
+//                case '_':
+//                    esc.append("\\_");
+//                    break;
                 default:
                     esc.append(ch);
                     break;

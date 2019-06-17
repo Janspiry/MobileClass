@@ -6,6 +6,18 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<script type="text/javascript">
+    var flag=<%=session.getAttribute("login_errno")!=null && ((int)session.getAttribute("login_errno"))!=0%>;
+    console.log(flag);
+    if(flag)
+    {
+        alert("<%=session.getAttribute("login_msg")%>");
+    }
+</script>
+<%
+    String email=session.getAttribute("email")==null ? "" : (String)session.getAttribute("email");
+    session.setAttribute("login_errno", 0);
+%>
 <!DOCTYPE html>
 <html>
 
@@ -36,15 +48,15 @@
                     <div class="login-content card">
                         <div class="login-form">
                             <h4>登录</h4>
-                            <form>
-                                <input type="hidden" name="action" value="<%=request.getContextPath()%>/AccountAction?action=login">
+                            <form action="<%=request.getContextPath()%>/AccountAction" method="post">
+                                <input type="hidden" name="action" value="login">
                                 <div class="form-group">
                                     <label>邮箱</label>
-                                    <input type="text" class="form-control" placeholder="请填写注册过的邮箱">
+                                    <input name="email" type="text" class="form-control" placeholder="请填写注册过的邮箱" value="<%=email%>">
                                 </div>
                                 <div class="form-group">
                                     <label>密码</label>
-                                    <input type="password" class="form-control" placeholder="请输入密码">
+                                    <input name="password" type="password" class="form-control" placeholder="请输入密码">
                                 </div>
                                 <div class="checkbox">
                                     <label>
