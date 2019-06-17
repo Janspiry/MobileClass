@@ -10,6 +10,20 @@
 <script type="text/javascript">
     var Page = function()
     {
+        var renderSelect = function(){
+            var color='rgb(108,137,191)';
+            $('.form-group').find('select').css('color',color);
+            $('.form-group').find('select').change(function(){
+                console.log($(this).val());
+               if($(this).val()==='0') {
+                   $(this).css('color', color);
+               }
+                else{
+                   $(this).css('color', 'black');
+               }
+            });
+        }
+
         var bindValidation = function(){
             $(".register-form").validate({
                 errorElement: 'span', //default input error message container
@@ -112,7 +126,7 @@
 
                 submitHandler: function(form) {
                     console.log("submitHandler");
-
+                    register_btn_onClick();
                 }
             });
         };
@@ -132,23 +146,24 @@
             $.post(url, function(result){
                 console.log("register callback");
                 console.log("result");
-                if(result.errno == 0)
+                if(result.register_errno == 0)
                 {
                     alert("注册成功");
                     window.location.href="login.jsp";
                 }
                 else {
-                    alert(result.msg);
+                    alert(result.register_msg);
                 }
             });
         };
 
         var addEventListener = function() {
-            $('#register-btn').click(register_btn_onClick);
+//            $('#register-btn').click(register_btn_onClick);
         };
 
         return {
             init: function(){
+                renderSelect();
                 bindValidation();
             }
         };

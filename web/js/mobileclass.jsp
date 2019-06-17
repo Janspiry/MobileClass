@@ -6,6 +6,14 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    if(session.getAttribute("guid")==null || (int)session.getAttribute("guid")<=0 || session.getAttribute("check")==null)
+    {
+        System.out.println("check login failed");
+        response.sendRedirect(request.getContextPath()+"/login.jsp");
+        return;
+    }
+%>
 
 <script type="text/javascript">
 var MobileClass = function(){
@@ -38,14 +46,14 @@ var MobileClass = function(){
                 html += "</ul></li>";
             }
             document.getElementById("sidebar-menu").innerHTML = html;
-            html = "";
+            $("#sidebar-menu").metisMenu();
         });
     };
     return {
         init: function(){
             console.log("enter MobileClass.init");
-//            init_header();
-//            init_sidebar_menu();
+            init_header();
+            init_sidebar_menu();
             console.log("exit MobileClass.init");
         }
     };
