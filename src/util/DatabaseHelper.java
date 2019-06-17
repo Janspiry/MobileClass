@@ -6,12 +6,12 @@ import java.sql.*;
 
 public class DatabaseHelper
 {
-    private final String DB_URL = "jdbc:mysql://122.114.119.101:3306/xm07_2019?useUnicode=true&characterEncoding=UTF-8";
-    private final String DB_USR = "xm07";
-    private final String DB_PASS = "YJYkfsj2019";
-//    private final String DB_URL = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8";
-//    private final String DB_USR = "root";
-//    private final String DB_PASS = "123456";
+//    private final String DB_URL = "jdbc:mysql://122.114.119.101:3306/xm07_2019?useUnicode=true&characterEncoding=UTF-8";
+//    private final String DB_USR = "xm07";
+//    private final String DB_PASS = "YJYkfsj2019";
+    private final String DB_URL = "jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&characterEncoding=UTF-8";
+    private final String DB_USR = "root";
+    private final String DB_PASS = "123456";
 
     private Connection conn = null;
     private Statement st = null;
