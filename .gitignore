@@ -2,6 +2,7 @@
 lib/
 out/
 xm07.iml
+src/util/DatabaseHelper.java
 
 # Compiled class file
 *.class
