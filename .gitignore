@@ -1,3 +1,8 @@
+.idea/
+lib/
+out/
+xm07.iml
+
 # Compiled class file
 *.class
 
