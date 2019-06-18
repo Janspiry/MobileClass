@@ -24,6 +24,7 @@ public class QueryBuilder {
     private int problemId;
     private int answeFlag;
     private int userFlag;
+    private int answerNum;
 
     private String title;
     private String content;
@@ -72,6 +73,13 @@ public class QueryBuilder {
     }
 
 
+    public int getAnswerNum() {
+        return answerNum;
+    }
+
+    public void setAnswerNum(String answerNum) {
+        this.answerNum = filterInt(answerNum);
+    }
     public int getAnsweFlag() {
         return answeFlag;
     }
@@ -512,6 +520,10 @@ public class QueryBuilder {
 
             where=" where questionnaire_id="+questionId+" and user_flag=1";
             System.out.println("where:"+where);
+
+            if(getUserName()!=null&&getUserName()!=""){
+                where=where+" and user_name like '%"+getUserName()+"%'";
+            }
             String orderBy="";
             if(getOrderBy()!=null&&getOrderBy()!=""){
                 orderBy=" order by "+getOrderBy();
@@ -541,7 +553,7 @@ public class QueryBuilder {
             }
             sql="select * from "+getTablename()+" where questionnaire_id="+
                     questionId+" and problem_id!=-1 and user_id="+userId+
-                    "and answer_flag=1 order by problem_id asc";
+                    " and answer_flag=1 order by problem_id asc";
         }
         System.out.println("get sql:"+sql);
         return sql;

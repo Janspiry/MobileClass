@@ -126,22 +126,6 @@ function deleteRecord(id) {
     });
     event.preventDefault();
 }
-function isDate(dateString) {
-    if (dateString.trim() == "")return true;
-    //年月日时分正则表达式
-    var r = dateString.match(/^(\d{1,4})\-(\d{1,2})\-(\d{1,2})$/);
-    if (r == null) {
-        alert("请输入正确格式的日期\n\r如：2019-09-09\n\r");
-        return false;
-    }
-    var d = new Date(r[1], r[2] - 1, r[3]);
-    var num = (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[2] && d.getDate() == r[3]);
-    if (num == 0) {
-        alert("请输入正确格式的日期\n\r如：2019-09-09\n\r");
-    }
-    return (num != 0);
-}
-
 function getAllRecord(){
 
     var dataTable = $('#example23').DataTable();
@@ -155,7 +139,7 @@ function getAllRecord(){
             var title = json[i]["title"];
             var author_name = json[i]["author_name"];
             var change_time = json[i]["change_time"];
-            var create_time = json[i]["limit_time"];
+            var create_time = json[i]["create_time"];
             var answer_num = json[i]["answer_num"];
             var user_name = json[i]["user_name"];
             dataTable.row.add([id,'', title, author_name, create_time, change_time,answer_num,user_name]).draw().node();
@@ -172,11 +156,11 @@ function getSelectedRecord(url){
             var id = json[i]["guid"];
             var title = json[i]["title"];
             var author_name = json[i]["author_name"];
+            var change_time = json[i]["change_time"];
             var create_time = json[i]["create_time"];
-            var limit_time = json[i]["limit_time"];
-            var status = json[i]["status"];
             var answer_num = json[i]["answer_num"];
-            dataTable.row.add([id,'', title, author_name, create_time, limit_time,answer_num,status]).draw().node();
+            var user_name = json[i]["user_name"];
+            dataTable.row.add([id,'', title, author_name, create_time, change_time,answer_num,user_name]).draw().node();
         }
     });
 }
@@ -197,15 +181,13 @@ function sortRecord(){
     var rule1 = $("#rule1").val();
     var rule2 = $("#rule2").val();
     var rule3 = $("#rule3").val();
-    var url =ContextPath+module+"?action=get_record";
+    var url =ContextPath+module+"?action=get_record&id="+id+"&type=user";
     var title = $("#title").val();
-    var author_name = $("#author_name").val();
-    if (title != "") {
-        url += "&title=" + title;
+    var user_name = $("#user_name").val();
+    if (user_name != "") {
+        url += "&user_name=" + user_name;
     }
-    if (author_name != "") {
-        url += "&author_name=" + author_name;
-    }
+
     var tmp="&orderby=";
     var flag=0;
     if (key1 != "") {
@@ -243,21 +225,20 @@ function sortRecord(){
     getSelectedRecord(url);
 };
 function searchRecord(){
-    var title = $("#title").val();
-    var author_name = $("#author_name").val();
-    var url =ContextPath+module+"?action=get_record";
-    if (title != "") {
-        url += "&title=" + title;
-    }
-    if (author_name != "") {
-        url += "&author_name=" + author_name;
+    var user_name = $("#user_name").val();
+    var url =ContextPath+module+"?action=get_record&id="+id+"&type=user";
+    if (user_name != "") {
+        url += "&user_name=" + user_name;
     }
     getSelectedRecord(url);
 };
-function modifyReaord(id){
+function modifyRecord(id){
     window.location.href=ContextPath+"/questionnaire/answer/answer_modify.jsp?id="+id;
 };
 function answerDetail(id){
     window.location.href=ContextPath+"/questionnaire/answer/answer_detail.jsp?id="+id;
 };
+function returnBack(){
+    window.history.back();
+}
 Record();

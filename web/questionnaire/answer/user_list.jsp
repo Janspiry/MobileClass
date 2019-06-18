@@ -111,25 +111,25 @@
                                                 <div class="form-group">
                                                     <label>字段选择</label>
                                                     <select id="key1" class="form-control">
-                                                        <option value="limit_time" selected="selected">截止时间</option>
-                                                        <option value="create_time" >创建时间</option>
-                                                        <option value="answer_num" >回答数</option>
+                                                        <option value="create_time" selected="selected">首次提交时间</option>
+                                                        <option value="change_time" >最后修改时间</option>
+                                                        <option value="answer_num" >回答次数</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <select id="key2" class="form-control">
                                                         <option value="" selected="selected">请选择</option>
-                                                        <option value="create_time">创建时间</option>
-                                                        <option value="limit_time">截止时间</option>
-                                                        <option value="answer_num">回答数</option>
+                                                        <option value="change_time" >最后修改时间</option>
+                                                        <option value="create_time">首次提交时间</option>
+                                                        <option value="answer_num" >回答次数</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <select id="key3" class="form-control">
                                                         <option value="" selected="selected">请选择</option>
-                                                        <option value="answer_num">回答数</option>
-                                                        <option value="create_time">创建时间</option>
-                                                        <option value="limit_time">截止时间</option>
+                                                        <option value="answer_num" >回答次数</option>
+                                                        <option value="create_time">首次提交时间</option>
+                                                        <option value="change_time" >最后修改时间</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -139,22 +139,15 @@
                                     <div class="tab-pane  p-20" id="profile3" role="tabpanel">
 
                                             <div class="row">
-                                                <div class="col-lg-6">
+                                                <div class="col-lg-auto">
                                                     <div class="card">
                                                         <div class="form-group">
-                                                            <p class="text-muted m-b-15 f-s-12">问卷名</p>
-                                                            <input type="text" id="title" name="title" class="form-control input-focus" placeholder="输入问卷名">
+                                                            <p class="text-muted m-b-15 f-s-12">用户名</p>
+                                                            <input type="text" id="user_name" name="user_name" class="form-control input-focus" placeholder="输入用户名">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6">
-                                                    <div class="card">
-                                                        <div class="form-group">
-                                                            <p class="text-muted m-b-15 f-s-12">发布者</p>
-                                                            <input type="text" id="author_name" name="author_name" class="form-control input-focus" placeholder="输入发布者">
-                                                        </div>
-                                                    </div>
-                                                </div>
+
 
                                             </div>
                                         <button type="button" onclick="searchRecord()" class="btn btn-default btn-flat m-b-10">查询</button>
@@ -166,7 +159,7 @@
                                                     <div class="card-toggle-body">
                                                         <div class="button-list">
                                                             <div class="btn-group">
-                                                                <button type="button" onclick="" class="btn btn-pink btn-flat m-b-10 m-l-5">返回</button>
+                                                                <button type="button" onclick="returnBack()" class="btn btn-pink btn-flat m-b-10 m-l-5">返回</button>
                                                                 <button type="button" onclick="statisticRecord()" class="btn btn-success btn-flat  m-b-10 m-l-5">统计</button>
                                                                 <button type="button" onclick="getAllRecord()" class="btn btn-primary btn-flat  m-b-10 m-l-5">所有记录</button>
                                                             </div>

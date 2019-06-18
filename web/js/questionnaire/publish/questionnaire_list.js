@@ -260,6 +260,7 @@ function getSelectedRecord(url){
 
 function addRecord(){
     window.location.href="questionnaire_add.jsp";
+
 }
 
 function statisticRecord(){
@@ -332,7 +333,16 @@ function searchRecord(){
     getSelectedRecord(url);
 };
 function answerProblem(id){
-    window.location.href=ContextPath+"/questionnaire/answer/answer_problem.jsp?id="+id;
+    var url=ContextPath+"/QuestionnaireAnswer?action=get_record_by_id&id="+id+"&type=user";
+    // alert(url);
+    $.post(url,function(json){
+        console.log(json);
+        if(json.length>0){
+            window.location.href=ContextPath+"/questionnaire/answer/answer_problem.jsp?id="+id;
+        }else{
+            alert("你已回答过此问卷");
+        }
+    })
 };
 function answerUser(id){
     window.location.href=ContextPath+"/questionnaire/answer/user_list.jsp?id="+id;
