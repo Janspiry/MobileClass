@@ -19,7 +19,8 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <title>移动互动课堂 | 首页</title>
+    <link href="<%=request.getContextPath()%>/css/lib/toastr/toastr.min.css" rel="stylesheet">
+    <title>移动互动课堂 | 用户信息管理</title>
     <%@include file="../page_css.jsp"%>
 </head>
 
@@ -36,7 +37,7 @@
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">移动互动课堂</a></li>
-                    <li class="breadcrumb-item active">首页</li>
+                    <li class="breadcrumb-item active">用户信息管理</li>
                 </ol>
             </div>
         </div>
@@ -59,170 +60,77 @@
                     </ul>
                     <div id="tab-content" class="tab-content tabcontent-border p-20" style="display: none;">
                         <div role="tabpanel" class="tab-pane active" id="tab-query">
-                            <form action="#" class="form-horizontal">
+                            <form id="form-query" action="#" class="form-horizontal">
                                 <div class="form-body">
-                                    <h3 class="box-title m-t-15">Person Info</h3>
-                                    <hr class="m-t-0 m-b-40">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">First Name</label>
+                                                <label class="control-label text-right col-md-3">用户名</label>
                                                 <div class="col-md-9">
-                                                    <input type="text" class="form-control" placeholder="John doe">
-                                                    <small class="form-control-feedback"> This is inline help </small> </div>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                        <div class="col-md-6">
-                                            <div class="form-group has-danger row">
-                                                <label class="control-label text-right col-md-3">Last Name</label>
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control form-control-danger" placeholder="12n">
-                                                    <small class="form-control-feedback"> This field has error. </small> </div>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                    </div>
-                                    <!--/row-->
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">Gender</label>
-                                                <div class="col-md-9">
-                                                    <select class="form-control">
-                                                        <option value="">Male</option>
-                                                        <option value="">Female</option>
-                                                    </select>
-                                                    <small class="form-control-feedback"> Select your gender. </small> </div>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">Date of Birth</label>
-                                                <div class="col-md-9">
-                                                    <input type="date" class="form-control" placeholder="dd/mm/yyyy">
+                                                    <input name="username" type="text" class="form-control" placeholder="User Name">
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--/span-->
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">籍贯</label>
+                                                <div class="col-md-9">
+                                                    <input name="nativeplace" type="text" class="form-control" placeholder="Native Place">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!--/row-->
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">Category</label>
+                                                <label class="control-label text-right col-md-3">姓名</label>
                                                 <div class="col-md-9">
-                                                    <select class="form-control" data-placeholder="Choose a Category" tabindex="1">
-                                                        <option value="Category 1">Category 1</option>
-                                                        <option value="Category 2">Category 2</option>
-                                                        <option value="Category 3">Category 5</option>
-                                                        <option value="Category 4">Category 4</option>
+                                                    <input name="fullname" type="text" class="form-control" placeholder="Full Name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">邮箱</label>
+                                                <div class="col-md-9">
+                                                    <input name="email" type="text" class="form-control" placeholder="Email">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">性别</label>
+                                                <div class="col-md-9">
+                                                    <select name="gender" class="form-control">
+                                                        <option value="0">-- Gender --</option>
+                                                        <option value="1">男</option>
+                                                        <option value="2">女</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!--/span-->
                                         <div class="col-md-6">
                                             <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">Membership</label>
+                                                <label class="control-label text-right col-md-3">电话</label>
                                                 <div class="col-md-9">
-                                                    <div class="radio-list">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-                                                            <label class="form-check-label" for="exampleRadios1">
-                                                                Free
-                                                            </label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                                                            <label class="form-check-label" for="exampleRadios2">
-                                                                Paid
-                                                            </label>
-                                                        </div>
+                                                    <input name="phone" type="text" class="form-control" placeholder="Phone">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">学号</label>
+                                                <div class="col-md-9">
+                                                    <input name="schoolnum" type="text" class="form-control" placeholder="School Number">
+                                                </div>
+                                            </div>
+                                        </div>
 
-                                                        <!-- <label class="custom-control custom-radio">
-                                                            <input id="radio3" name="radio" type="radio" checked="" class="custom-control-input">
-                                                            <span class="custom-control-indicator"></span>
-                                                            <span class="custom-control-description">Free</span>
-                                                        </label>
-                                                        <label class="custom-control custom-radio">
-                                                            <input id="radio4" name="radio" type="radio" class="custom-control-input">
-                                                            <span class="custom-control-indicator"></span>
-                                                            <span class="custom-control-description">Paid</span>
-                                                        </label> -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
                                     </div>
-                                    <h3 class="box-title">Address</h3>
-                                    <hr class="m-t-0 m-b-40">
-                                    <!--/row-->
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">Address 1</label>
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">Address 2</label>
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">City</label>
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">State</label>
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                    </div>
-                                    <!--/row-->
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">Post Code</label>
-                                                <div class="col-md-9">
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">Country</label>
-                                                <div class="col-md-9">
-                                                    <select class="form-control">
-                                                        <option>Country 1</option>
-                                                        <option>Country 2</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <!--/span-->
-                                    </div>
-                                    <!--/row-->
                                 </div>
                                 <hr>
                                 <div class="form-actions">
@@ -230,8 +138,8 @@
                                         <div class="col-md-6">
                                             <div class="row">
                                                 <div class="col-md-offset-3 col-md-9">
-                                                    <button type="submit" class="btn btn-success">Submit</button>
-                                                    <button type="button" class="btn btn-inverse">Cancel</button>
+                                                    <button type="submit" class="btn btn-success">查询</button>
+                                                    <button type="clear" class="btn btn-inverse">清空</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -241,10 +149,100 @@
                             </form>
                         </div>
                         <div class="tab-pane" id="tab-add" role="tabpanel">
-                            <p>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                                beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica
-                                VHS salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
-                                stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</p>
+                            <form id="form-add" action="#" class="form-horizontal">
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">用户名</label>
+                                                <div class="col-md-9">
+                                                    <input name="username" type="text" class="form-control" placeholder="User Name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">密码</label>
+                                                <div class="col-md-9">
+                                                    <input name="password" type="password" class="form-control" placeholder="Password">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">姓名</label>
+                                                <div class="col-md-9">
+                                                    <input name="fullname" type="text" class="form-control" placeholder="Full Name">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">籍贯</label>
+                                                <div class="col-md-9">
+                                                    <input name="nativeplace" type="text" class="form-control" placeholder="Native Place">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">性别</label>
+                                                <div class="col-md-9">
+                                                    <select name="gender" class="form-control">
+                                                        <option value="0">-- Gender --</option>
+                                                        <option value="1">男</option>
+                                                        <option value="2">女</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">邮箱</label>
+                                                <div class="col-md-9">
+                                                    <input name="email" type="text" class="form-control" placeholder="Email">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">学号</label>
+                                                <div class="col-md-9">
+                                                    <input name="schoolnum" type="text" class="form-control" placeholder="School Number">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">电话</label>
+                                                <div class="col-md-9">
+                                                    <input name="phone" type="text" class="form-control" placeholder="Phone">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-offset-3 col-md-9">
+                                                    <button type="submit" class="btn btn-success">添加</button>
+                                                    <button type="clear" class="btn btn-inverse">清空</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6"> </div>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                         <div class="tab-pane fade" id="dropdown1" role="tabpanel" aria-labelledby="dropdown1-tab">
                             <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard
@@ -261,20 +259,62 @@
             </div>
         </div>
 
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">用户列表</h4>
+                    <div class="table-responsive m-t-40">
+                        <table id="myDataTable" class="display nowrap table table-hover table-bordered" cellspacing="2px" width="100%">
+                            <thead>
+                            <tr>
+                                <th>GUID</th>
+                                <th>操作</th>
+                                <th>用户名</th>
+                                <th>姓名</th>
+                                <th>性别</th>
+                                <th>学号</th>
+                                <th>籍贯</th>
+                                <th>邮箱</th>
+                                <th>电话</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <%@include file="../page_footer.jsp"%>
     </div>
     <!-- End Page wrapper  -->
 </div>
 <!-- End Wrapper -->
+
 <%@include file="../page_js.jsp"%>
+<script src="<%=request.getContextPath()%>/js/lib/jquery/jquery.validate.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/datatables/datatables.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/toastr/toastr.min.js"></script>
+
 <script src="../js/tabview.js"></script>
 <%@include file="../js/mobileclass.jsp"%>
+<%@include file="../js/userinfo/index_js.jsp"%>
 </body>
 
 </html>
 <script type="text/javascript">
     jQuery(document).ready(function() {
-        MobileClass.init();
         TabView.init();
+        MobileClass.init();
+        Page.init();
     });
 </script>

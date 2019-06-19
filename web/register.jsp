@@ -88,7 +88,7 @@
                                         <input name="tnc" type="checkbox"> 同意xxx条款
                                     </label>
                                 </div>
-                                <button id="register-btn" type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">提交</button>
+                                <button id="register-btn" type="submit" class="btn btn-primary btn-flat m-b-30 m-t-30">注册</button>
                                 <div class="register-link m-t-15 text-center">
                                     <p>已经有账号？<a href="login.jsp"> 点这里登录</a></p>
                                 </div>

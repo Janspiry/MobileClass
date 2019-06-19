@@ -165,6 +165,7 @@
             init: function(){
                 renderSelect();
                 bindValidation();
+                addEventListener();
             }
         };
     }();

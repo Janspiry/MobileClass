@@ -9,8 +9,13 @@
 <%
     if(session.getAttribute("guid")==null || (int)session.getAttribute("guid")<=0 || session.getAttribute("check")==null)
     {
-        System.out.println("check login failed");
-        response.sendRedirect(request.getContextPath()+"/login.jsp");
+%>
+        <script type="text/javascript">
+            console.log("check login failed");
+            alert("请先登录");
+            window.location.href="<%=request.getContextPath()%>/login.jsp";
+        </script>
+<%
         return;
     }
 %>

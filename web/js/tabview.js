@@ -28,7 +28,7 @@ var TabView = function(){
                 showTabView();
             }
         });
-        $('.nav-item').not('.dropdown').click(function(){
+        $('#myTab .nav-item').not('.dropdown').click(function(){
             if(!isVisible){
                 showTabView();
             }
