@@ -36,7 +36,7 @@ function showRecord(json){
             "<p class=\"text-muted m-b-15 f-s-12\">"+
                 "<code>问题"+problem_id+"</code>"+
             "</p>"+
-            "<input name="+problemurl+" value="+problem+
+            "<input name="+problemurl+" value='"+problem+"'"+
             " class=\"form-control input-rounded\" readonly=\"true\">"+
         "</div>"
 
@@ -45,7 +45,7 @@ function showRecord(json){
             "<p class=\"text-muted m-b-15 f-s-12\">"+
                 "回答"+
             "</p>"+
-            "<input name="+answerurl+" value="+answer+
+            "<input name="+answerurl+" value='"+answer+"'"+
             " class=\"form-control input-focus\" placeholder=\"输入答案\">"+
         "</div>"
 };

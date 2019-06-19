@@ -1,4 +1,4 @@
-package Questionnaire;
+package FileManagement;
 
 import util.DatabaseHelper;
 
@@ -341,23 +341,29 @@ public class QueryBuilder {
 
     public String getSelectStmt(){
         String sql="";
-        String where="";
+        String where=" where problem_id=-1";
         System.out.println("where:"+where);
         if(getTitle()!=null && !getTitle().equals("null") && !getTitle().isEmpty()){
             if(!where.isEmpty()){
                 where=where+" and title like '%"+getTitle()+"%'";
             }else{
-                where=" where title like '%"+getTitle()+"%'";
+                where="where title like '%"+getTitle()+"%'";
             }
         }
-        if(getUserName()!=null && !getUserName().equals("null") && !getUserName().isEmpty()){
+        if(getCreator()!=null && !getCreator().equals("null") && !getCreator().isEmpty()){
             if(!where.isEmpty()){
-                where=where+" and user_name like '%"+getUserName()+"%'";
+                where=where+" and author_name like '%"+getCreator()+"%'";
             }else{
-                where=" where user_name like '%"+getUserName()+"%'";
+                where="where author_name like '%"+getCreator()+"%'";
             }
         }
-
+        if(getTimeFrom()!=null && getTimeTo()!=null && !getTimeFrom().isEmpty()){
+            if(!where.isEmpty()){
+                where=where+" and create_time between '"+getTimeFrom()+"' and '"+getTimeTo()+"'";
+            }else{
+                where="where create_time between '"+getTimeFrom()+"' and '"+getTimeTo()+"'";
+            }
+        }
         String orderBy="";
         if(getOrderBy()!=null&&getOrderBy()!=""){
             orderBy=" order by "+getOrderBy();
