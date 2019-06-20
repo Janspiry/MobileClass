@@ -85,6 +85,7 @@ public class QueryBuilder {
     public void setGender(String value)
     {
         gender = filterInt(value);
+        if(gender == 0)gender = -1;
     }
 
     private String schoolnum;

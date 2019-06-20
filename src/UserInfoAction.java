@@ -38,6 +38,9 @@ public class UserInfoAction extends HttpServlet
                 case "getResult":
                     getResult(request, response);
                     break;
+                case "query":
+                    doQuery(request, response);
+                    break;
             }
         }
         catch(Exception ex)
@@ -47,6 +50,7 @@ public class UserInfoAction extends HttpServlet
     }
 
     private void getResult(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
+        System.out.println("enter UserInfoAction.getResult");
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
         String sql=queryBuilder.getSelectStmt();
@@ -54,6 +58,28 @@ public class UserInfoAction extends HttpServlet
         ResultSet rs=db.executeQuery(sql);
         processResult(rs);
         out.print(result);
+        out.flush();
+        out.close();
+    }
+
+    private void doQuery(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException{
+        System.out.println("enter UserInfoAction.doQuery");
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        queryBuilder.clear();
+        queryBuilder.setUsername(request.getParameter("username"));
+        queryBuilder.setEmail(request.getParameter("email"));
+        queryBuilder.setGender(request.getParameter("gender"));
+        queryBuilder.setFullname(request.getParameter("fullname"));
+        queryBuilder.setNativeplace(request.getParameter("nativeplace"));
+        queryBuilder.setPhone(request.getParameter("phone"));
+        String sql=queryBuilder.getSelectStmt();
+        DatabaseHelper db=new DatabaseHelper();
+        ResultSet rs=db.executeQuery(sql);
+        processResult(rs);
+        JSONObject json = new JSONObject();
+        json.put("errno", 0);
+        out.print(json);
         out.flush();
         out.close();
     }

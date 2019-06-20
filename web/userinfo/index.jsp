@@ -20,6 +20,7 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <link href="<%=request.getContextPath()%>/css/lib/toastr/toastr.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/lib/nestable/nestable.css" rel="stylesheet">
     <title>移动互动课堂 | 用户信息管理</title>
     <%@include file="../page_css.jsp"%>
 </head>
@@ -50,6 +51,7 @@
                         <label id="fold-btn"> <a class="nav-link" href="#"><span><i id="fold-icon" style="font-size:20px" class="fa fa-angle-down"></i></span></a> </label>
                         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-query" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">查询</span></a> </li>
                         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-add" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">添加</span></a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-sort" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">排序</span></a> </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                 <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">更多</span>
@@ -244,15 +246,109 @@
                                 </div>
                             </form>
                         </div>
+                        <div role="tabpanel" class="tab-pane active" id="tab-sort">
+                            <div class="form-horizontal">
+                                <div class="form-body">
+                                    <div class="dd" id="form-sort">
+                                        <ol class="dd-list">
+                                            <li class="dd-item dd3-item" data-id="username">
+                                                <div class="dd-handle dd3-handle"></div>
+                                                <div class="dd3-content">用户名</div>
+                                            </li>
+                                            <li class="dd-item dd3-item" data-id="fullname">
+                                                <div class="dd-handle dd3-handle"></div>
+                                                <div class="dd3-content">姓名</div>
+                                            </li>
+                                            <li class="dd-item dd3-item" data-id="schoolnum">
+                                                <div class="dd-handle dd3-handle"></div>
+                                                <div class="dd3-content">学号</div>
+                                            </li>
+                                            <li class="dd-item dd3-item" data-id="nativeplace">
+                                                <div class="dd-handle dd3-handle"></div>
+                                                <div class="dd3-content">籍贯</div>
+                                            </li>
+                                            <li class="dd-item dd3-item" data-id="email">
+                                                <div class="dd-handle dd3-handle"></div>
+                                                <div class="dd3-content">邮箱</div>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="form-actions">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="row">
+                                            <div class="col-md-offset-3 col-md-9">
+                                                <button type="button" class="btn btn-success">排序</button>
+                                                <button type="button" class="btn btn-inverse">重置</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6"> </div>
+                                </div>
+                            </div>
+                            <%--<form id="form-sort" action="#" class="form-horizontal">--%>
+                                <%--<div class="form-body">--%>
+                                    <%--<div class="row">--%>
+                                        <%--<div class="col-md-6">--%>
+                                            <%--<div class="form-group row">--%>
+                                                <%--<label class="control-label text-right col-md-3">关键字1</label>--%>
+                                                <%--<div class="col-md-9">--%>
+                                                    <%--<select name="gender" class="form-control">--%>
+                                                        <%--<option value="username">用户名</option>--%>
+                                                        <%--<option value="fullname">姓名</option>--%>
+                                                        <%--<option value="schoolnum">学号</option>--%>
+                                                        <%--<option value="nativeplace">籍贯</option>--%>
+                                                        <%--<option value="email">邮箱</option>--%>
+                                                        <%--<option value="phone">手机</option>--%>
+                                                    <%--</select>--%>
+                                                <%--</div>--%>
+                                            <%--</div>--%>
+                                        <%--</div>--%>
+                                        <%--<div class="col-md-6">--%>
+                                            <%--<div class="form-group row">--%>
+                                                <%--<label class="control-label text-right col-md-3">电话</label>--%>
+                                                <%--<div class="col-md-9">--%>
+                                                    <%--<input name="phone" type="text" class="form-control" placeholder="Phone">--%>
+                                                <%--</div>--%>
+                                            <%--</div>--%>
+                                        <%--</div>--%>
+                                    <%--</div>--%>
+                                    <%--<div class="row">--%>
+                                        <%--<div class="col-md-6">--%>
+                                            <%--<div class="form-group row">--%>
+                                                <%--<label class="control-label text-right col-md-3">学号</label>--%>
+                                                <%--<div class="col-md-9">--%>
+                                                    <%--<input name="schoolnum" type="text" class="form-control" placeholder="School Number">--%>
+                                                <%--</div>--%>
+                                            <%--</div>--%>
+                                        <%--</div>--%>
+
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                                <%--<hr>--%>
+                                <%--<div class="form-actions">--%>
+                                    <%--<div class="row">--%>
+                                        <%--<div class="col-md-6">--%>
+                                            <%--<div class="row">--%>
+                                                <%--<div class="col-md-offset-3 col-md-9">--%>
+                                                    <%--<button type="submit" class="btn btn-success">查询</button>--%>
+                                                    <%--<button type="clear" class="btn btn-inverse">清空</button>--%>
+                                                <%--</div>--%>
+                                            <%--</div>--%>
+                                        <%--</div>--%>
+                                        <%--<div class="col-md-6"> </div>--%>
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                            <%--</form>--%>
+                        </div>
                         <div class="tab-pane fade" id="dropdown1" role="tabpanel" aria-labelledby="dropdown1-tab">
-                            <p>Etsy mixtape wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard
-                                locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie
-                                etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog stumptown. Pitchfork sustainable tofu synth chambray yr.</p>
+
                         </div>
                         <div class="tab-pane fade" id="dropdown2" role="tabpanel" aria-labelledby="dropdown2-tab">
-                            <p>Trust fund seitan letterpress, keytar raw denim keffiyeh etsy art party before they sold out master cleanse gluten-free squid scenester freegan cosby sweater. Fanny pack portland seitan DIY, art party locavore
-                                wolf cliche high life echo park Austin. Cred vinyl keffiyeh DIY salvia PBR, banh mi before they sold out farm-to-table VHS viral locavore cosby sweater. Lomo wolf viral, mustache readymade thundercats keffiyeh
-                                craft beer marfa ethical. Wolf salvia freegan, sartorial keffiyeh echo park vegan.</p>
+
                         </div>
                     </div>
                 </div>
@@ -304,6 +400,7 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/toastr/toastr.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/nestable/jquery.nestable.js"></script>
 
 <script src="../js/tabview.js"></script>
 <%@include file="../js/mobileclass.jsp"%>

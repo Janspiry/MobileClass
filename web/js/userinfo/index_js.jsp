@@ -54,6 +54,110 @@
             })
         }
 
+        var bindValidationToFormQuery = function(){
+            $("#form-query").validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'color-danger', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: {
+                    username: {
+                        id: true
+                    },
+                    fullname: {
+                        id_zh: true
+                    },
+                    email: {
+                        email: true
+                    },
+                    phone: {
+                        number: true,
+                        rangelength: [3, 15]
+                    },
+                    schoolnum: {
+                        id: true
+                    },
+                    nativeplace: {
+                        id_zh: true
+                    },
+                },
+
+                messages: { // custom messages for radio buttons and checkboxes
+                    username: {
+                        id: "用户名只能包含字母、数字、下划线"
+                    },
+                    email: {
+                        email: "邮箱格式不正确"
+                    },
+                    phone: {
+                        number: "电话格式不正确",
+                        rangelength: "电话格式不正确"
+                    },
+                    fullname: {
+                        id_zh: "姓名只能包含字母、数字、下划线、汉字"
+                    },
+                    schoolnum: {
+                        id: "学号只能包含字母、数字、下划线"
+                    },
+                    nativeplace: {
+                        id_zh: "籍贯只能包含字母、数字、下划线、汉字"
+                    },
+                },
+
+                highlight: function(element) { // hightlight error inputs
+                    $(element)
+                            .closest('.form-group').addClass('has-error'); // set error class to the control group
+                },
+
+                success: function(label) {
+                    label.closest('.form-group').removeClass('has-error');
+                    label.remove();
+                },
+
+                errorPlacement: function(error, element) {
+                    error.insertAfter(element);
+                },
+
+                submitHandler: function(form) {
+                    console.log("submitHandler");
+                    submitFormQuery_onClick();
+                }
+            });
+
+            $.validator.addMethod("id",function(value,element,params){
+                var checkId = /^[_a-zA-Z0-9]+$/;
+                return this.optional(element)||(checkId.test(value));
+            },"ID格式不正确");
+
+            $.validator.addMethod("id_zh",function(value,element,params){
+                var checkIdzh = /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/;
+                return this.optional(element)||(checkIdzh.test(value));
+            },"中文ID格式不正确");
+        };
+
+        var submitFormQuery_onClick = function(){
+            if(!$('#form-query').valid())return;
+            url = "<%=request.getContextPath()%>/UserInfoAction?action=query";
+            var form=document.getElementById("form-query");
+            var param = {
+                "username": form.username.value,
+                "fullname": form.fullname.value,
+                "nativeplace": form.nativeplace.value,
+                "email": form.email.value,
+                "phone": form.phone.value,
+                "gender": form.gender.value
+            };
+            $.post(url, param, function(res){
+                console.log("userinfo query callback");
+                console.log(res);
+                if(res.errno != 0){
+                    showError(res.msg);
+                }else{
+                    fetchRecord();
+                }
+            });
+        };
+
         var bindValidationToFormAdd = function(){
             $("#form-add").validate({
                 errorElement: 'span', //default input error message container
@@ -172,6 +276,12 @@
             });
         };
 
+        var initNestable = function(){
+            $('#form-sort').nestable({
+                "maxDepth": 1
+            });
+        };
+
         var initDataTable = function(){
             $(document).ready(function() {
                 $('#myTable').DataTable();
@@ -256,7 +366,17 @@
                         "orderable": false
                     },
                     {
-                        "targets":[2,3,4,5,6,7,8],
+                        "targets":4,
+                        "orderable":false,
+                        "mRender":function(data,type,full){
+                            var res="null";
+                            if(data===1)res="男";
+                            else if(data===2)res="女";
+                            return res;
+                        }
+                    },
+                    {
+                        "targets":[2,3,5,6,7,8],
                         "orderable": false
                     },
                 ],
@@ -355,8 +475,9 @@
         return {
             init: function(){
                 initDataTable();
+                bindValidationToFormQuery();
                 bindValidationToFormAdd();
-
+                initNestable();
             }
         };
 
