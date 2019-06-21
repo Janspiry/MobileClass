@@ -207,7 +207,6 @@ function getSelectedRecord(url){
 
 function addRecord(){
     window.location.href="file_add.jsp";
-
 }
 
 function statisticRecord(){
