@@ -19,7 +19,6 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <link href="<%=request.getContextPath()%>/css/lib/toastr/toastr.min.css" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/css/lib/nestable/nestable.css" rel="stylesheet">
     <title>移动互动课堂 | 用户信息管理</title>
     <%@include file="../page_css.jsp"%>
@@ -247,48 +246,45 @@
                             </form>
                         </div>
                         <div role="tabpanel" class="tab-pane active" id="tab-sort">
-                            <div class="form-horizontal">
-                                <div class="form-body">
-                                    <div class="dd" id="form-sort">
-                                        <ol class="dd-list">
-                                            <li class="dd-item dd3-item" data-id="username">
-                                                <div class="dd-handle dd3-handle"></div>
-                                                <div class="dd3-content">用户名</div>
-                                            </li>
-                                            <li class="dd-item dd3-item" data-id="fullname">
-                                                <div class="dd-handle dd3-handle"></div>
-                                                <div class="dd3-content">姓名</div>
-                                            </li>
-                                            <li class="dd-item dd3-item" data-id="schoolnum">
-                                                <div class="dd-handle dd3-handle"></div>
-                                                <div class="dd3-content">学号</div>
-                                            </li>
-                                            <li class="dd-item dd3-item" data-id="nativeplace">
-                                                <div class="dd-handle dd3-handle"></div>
-                                                <div class="dd3-content">籍贯</div>
-                                            </li>
-                                            <li class="dd-item dd3-item" data-id="email">
-                                                <div class="dd-handle dd3-handle"></div>
-                                                <div class="dd3-content">邮箱</div>
-                                            </li>
-                                        </ol>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="form-actions">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-md-offset-3 col-md-9">
-                                                <button type="button" class="btn btn-success">排序</button>
-                                                <button type="button" class="btn btn-inverse">重置</button>
+                            <div class="row">
+                                <div class="col-lg-1"></div>
+
+                                <div class="col-lg-5">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">排序规则</h4>
+                                            <div class="card-content">
+                                                <div class="nestable">
+                                                    <div class="dd" id="form-sort-rule">
+                                                        <ol class="dd-list">
+
+                                                        </ol>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6"> </div>
                                 </div>
+
+                                <div class="col-lg-5">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h4 class="card-title">候选规则</h4>
+                                            <div class="card-content">
+                                                <div class="nestable">
+                                                    <div class="dd" id="form-sort-choice">
+                                                        <ol class="dd-list">
+                                                        </ol>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-1"></div>
                             </div>
+
                             <%--<form id="form-sort" action="#" class="form-horizontal">--%>
                                 <%--<div class="form-body">--%>
                                     <%--<div class="row">--%>
@@ -390,7 +386,6 @@
 <!-- End Wrapper -->
 
 <%@include file="../page_js.jsp"%>
-<script src="<%=request.getContextPath()%>/js/lib/jquery/jquery.validate.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/datatables.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
@@ -399,7 +394,6 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-<script src="<%=request.getContextPath()%>/js/lib/toastr/toastr.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/nestable/jquery.nestable.js"></script>
 
 <script src="../js/tabview.js"></script>

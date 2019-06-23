@@ -41,6 +41,11 @@ public class UserInfoAction extends HttpServlet
                 case "query":
                     doQuery(request, response);
                     break;
+                case "delete":
+                    Delete(request, response);
+                    break;
+                default:
+                    throw new Exception("未知的请求类型");
             }
         }
         catch(Exception ex)
@@ -77,6 +82,25 @@ public class UserInfoAction extends HttpServlet
         DatabaseHelper db=new DatabaseHelper();
         ResultSet rs=db.executeQuery(sql);
         processResult(rs);
+        JSONObject json = new JSONObject();
+        json.put("errno", 0);
+        out.print(json);
+        out.flush();
+        out.close();
+    }
+
+    private void Delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("enter UserInfoAction.doQuery");
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        QueryBuilder q=new QueryBuilder(queryBuilder.getTablename());
+        q.setGuid(request.getParameter("guid"));
+        if(q.getGuid()==-1){
+            throw new Exception("UserInfoAction.Delete: guid为空");
+        }
+        String sql=q.getDeleteStmt();
+        DatabaseHelper db=new DatabaseHelper();
+        db.execute(sql);
         JSONObject json = new JSONObject();
         json.put("errno", 0);
         out.print(json);

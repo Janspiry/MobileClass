@@ -11,3 +11,6 @@
 <link href="<%=request.getContextPath()%>/css/lib/owl.carousel.min.css" rel="stylesheet" />
 <link href="<%=request.getContextPath()%>/css/lib/owl.theme.default.min.css" rel="stylesheet" />
 <link href="<%=request.getContextPath()%>/css/style.css" rel="stylesheet">
+
+<link href="<%=request.getContextPath()%>/css/lib/toastr/toastr.min.css" rel="stylesheet">
+<link href="<%=request.getContextPath()%>/css/lib/sweetalert/sweetalert.css" rel="stylesheet">

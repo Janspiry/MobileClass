@@ -63,4 +63,81 @@ var MobileClass = function(){
         }
     };
 }();
+
+String.format = function() {
+    if( arguments.length == 0 )
+        return null;
+
+    var str = arguments[0];
+    for(var i=1;i<arguments.length;i++) {
+        var re = new RegExp('\\{' + (i-1) + '\\}','gm');
+        str = str.replace(re, arguments[i]);
+    }
+    return str;
+}
+
+var Dialog = function() {
+    var showSuccess = function(sMsg, sTitle){
+        toastr.success(sMsg, sTitle,{
+            "positionClass": "toast-top-center",
+            timeOut: 3000,
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "tapToDismiss": false
+        });
+    };
+
+    var showError = function(sMsg, sTitle){
+        toastr.error(sMsg, sTitle,{
+            "positionClass": "toast-top-center",
+            timeOut: 3000,
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "tapToDismiss": false
+        });
+    };
+
+    var showComfirm = function(sText, sTitle, fnCallback) {
+        swal({
+                    title: sTitle,
+                    text: sText,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "确认",
+                    cancelButtonText: "放弃",
+                    closeOnConfirm: true
+                },
+                fnCallback
+        );
+    };
+
+    return {
+        showSuccess: showSuccess,
+        showError: showError,
+        showComfirm: showComfirm
+    };
+}();
 </script>

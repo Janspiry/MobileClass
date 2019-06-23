@@ -10,50 +10,6 @@
 <script type="text/javascript">
     var Page = function(){
 
-        var showSussess = function(msg){
-            toastr.success(msg,'操作成功',{
-                "positionClass": "toast-top-center",
-                timeOut: 3000,
-                "closeButton": true,
-                "debug": false,
-                "newestOnTop": true,
-                "progressBar": true,
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut",
-                "tapToDismiss": false
-
-            })
-        }
-
-        var showError = function(msg){
-            toastr.error(msg,'错误',{
-                "positionClass": "toast-top-center",
-                timeOut: 3000,
-                "closeButton": true,
-                "debug": false,
-                "newestOnTop": true,
-                "progressBar": true,
-                "preventDuplicates": true,
-                "onclick": null,
-                "showDuration": "300",
-                "hideDuration": "1000",
-                "extendedTimeOut": "1000",
-                "showEasing": "swing",
-                "hideEasing": "linear",
-                "showMethod": "fadeIn",
-                "hideMethod": "fadeOut",
-                "tapToDismiss": false
-
-            })
-        }
-
         var bindValidationToFormQuery = function(){
             $("#form-query").validate({
                 errorElement: 'span', //default input error message container
@@ -267,60 +223,88 @@
                 console.log(result);
                 if(result.register_errno == 0)
                 {
-                    showSussess("用户添加成功");
+                    Dialog.showSuccess("用户添加成功", "操作成功");
                     fetchRecord();
                 }
                 else {
-                    showError(result.register_msg);
+                    Dialog.showError(result.register_msg, "错误");
                 }
             });
         };
 
         var initNestable = function(){
-            $('#form-sort').nestable({
-                "maxDepth": 1
+            var choice = [
+                ['username','用户名'],
+                ['fullname','姓名'],
+                ['schoolnum','学号'],
+                ['nativeplace','籍贯'],
+                ['email','邮箱'],
+                ['phone','电话']
+            ];
+            var li="  <li class='dd-item dd3-item' data-id='{0}'>"
+                +"  <div class='dd-handle dd3-handle'></div>"
+                +"  <div class='dd3-content'>"
+                +"  <div class='row'>"
+                +"      <h5 class='col-md-9'>{1}</h5>"
+                +"      <button type='button' class='col-md-2 btn btn-info btn-xs btn-rounded m-b-10 m-l-5'>升序</button>"
+                +"  </div>"
+                +"</div></li>";
+            if(choice.length>0){
+                $('#form-sort-rule').html(String.format(li, choice[0][0], choice[0][1]));
+            }
+            var html="";
+            for(var i=1;i<choice.length;i++){
+                html+=String.format(li, choice[i][0], choice[i][1]);
+            }
+            $('#form-sort-choice').html(html);
+            $('#form-sort-rule').nestable({
+                "maxDepth": 0
             });
+            $('#form-sort-choice').nestable({
+                "maxDepth": 0
+            });
+
         };
 
         var initDataTable = function(){
             $(document).ready(function() {
-                $('#myTable').DataTable();
-                $(document).ready(function() {
-                    var table = $('#example').DataTable({
-                        "columnDefs": [{
-                            "visible": false,
-                            "targets": 2
-                        }],
-                        "order": [
-                            [2, 'asc']
-                        ],
-                        "displayLength": 25,
-                        "drawCallback": function(settings) {
-                            var api = this.api();
-                            var rows = api.rows({
-                                page: 'current'
-                            }).nodes();
-                            var last = null;
-                            api.column(2, {
-                                page: 'current'
-                            }).data().each(function(group, i) {
-                                if (last !== group) {
-                                    $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-                                    last = group;
-                                }
-                            });
-                        }
-                    });
-                    // Order by the grouping
-                    $('#example tbody').on('click', 'tr.group', function() {
-                        var currentOrder = table.order()[0];
-                        if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-                            table.order([2, 'desc']).draw();
-                        } else {
-                            table.order([2, 'asc']).draw();
-                        }
-                    });
-                });
+//                $('#myTable').DataTable();
+//                $(document).ready(function() {
+//                    var table = $('#example').DataTable({
+//                        "columnDefs": [{
+//                            "visible": false,
+//                            "targets": 2
+//                        }],
+//                        "order": [
+//                            [2, 'asc']
+//                        ],
+//                        "displayLength": 25,
+//                        "drawCallback": function(settings) {
+//                            var api = this.api();
+//                            var rows = api.rows({
+//                                page: 'current'
+//                            }).nodes();
+//                            var last = null;
+//                            api.column(2, {
+//                                page: 'current'
+//                            }).data().each(function(group, i) {
+//                                if (last !== group) {
+//                                    $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
+//                                    last = group;
+//                                }
+//                            });
+//                        }
+//                    });
+//                    // Order by the grouping
+//                    $('#example tbody').on('click', 'tr.group', function() {
+//                        var currentOrder = table.order()[0];
+//                        if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
+//                            table.order([2, 'desc']).draw();
+//                        } else {
+//                            table.order([2, 'asc']).draw();
+//                        }
+//                    });
+//                });
             });
             var dataTable=$('#myDataTable').DataTable({
                 dom: 'Bfrtip',
@@ -383,13 +367,27 @@
                 "aLengthMenu": [[10,15,20,25,40,50,-1],[10,15,20,25,40,50,"所有记录"]],
             });
             fetchRecord();
-//            $('#myDataTable tbody').on('click', '.delete-button', function (event) {
-//                var id = $(this).parent().prev().text();
-//                deleteRecord(id);
-//                var table = $('#example23').DataTable();
-//                table.row($(this).parents('tr')).remove().draw();
-//                event.preventDefault();
-//            });
+
+            $('#myDataTable tbody').on('click', '.delete-button', function (event) {
+                var node=$(this).parents('tr');
+                var table=$('#myDataTable').DataTable();
+                var id = table.row(node).data()[0];
+                console.log("deleteRecord", id);
+                Dialog.showComfirm("确定要删除这条记录吗？", "警告", function(){
+
+                    url="<%=request.getContextPath()%>/UserInfoAction?action=delete";
+                    param={
+                        "guid": id
+                    };
+                    $.post(url, param, function(res){
+                        console.log(res);
+                        table.row(node).remove().draw();
+                        event.preventDefault();
+                        Dialog.showSuccess("记录已删除", "操作成功");
+                    });
+
+                });
+            });
 //            $("#myDataTable tbody").on("click", ".edit-button", function (event) {
 //                var tds = $(this).parents("tr").children();
 //                $.each(tds, function (i, val) {
@@ -470,7 +468,11 @@
                     dt.row.add(row).draw().node();
                 }
             });
-        }
+        };
+
+        var deleteRecord = function(id){
+
+        };
 
         return {
             init: function(){
