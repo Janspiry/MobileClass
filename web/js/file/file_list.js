@@ -76,10 +76,12 @@ function Record(){
                 "targets":1,
                 "mRender":
                     function(data, type, full) {
+                        // console.log("这是文件url:"+data);
                         sReturn=
                             "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改</button>"+
                             "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除</button>"
-                            sReturn=sReturn+"<button type=\"button\" onclick=\"downloadRecord("+data+")\" class=\"btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
+                            // sReturn=sReturn+"<button type=\"button\" onclick=\"downloadRecord('"+data+"')\" class=\"download-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
+                            sReturn=sReturn+"<button type=\"button\" class=\"download-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
                         return sReturn;
                     },
             },
@@ -89,6 +91,33 @@ function Record(){
     });
     getAllRecord();
 
+    $('#example23 tbody').on('click', '.download-button', function (event) {
+        var row = dataTable.row($(this).parents("tr"));
+        var data = row.data();
+        console.log(data);
+        var guid = data[0];
+        var fileurl = data[1];
+        var downloadNum = data[7];
+        var tds = $(this).parents("tr").children();
+        $.each(tds, function (i, val) {
+            var jqob = $(val);
+            if (i==7) {
+                var txt = downloadNum+1;
+                jqob.html(txt);
+                dataTable.cell(jqob).data(txt);
+            }
+        });
+        url =ContextPath+module+"?action=modify_record";
+        if (guid != "") {
+            url += "&guid=" + guid;
+        }
+        url += "&downloadNum=" + (downloadNum+1);
+        window.open(fileurl);
+        event.preventDefault();
+        $.post(url, function (json) {
+
+        });
+    });
     $('#example23 tbody').on('click', '.delete-button', function (event) {
         var id = $(this).parent().prev().text();
         deleteRecord(id);
@@ -140,18 +169,15 @@ function Record(){
             url += "&context=" + context;
         }
         getSelectedRecord(url);
-        // $.post(url, function (jsonObject) {
-        //     alert("修改成功！");
-        // });
-        // event.preventDefault();
     });
-    // $('#example23 tbody').on('click', '.download-button', function (event) {
-    //     var id = $(this).parent().prev().text();
-    //     answerProblem(id);
-    // });
 }
 function downloadRecord(url) {
     window.open(url);
+}
+function modifyRecord(url) {
+    $.post(url, function (json) {
+
+    });
 }
 function deleteRecord(id) {
     var url=ContextPath+module+"?action=delete_record";

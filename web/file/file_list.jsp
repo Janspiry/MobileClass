@@ -166,9 +166,9 @@
                                                         <div class="button-list">
                                                             <div class="btn-group">
                                                                 <button type="button" onclick="" class="btn btn-pink btn-flat m-b-10 m-l-5">返回</button>
-                                                                <button type="button" onclick="addRecord()" class="btn btn-success btn-flat  m-b-10 m-l-5">增加</button>
+                                                                <button type="button" onclick="addRecord()" class="btn btn-success btn-flat  m-b-10 m-l-5">上传</button>
                                                                 <button type="button" onclick="statisticRecord()" class="btn btn-dark btn-flat m-b-10 m-l-5">统计</button>
-                                                                <button type="button" onclick="getAllRecord()" class="btn btn-primary btn-flat  m-b-10 m-l-5">所有记录</button>
+                                                                <button type="button" onclick="getAllRecord()" class="btn btn-primary btn-flat  m-b-10 m-l-5">所有文件</button>
                                                             </div>
                                                         </div>
                                                     </div>

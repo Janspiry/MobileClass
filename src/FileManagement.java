@@ -2,7 +2,7 @@
  * Created by Janspiry on 2019/6/15.
  */
 
-import Questionnaire.QueryBuilder;
+import FileManagement.QueryBuilder;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -143,8 +143,23 @@ public class FileManagement extends HttpServlet {
         }
         System.out.println("title:"+title);
         System.out.println("context:"+context);
+        String userId=session.getAttribute("guid")==null?null:(String)session.getAttribute("guid");
+        String creator=(String)session.getAttribute("username");
+        String createTime=(new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
+        queryBuilder.clear();
+        queryBuilder.setUserId(userId);
+        queryBuilder.setUserName(creator);
+        queryBuilder.setTitle(title);
+        queryBuilder.setContent(context);
+        queryBuilder.setCreateTime(createTime);
+        queryBuilder.setChangeTime(createTime);
+        queryBuilder.setfileUrl(fileUrl);
+        queryBuilder.setDownloadNum("0");
+        queryBuilder.setChangNum("1");
 
-
+        DatabaseHelper db = new DatabaseHelper();
+        String sql=queryBuilder.getInsertStmt();
+        db.execute(sql);
     }
     private void getRecord(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, SQLException {
         response.setContentType("application/json; charset=UTF-8");
@@ -194,6 +209,10 @@ public class FileManagement extends HttpServlet {
         String context = request.getParameter("context");
         String title = request.getParameter("title");
         String changeTime=(new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
+        //修改内容
+
+        String downloadNum = request.getParameter("downloadNum");
+        //修改下载数
 
         String tableName="file";
         String sql="select * from "+tableName+" where guid="+guid;
@@ -205,14 +224,18 @@ public class FileManagement extends HttpServlet {
         chang_num++;
 
         sql="update "+tableName+" set";
-        if(title!=null&&title!=""){
-            sql=sql+" title='"+title+"'";
+        if(downloadNum!=null&&downloadNum!=""){
+            sql=sql+" download_num='"+downloadNum+"'";
+        }else{
+            if(title!=null&&title!=""){
+                sql=sql+" title='"+title+"'";
+            }
+            if(context!=null&&context!=""){
+                sql=sql+" ,context='"+context+"'";
+            }
+            sql=sql+" ,change_time='"+changeTime+"'";
+            sql=sql+" ,change_num='"+chang_num+"'";
         }
-        if(context!=null&&context!=""){
-            sql=sql+" ,context='"+context+"'";
-        }
-        sql=sql+" ,change_time='"+changeTime+"'";
-        sql=sql+" ,change_num='"+chang_num+"'";
         sql=sql+" where guid="+guid;
         System.out.println("modify sql = "+sql);
         db.execute(sql);

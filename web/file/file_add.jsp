@@ -53,7 +53,7 @@
         <div class="container-fluid">
             <!-- Start Page Content -->
             <button type="button" id="submit_button" class="btn btn-primary m-b-10 m-l-5">确认上传</button>
-            <button type="button" id="return_button" class="btn btn-success m-b-10 m-l-5">取消上传</button>
+            <button type="button" onclick="returnBack()" class="btn btn-success m-b-10 m-l-5">取消上传</button>
             <%--<form  role="form" id="page_form" name="page_form" action="add_record">--%>
                 <div class="row">
                     <div class="col-12">
