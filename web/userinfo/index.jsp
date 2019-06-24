@@ -246,99 +246,45 @@
                             </form>
                         </div>
                         <div role="tabpanel" class="tab-pane active" id="tab-sort">
-                            <div class="row">
-                                <div class="col-lg-1"></div>
+                            <%--<div class="row">--%>
+                                <%--<div class="col-lg-1"></div>--%>
 
-                                <div class="col-lg-5">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h4 class="card-title">排序规则</h4>
-                                            <div class="card-content">
-                                                <div class="nestable">
-                                                    <div class="dd" id="form-sort-rule">
-                                                        <ol class="dd-list">
+                                <%--<div class="col-lg-5">--%>
+                                    <%--<div class="card">--%>
+                                        <%--<div class="card-body">--%>
+                                            <%--<h4 class="card-title">排序规则</h4>--%>
+                                            <%--<div class="card-content">--%>
+                                                <%--<div class="nestable">--%>
+                                                    <%--<div class="dd" id="form-sort-rule">--%>
+                                                        <%--<ol class="dd-list">--%>
 
-                                                        </ol>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-5">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <h4 class="card-title">候选规则</h4>
-                                            <div class="card-content">
-                                                <div class="nestable">
-                                                    <div class="dd" id="form-sort-choice">
-                                                        <ol class="dd-list">
-                                                        </ol>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-lg-1"></div>
-                            </div>
-
-                            <%--<form id="form-sort" action="#" class="form-horizontal">--%>
-                                <%--<div class="form-body">--%>
-                                    <%--<div class="row">--%>
-                                        <%--<div class="col-md-6">--%>
-                                            <%--<div class="form-group row">--%>
-                                                <%--<label class="control-label text-right col-md-3">关键字1</label>--%>
-                                                <%--<div class="col-md-9">--%>
-                                                    <%--<select name="gender" class="form-control">--%>
-                                                        <%--<option value="username">用户名</option>--%>
-                                                        <%--<option value="fullname">姓名</option>--%>
-                                                        <%--<option value="schoolnum">学号</option>--%>
-                                                        <%--<option value="nativeplace">籍贯</option>--%>
-                                                        <%--<option value="email">邮箱</option>--%>
-                                                        <%--<option value="phone">手机</option>--%>
-                                                    <%--</select>--%>
+                                                        <%--</ol>--%>
+                                                    <%--</div>--%>
                                                 <%--</div>--%>
                                             <%--</div>--%>
                                         <%--</div>--%>
-                                        <%--<div class="col-md-6">--%>
-                                            <%--<div class="form-group row">--%>
-                                                <%--<label class="control-label text-right col-md-3">电话</label>--%>
-                                                <%--<div class="col-md-9">--%>
-                                                    <%--<input name="phone" type="text" class="form-control" placeholder="Phone">--%>
-                                                <%--</div>--%>
-                                            <%--</div>--%>
-                                        <%--</div>--%>
-                                    <%--</div>--%>
-                                    <%--<div class="row">--%>
-                                        <%--<div class="col-md-6">--%>
-                                            <%--<div class="form-group row">--%>
-                                                <%--<label class="control-label text-right col-md-3">学号</label>--%>
-                                                <%--<div class="col-md-9">--%>
-                                                    <%--<input name="schoolnum" type="text" class="form-control" placeholder="School Number">--%>
-                                                <%--</div>--%>
-                                            <%--</div>--%>
-                                        <%--</div>--%>
-
                                     <%--</div>--%>
                                 <%--</div>--%>
-                                <%--<hr>--%>
-                                <%--<div class="form-actions">--%>
-                                    <%--<div class="row">--%>
-                                        <%--<div class="col-md-6">--%>
-                                            <%--<div class="row">--%>
-                                                <%--<div class="col-md-offset-3 col-md-9">--%>
-                                                    <%--<button type="submit" class="btn btn-success">查询</button>--%>
-                                                    <%--<button type="clear" class="btn btn-inverse">清空</button>--%>
+
+                                <%--<div class="col-lg-5">--%>
+                                    <%--<div class="card">--%>
+                                        <%--<div class="card-body">--%>
+                                            <%--<h4 class="card-title">候选规则</h4>--%>
+                                            <%--<div class="card-content">--%>
+                                                <%--<div class="nestable">--%>
+                                                    <%--<div class="dd" id="form-sort-choice">--%>
+                                                        <%--<ol class="dd-list">--%>
+                                                        <%--</ol>--%>
+                                                    <%--</div>--%>
                                                 <%--</div>--%>
                                             <%--</div>--%>
                                         <%--</div>--%>
-                                        <%--<div class="col-md-6"> </div>--%>
                                     <%--</div>--%>
                                 <%--</div>--%>
-                            <%--</form>--%>
+
+                                <%--<div class="col-lg-1"></div>--%>
+                            <%--</div>--%>
+
                         </div>
                         <div class="tab-pane fade" id="dropdown1" role="tabpanel" aria-labelledby="dropdown1-tab">
 
