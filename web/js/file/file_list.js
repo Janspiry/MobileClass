@@ -1,8 +1,7 @@
 var Data=[];
-var module="/QuestionnaireAnswer";
+var module="/FileManagement";
 var existResultset="0";
 var ContextPath=$("#ContextPath").val();
-var id=$("#id").val();
 function Record(){
     $(document).ready(function() {
         $('#myTable').DataTable();
@@ -45,7 +44,6 @@ function Record(){
     });
     var dataTable=$('#example23').DataTable({
         dom: 'Bfrtip',
-
         // buttons: [
         //     'excel', 'pdf', 'print'
         // ],
@@ -59,11 +57,11 @@ function Record(){
                 "sortDescending": ": activate to sort column descending"
             },
             "sProcessing":   "处理中...",
-            "sLengthMenu":   "_MENU_ 用户/页",
-            "sZeroRecords":  "<span'>没有找到对应的用户！</span>",
-            "sInfo":         "显示第 _START_ 至 _END_ 个用户，共 _TOTAL_ 个",
-            "sInfoEmpty":    "显示第 0 至 0 个用户，共 0 个",
-            "sInfoFiltered": "(由 _MAX_个用户过滤)",
+            "sLengthMenu":   "_MENU_ 文件/页",
+            "sZeroRecords":  "<span'>没有找到对应的文件！</span>",
+            "sInfo":         "显示第 _START_ 至 _END_ 个文件，共 _TOTAL_ 个",
+            "sInfoEmpty":    "显示第 0 至 0 个文件，共 0 个",
+            "sInfoFiltered": "(由 _MAX_ 个文件过滤)",
             "sInfoPostFix":  "",
             "sSearch":       "搜索:",
             "oPaginate": {
@@ -76,27 +74,18 @@ function Record(){
         "columnDefs": [
             {
                 "targets":1,
-                "data": null,
                 "mRender":
                     function(data, type, full) {
                         sReturn=
-                            "<button type=\"button\" class=\"detail-button btn btn-default btn-sm btn-rounded m-b-10\">回答详情</button>"+
-                            "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改回答</button>"+
-                            "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除回答</button>"
+                            "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改</button>"+
+                            "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除</button>"
+                            sReturn=sReturn+"<button type=\"button\" onclick=\"downloadRecord("+data+")\" class=\"btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
                         return sReturn;
                     },
-                "orderable": false
             },
-            {
-                "targets":2,
-                "orderable": false
-            },
-            {
-                "targets":3,
-                "orderable": false
-            },
+
         ],
-        "aLengthMenu": [[10,15,20,25,40,50,-1],[10,15,20,25,40,50,"所有问卷"]],
+        "aLengthMenu": [[10,15,20,25,40,50,-1],[10,15,20,25,40,50,"所有文件"]],
     });
     getAllRecord();
 
@@ -108,13 +97,61 @@ function Record(){
         event.preventDefault();
     });
     $("#example23 tbody").on("click", ".edit-button", function (event) {
-        var id = $(this).parent().prev().text();
-        modifyRecord(id);
+        var tds = $(this).parents("tr").children();
+        $.each(tds, function (i, val) {
+            var jqob = $(val);
+            if (i != 2 &&i!=3) {
+                return true;
+            }
+            var txt = jqob.text();
+            var put = $("<input type='text'>");
+            put.val(txt);
+            jqob.html(put);
+        });
+        $(this).html("保存");
+        $(this).toggleClass("edit-button");
+        $(this).toggleClass("save-button");
+        event.preventDefault();
     });
-    $('#example23 tbody').on('click', '.detail-button', function (event) {
-        var id = $(this).parent().prev().text();
-        answerDetail(id);
+    $("#example23 tbody").on("click", ".save-button", function (event) {
+        var row = dataTable.row($(this).parents("tr"));
+        var tds = $(this).parents("tr").children();
+        var valid_flag=1;
+        $.each(tds, function (i, val) {
+            var jqob = $(val);
+            if (!jqob.has('button').length) {
+                var txt = jqob.children("input").val();
+                jqob.html(txt);
+                dataTable.cell(jqob).data(txt);
+            }
+        });
+        var data = row.data();
+        var guid = data[0];
+        var title = data[2];
+        var context = data[3];
+        url =ContextPath+module+"?action=modify_record";
+        if (guid != "") {
+            url += "&guid=" + guid;
+        }
+        if (title != "") {
+            url += "&title=" + title;
+        }
+        if (context != "") {
+            url += "&context=" + context;
+        }
+        getSelectedRecord(url);
+        // $.post(url, function (jsonObject) {
+        //     alert("修改成功！");
+        // });
+        // event.preventDefault();
     });
+    // $('#example23 tbody').on('click', '.download-button', function (event) {
+    //     var id = $(this).parent().prev().text();
+    //     answerProblem(id);
+    // });
+}
+function downloadRecord(url) {
+    window.open(url);
 }
 function deleteRecord(id) {
     var url=ContextPath+module+"?action=delete_record";
@@ -127,22 +164,23 @@ function deleteRecord(id) {
     event.preventDefault();
 }
 function getAllRecord(){
-
     var dataTable = $('#example23').DataTable();
     dataTable.clear().draw(); //清除表格数据
-    var url=ContextPath+module+"?action=get_record&id="+id+"&type=user";
+    var url=ContextPath+module+"?action=get_record";
     $.post(url, function (json) {
         Data = json;
         console.log(json);
         for (var i = 0; i < json.length; i++) {
             var id = json[i]["guid"];
             var title = json[i]["title"];
-            var author_name = json[i]["author_name"];
-            var change_time = json[i]["change_time"];
-            var create_time = json[i]["create_time"];
-            var answer_num = json[i]["answer_num"];
+            var context = json[i]["context"];
             var user_name = json[i]["user_name"];
-            dataTable.row.add([id,'', title, author_name, create_time, change_time,answer_num,user_name]).draw().node();
+            var create_time = json[i]["create_time"];
+            var change_time = json[i]["change_time"];
+            var download_num = json[i]["download_num"];
+            var change_num = json[i]["change_num"];
+            var file_url = json[i]["file_url"];
+            dataTable.row.add([id,file_url, title, context, user_name,create_time, change_time,download_num,change_num]).draw().node();
         }
     });
 }
@@ -155,22 +193,24 @@ function getSelectedRecord(url){
         for (var i = 0; i < json.length; i++) {
             var id = json[i]["guid"];
             var title = json[i]["title"];
-            var author_name = json[i]["author_name"];
-            var change_time = json[i]["change_time"];
-            var create_time = json[i]["create_time"];
-            var answer_num = json[i]["answer_num"];
+            var context = json[i]["context"];
             var user_name = json[i]["user_name"];
-            dataTable.row.add([id,'', title, author_name, create_time, change_time,answer_num,user_name]).draw().node();
+            var create_time = json[i]["create_time"];
+            var change_time = json[i]["change_time"];
+            var download_num = json[i]["download_num"];
+            var change_num = json[i]["change_num"];
+            var file_url = json[i]["file_url"];
+            dataTable.row.add([id,file_url, title, context, user_name,create_time, change_time,download_num,change_num]).draw().node();
         }
     });
 }
 
 function addRecord(){
-    window.location.href="questionnaire_add.jsp";
+    window.location.href="file_add.jsp";
 }
 
 function statisticRecord(){
-    window.location.href="questionnaire_statistic.jsp";
+    window.location.href="file_statistic.jsp";
 
 };
 
@@ -181,13 +221,15 @@ function sortRecord(){
     var rule1 = $("#rule1").val();
     var rule2 = $("#rule2").val();
     var rule3 = $("#rule3").val();
-    var url =ContextPath+module+"?action=get_record&id="+id+"&type=user";
+    var url =ContextPath+module+"?action=get_record";
     var title = $("#title").val();
     var user_name = $("#user_name").val();
+    if (title != "") {
+        url += "&title=" + title;
+    }
     if (user_name != "") {
         url += "&user_name=" + user_name;
     }
-
     var tmp="&orderby=";
     var flag=0;
     if (key1 != "") {
@@ -225,20 +267,15 @@ function sortRecord(){
     getSelectedRecord(url);
 };
 function searchRecord(){
+    var title = $("#title").val();
     var user_name = $("#user_name").val();
-    var url =ContextPath+module+"?action=get_record&id="+id+"&type=user";
+    var url =ContextPath+module+"?action=get_record";
+    if (title != "") {
+        url += "&title=" + title;
+    }
     if (user_name != "") {
         url += "&user_name=" + user_name;
     }
     getSelectedRecord(url);
 };
-function modifyRecord(id){
-    window.location.href=ContextPath+"/questionnaire/answer/answer_modify.jsp?id="+id;
-};
-function answerDetail(id){
-    window.location.href=ContextPath+"/questionnaire/answer/answer_detail.jsp?id="+id;
-};
-function returnBack(){
-    window.history.back();
-}
 Record();

@@ -50,6 +50,9 @@ public class QuestionnaireAnswer extends HttpServlet {
                 case "get_record":
                     getRecord(request, response);
                     break;
+                case "get_record_by_id":
+                    getRecordById(request, response);
+                    break;
                 case "add_record":
                     addRecord(request, response);
                     break;
@@ -124,6 +127,7 @@ public class QuestionnaireAnswer extends HttpServlet {
         queryBuilder.setLimitTime(limitTime);
         queryBuilder.setQuestionnaireId(questionnaireId);//问卷id
         queryBuilder.setStatus(status);
+        queryBuilder.setAnswerNum("1");
         //用户回答此问卷的标识
         queryBuilder.setUserFlag("1");
         queryBuilder.setProblemId("0");
@@ -141,8 +145,6 @@ public class QuestionnaireAnswer extends HttpServlet {
             answer=request.getParameter(answerName);
             String value1 =new String(problem.getBytes("iso-8859-1"),"utf-8");
             String value2 =new String(answer.getBytes("iso-8859-1"),"utf-8");
-//            System.out.println("问题"+problem);
-//            System.out.println("答案"+answer);
             System.out.println("问题"+value1);
             System.out.println("答案"+value2);
             queryBuilder.setProblem(value1);
@@ -161,6 +163,7 @@ public class QuestionnaireAnswer extends HttpServlet {
         String type= request.getParameter("type");
         String title=request.getParameter("title");
         String author_name=(String)request.getParameter("author_name");
+        String user_name=(String)request.getParameter("user_name");
         String orderby=(String)request.getParameter("orderby");
 
         System.out.println("getResultexist_result=false or null");
@@ -168,10 +171,7 @@ public class QuestionnaireAnswer extends HttpServlet {
         //问卷问题所需
         queryBuilder.setGuid(id);
         queryBuilder.setType(type);
-
-
-        queryBuilder.setTitle(title);
-        queryBuilder.setCreator(author_name);
+        queryBuilder.setUserName(user_name);
         queryBuilder.setOrderBy(orderby);
 
         String sql=queryBuilder.getAnswerSql();
@@ -187,6 +187,46 @@ public class QuestionnaireAnswer extends HttpServlet {
         out.flush();
         out.close();
         System.out.println("exit getResult");
+    }
+    private void getRecordById(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, SQLException {
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        HttpSession session = request.getSession();
+        int guid=Integer.parseInt((String)session.getAttribute("guid"));
+        String id=request.getParameter("id");
+        String type= request.getParameter("type");
+
+        System.out.println("getResultexist_result=false or null");
+        queryBuilder.clear();
+        //问卷问题所需
+        queryBuilder.setGuid(id);
+        queryBuilder.setType(type);
+
+        String sql=queryBuilder.getAnswerSql();
+        DatabaseHelper db=new DatabaseHelper();
+        ResultSet rs=db.executeQuery(sql);
+        processResult(rs);
+
+
+        System.out.println("guid:"+guid);
+        if(queryResult.length()<1){
+            JSONObject item = new JSONObject();
+            item.put("guid",guid);
+            queryResult.put(item);
+        }else{
+            for(int i=0;i<queryResult.length();i++)
+            {
+                if(guid==queryResult.getJSONObject(i).getInt("user_id")){
+                    queryResult = new JSONArray("[]");
+                    break;
+                }
+                System.out.printf("result[%d].guid=%d\n",i, queryResult.getJSONObject(i).getInt("guid"));
+            }
+        }
+        out.print(queryResult);
+        out.flush();
+        out.close();
+        System.out.println("exit getResultById");
     }
     private void deleteRecord(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, SQLException {
         response.setContentType("application/json; charset=UTF-8");
@@ -205,59 +245,66 @@ public class QuestionnaireAnswer extends HttpServlet {
             userId=rs.getString("user_id");
         }
         System.out.println("问卷序号:"+questionId);
-        sql="delete from "+tableName+" where questionnaire_id="+questionId;
+        sql="delete from "+tableName+" where questionnaire_id="+questionId+" and user_id='"+userId+"' and answer_flag=1";
+        db.executeUpdate(sql);
+        sql="delete from "+tableName+" where questionnaire_id="+questionId+" and user_id='"+userId+"' and user_flag=1";
         db.executeUpdate(sql);
 
+        sql="select * from "+tableName+" where questionnaire_id="+questionId+" and problem_id=-1";
+        rs = db.executeQuery(sql);
+        rs.next();
+        int num=Integer.parseInt( rs.getString("answer_num"));
+        num--;
+        sql="update "+tableName+" set answer_num='"+num+"' where questionnaire_id='"+questionId+"' and problem_id=-1";
+        System.out.println("删除回答数:"+sql);
+        db.executeUpdate(sql);
     }
     private void modifyRecord(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException, ParseException {
         System.out.println("enter modifyRecord");
-        String guid = request.getParameter("guid");
-        String limit_time = request.getParameter("limit_time");
-        String title = request.getParameter("title");
-        String createTime=(new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
-        String status="processing";
+        String guid = request.getParameter("id");
+        String changeTime=(new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
+        int count =Integer.parseInt(request.getParameter("count"));
 
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        if(format.parse(limit_time).compareTo(format.parse(createTime))<0){
-            status="ended";
-        }
+        String problemName="problem"+1;
+        String answerName="answer"+1;
+        String problem="";
+        String answer="";
+
+        DatabaseHelper db = new DatabaseHelper();
+        ResultSet rs;
 
         String tableName="questionnaire";
         String sql="select * from "+tableName+" where guid="+guid;
-        DatabaseHelper db=new DatabaseHelper();
-        ResultSet rs = db.executeQuery(sql);
-        String questionId="";
-        while (rs.next()) {
-            questionId=rs.getString("questionnaire_id");
-        }
-        sql="update "+tableName+" set";
-        if(title!=null&&title!=""){
-            sql=sql+" title='"+title+"'";
-        }
-        if(limit_time!=null&&limit_time!=""){
-            sql=sql+" ,limit_time='"+limit_time+"'";
-        }
-        sql=sql+" ,status='"+status+"'";
-        sql=sql+" where questionnaire_id="+Integer.parseInt(questionId);
-        System.out.println("modify sql = "+sql);
-        db.execute(sql);
+        rs = db.executeQuery(sql);
+        rs.next();
+        String questionnaireId=rs.getString("questionnaire_id");
+        int userid=Integer.parseInt(rs.getString("user_id"));
+        String answer_num=rs.getString("answer_num");
 
+        //更新回答数与最后修改时间
+        int num=Integer.parseInt(answer_num);
+        num++;
+        sql="update "+tableName+" set answer_num="+num+
+                ",change_time='"+changeTime+"' where guid="+guid;
+        System.out.println("增加回答数:"+sql);
+        db.executeUpdate(sql);
+
+        //更新问题情况
+
+        for(int j=1;j<=count;j++){
+            problem=request.getParameter(problemName);
+            answer=request.getParameter(answerName);
+            String value1 =new String(problem.getBytes("iso-8859-1"),"utf-8");
+            String value2 =new String(answer.getBytes("iso-8859-1"),"utf-8");
+            System.out.println("问题"+value1);
+            System.out.println("答案"+value2);
+            sql="update "+tableName+" set answer='"+value2+"' where questionnaire_id="+
+                    questionnaireId+" and answer_flag=1 and problem_id="+j+" and user_id="+userid;
+            System.out.println("更新问题情况:"+sql);
+            db.executeUpdate(sql);
+        }
         //返回状态
-        response.setContentType("application/json; charset=UTF-8");
-        queryBuilder.clear();
-        sql=queryBuilder.getSelectStmt();
-        db=new DatabaseHelper();
-        rs=db.executeQuery(sql);
-        processResult(rs);
-        PrintWriter out = response.getWriter();
-        for(int i=0;i<queryResult.length();i++)
-        {
-            System.out.printf("result[%d].guid=%d\n",i, queryResult.getJSONObject(i).getInt("guid"));
-        }
-        out.print(queryResult);
-        out.flush();
-        out.close();
-
+        response.sendRedirect("questionnaire/publish/questionnaire_list.jsp");
         System.out.println("exit modifyResult");
     }
 

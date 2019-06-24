@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <input type="hidden" id="ContextPath" name="ContextPath" value="<%=request.getContextPath()%>" />
-<input type="hidden" id="id" name="id" value="<%=request.getParameter("id")%>"/>
 <%--<%@include file="js/check_login.jsp"%>--%>
 
 <!DOCTYPE html>
@@ -22,7 +21,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="../../image/png" sizes="16x16" href="../../images/favicon.png">
-    <title>移动互动课堂 | 问卷管理</title>
+    <title>移动互动课堂 | 文件管理</title>
     <!-- Custom CSS -->
     <link href="../../css/lib/amchart/export.css" rel="stylesheet">
     <link href="../../css/lib/owl.carousel.min.css" rel="stylesheet" />
@@ -33,8 +32,8 @@
 <body class="header-fix fix-sidebar">
 <!-- Main wrapper  -->
 <div id="main-wrapper">
-    <%@include file="../../page_header.jsp"%>
-    <%@include file="../../page_sidebar_menu.jsp"%>
+    <%@include file="../page_header.jsp"%>
+    <%@include file="../page_sidebar_menu.jsp"%>
     <!-- Page wrapper  -->
     <div class="page-wrapper">
         <!-- Bread crumb -->
@@ -43,7 +42,7 @@
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">移动互动课堂</a></li>
-                    <li class="breadcrumb-item active">问卷管理</li>
+                    <li class="breadcrumb-item active">文件管理</li>
                 </ol>
             </div>
         </div>
@@ -111,25 +110,25 @@
                                                 <div class="form-group">
                                                     <label>字段选择</label>
                                                     <select id="key1" class="form-control">
-                                                        <option value="create_time" selected="selected">首次提交时间</option>
-                                                        <option value="change_time" >最后修改时间</option>
-                                                        <option value="answer_num" >回答次数</option>
+                                                        <option value="create_time" selected="selected">上传时间</option>
+                                                        <option value="change_time" >最近修改时间</option>
+                                                        <option value="download_num" >下载数</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <select id="key2" class="form-control">
                                                         <option value="" selected="selected">请选择</option>
-                                                        <option value="change_time" >最后修改时间</option>
-                                                        <option value="create_time">首次提交时间</option>
-                                                        <option value="answer_num" >回答次数</option>
+                                                        <option value="change_time" >最近修改时间</option>
+                                                        <option value="create_time">上传时间</option>
+                                                        <option value="download_num" >下载数</option>
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
                                                     <select id="key3" class="form-control">
                                                         <option value="" selected="selected">请选择</option>
-                                                        <option value="answer_num" >回答次数</option>
-                                                        <option value="create_time">首次提交时间</option>
-                                                        <option value="change_time" >最后修改时间</option>
+                                                        <option value="download_num" >下载数</option>
+                                                        <option value="change_time" >最近修改时间</option>
+                                                        <option value="create_time">上传时间</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -139,15 +138,22 @@
                                     <div class="tab-pane  p-20" id="profile3" role="tabpanel">
 
                                             <div class="row">
-                                                <div class="col-lg-auto">
+                                                <div class="col-lg-6">
                                                     <div class="card">
                                                         <div class="form-group">
-                                                            <p class="text-muted m-b-15 f-s-12">用户名</p>
-                                                            <input type="text" id="user_name" name="user_name" class="form-control input-focus" placeholder="输入用户名">
+                                                            <p class="text-muted m-b-15 f-s-12">文件名</p>
+                                                            <input type="text" id="title" name="title" class="form-control input-focus" placeholder="输入问卷名">
                                                         </div>
                                                     </div>
                                                 </div>
-
+                                                <div class="col-lg-6">
+                                                    <div class="card">
+                                                        <div class="form-group">
+                                                            <p class="text-muted m-b-15 f-s-12">上传者</p>
+                                                            <input type="text" id="user_name" name="user_name" class="form-control input-focus" placeholder="输入上传者">
+                                                        </div>
+                                                    </div>
+                                                </div>
 
                                             </div>
                                         <button type="button" onclick="searchRecord()" class="btn btn-default btn-flat m-b-10">查询</button>
@@ -159,8 +165,9 @@
                                                     <div class="card-toggle-body">
                                                         <div class="button-list">
                                                             <div class="btn-group">
-                                                                <button type="button" onclick="returnBack()" class="btn btn-pink btn-flat m-b-10 m-l-5">返回</button>
-                                                                <button type="button" onclick="statisticRecord()" class="btn btn-success btn-flat  m-b-10 m-l-5">统计</button>
+                                                                <button type="button" onclick="" class="btn btn-pink btn-flat m-b-10 m-l-5">返回</button>
+                                                                <button type="button" onclick="addRecord()" class="btn btn-success btn-flat  m-b-10 m-l-5">增加</button>
+                                                                <button type="button" onclick="statisticRecord()" class="btn btn-dark btn-flat m-b-10 m-l-5">统计</button>
                                                                 <button type="button" onclick="getAllRecord()" class="btn btn-primary btn-flat  m-b-10 m-l-5">所有记录</button>
                                                             </div>
                                                         </div>
@@ -187,32 +194,34 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">问卷用户</h4>
-                            <h6 class="card-subtitle">这是此用户所有回答的用户</h6>
+                            <h4 class="card-title">文件列表</h4>
+                            <h6 class="card-subtitle">这是所有用户上传的文件</h6>
                             <div class="table-responsive m-t-40">
                                 <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                     <tr>
                                         <th>ID</th>
                                         <th>操作</th>
-                                        <th>问卷名</th>
-                                        <th>发布者</th>
-                                        <th>首次回答时间</th>
-                                        <th>最后修改时间</th>
-                                        <th>回答次数</th>
-                                        <th>回答用户</th>
+                                        <th>文件名</th>
+                                        <th>文件简介</th>
+                                        <th>上传者</th>
+                                        <th>上传时间</th>
+                                        <th>最近修改时间</th>
+                                        <th>下载数</th>
+                                        <th>修改数</th>
                                     </tr>
                                     </thead>
                                     <tfoot>
                                     <tr>
                                         <th>ID</th>
                                         <th>操作</th>
-                                        <th>问卷名</th>
-                                        <th>发布者</th>
-                                        <th>首次回答时间</th>
-                                        <th>最后修改时间</th>
-                                        <th>回答次数</th>
-                                        <th>回答用户</th>
+                                        <th>文件名</th>
+                                        <th>文件简介</th>
+                                        <th>上传者</th>
+                                        <th>上传时间</th>
+                                        <th>最近修改时间</th>
+                                        <th>下载数</th>
+                                        <th>修改数</th>
                                     </tr>
                                     </tfoot>
                                     <tbody>
@@ -230,13 +239,13 @@
             <!-- End PAge Content -->
         </div>
         <!-- End Container fluid  -->
-        <%@include file="../../page_footer.jsp"%>
+        <%@include file="../page_footer.jsp"%>
     </div>
     <!-- End Page wrapper  -->
 </div>
 <!-- End Wrapper -->
-<%@include file="../../page_js.jsp"%>
-<%@include file="../../js/mobileclass.jsp"%>
+<%@include file="../page_js.jsp"%>
+<%@include file="../js/mobileclass.jsp"%>
 
 
 <script src="<%=request.getContextPath()%>/js/lib/datatables/datatables.min.js"></script>
@@ -249,7 +258,7 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 
 
-<script src="<%=request.getContextPath()%>/js/questionnaire/answer/user_list.js"></script>
+<script src="<%=request.getContextPath()%>/js/file/file_list.js"></script>
 <%--<script src="<%=request.getContextPath()%>/js/lib/atatables/datatables-init.js"></script>--%>
 
 </body>

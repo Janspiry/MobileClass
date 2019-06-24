@@ -97,7 +97,7 @@ public class AccountAction extends HttpServlet
             return;
         }
 
-        session.setAttribute("guid", rs.getInt("guid"));
+        session.setAttribute("guid", Integer.toString(rs.getInt("guid")));
         session.setAttribute("username", rs.getString("username"));
         session.setAttribute("authorization", rs.getInt("authorization"));
         session.setAttribute("login_time", System.currentTimeMillis());
@@ -169,11 +169,11 @@ public class AccountAction extends HttpServlet
         HttpSession session = request.getSession();
         DatabaseHelper db=new DatabaseHelper();
 
-        if(session.getAttribute("guid")==null)
-        {
-            System.out.println("Authorization.getMenu: error: not login");
-            return;
-        }
+//        if(session.getAttribute("guid")==null)
+//        {
+//            System.out.println("Authorization.getMenu: error: not login");
+//            return;
+//        }
         int auth=(int)session.getAttribute("authorization");
         System.out.printf("auth = %d\n", auth);
 
