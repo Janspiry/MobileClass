@@ -44,8 +44,11 @@ public class UserInfoAction extends HttpServlet
                 case "delete":
                     Delete(request, response);
                     break;
+                case "update":
+                    Update(request, response);
+                    break;
                 default:
-                    throw new Exception("未知的请求类型");
+                    throw new Exception("UserInfoAction: 未知的请求类型");
             }
         }
         catch(Exception ex)
@@ -78,10 +81,10 @@ public class UserInfoAction extends HttpServlet
         queryBuilder.setFullname(request.getParameter("fullname"));
         queryBuilder.setNativeplace(request.getParameter("nativeplace"));
         queryBuilder.setPhone(request.getParameter("phone"));
-        String sql=queryBuilder.getSelectStmt();
-        DatabaseHelper db=new DatabaseHelper();
-        ResultSet rs=db.executeQuery(sql);
-        processResult(rs);
+//        String sql=queryBuilder.getSelectStmt();
+//        DatabaseHelper db=new DatabaseHelper();
+//        ResultSet rs=db.executeQuery(sql);
+//        processResult(rs);
         JSONObject json = new JSONObject();
         json.put("errno", 0);
         out.print(json);
@@ -108,6 +111,48 @@ public class UserInfoAction extends HttpServlet
         out.close();
     }
 
+    private void Update(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("enter UserInfoAction.Update");
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        QueryBuilder q=new QueryBuilder(queryBuilder.getTablename());
+        q.setGuid(request.getParameter("guid"));
+        JSONObject json = new JSONObject();
+        if(!q.setUsername(request.getParameter("username"))){
+            json.put("errno", 1);
+            json.put("msg", "用户名格式错误");
+        }
+        if(!q.setEmail(request.getParameter("email"))){
+            json.put("errno", 2);
+            json.put("msg", "邮箱格式错误");
+        }
+        if(!q.setGender(request.getParameter("gender"))){
+            json.put("errno", 3);
+            json.put("msg", "性别格式错误");
+        }
+        if(!q.setFullname(request.getParameter("fullname"))){
+            json.put("errno", 4);
+            json.put("msg", "姓名格式错误");
+        }
+        if(!q.setNativeplace(request.getParameter("nativeplace"))){
+            json.put("errno", 5);
+            json.put("msg", "籍贯格式错误");
+        }
+        if(!q.setPhone(request.getParameter("phone"))){
+            json.put("errno", 6);
+            json.put("msg", "电话格式错误");
+        }
+        if(!json.has("errno")) {
+            String sql = q.getUpdateStmt();
+            DatabaseHelper db = new DatabaseHelper();
+            db.execute(sql);
+            json.put("errno", 0);
+        }
+        out.print(json);
+        out.flush();
+        out.close();
+    }
+
     private void processResult(ResultSet rs) throws JSONException, SQLException {
         result = new JSONArray("[]");
         rs.beforeFirst();
@@ -115,9 +160,9 @@ public class UserInfoAction extends HttpServlet
         {
             JSONObject item = new JSONObject();
             item.put("guid", rs.getInt("guid"));
-            item.put("create_time", rs.getString("create_time"));
-            item.put("modify_time", rs.getString("modify_time"));
-            item.put("authorization", rs.getInt("authorization"));
+//            item.put("create_time", rs.getString("create_time"));
+//            item.put("modify_time", rs.getString("modify_time"));
+//            item.put("authorization", rs.getInt("authorization"));
             item.put("username", rs.getString("username"));
             item.put("fullname", rs.getString("fullname"));
             item.put("gender", rs.getInt("gender"));

@@ -20,7 +20,7 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
     <link href="<%=request.getContextPath()%>/css/lib/nestable/nestable.css" rel="stylesheet">
-    <title>移动互动课堂 | 用户信息管理</title>
+    <%--<title>移动互动课堂 | 用户信息管理</title>--%>
     <%@include file="../page_css.jsp"%>
 </head>
 
@@ -55,8 +55,13 @@
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                 <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">更多</span>
                             </a>
-                            <div class="dropdown-menu"> <a class="dropdown-item" id="dropdown1-tab" href="#dropdown1" role="tab" data-toggle="tab" aria-controls="dropdown1">@fat</a> <a class="dropdown-item" id="dropdown2-tab" href="#dropdown2" role="tab" data-toggle="tab"
-                                                                                                                                                                                         aria-controls="dropdown2">@mdo</a> </div>
+                            <div class="dropdown-menu">
+                                <span class="dropdown-item" id="tab-print" role="tab" aria-controls="dropdown1">打印</span>
+                                <span class="dropdown-item" id="tab-excel" role="tab" aria-controls="dropdown1">导出为Excel</span>
+                                <span class="dropdown-item" id="tab-csv" role="tab" aria-controls="dropdown1">导出为CSV</span>
+                                <span class="dropdown-item" id="tab-pdf" role="tab" aria-controls="dropdown1">导出为PDF</span>
+                                <span class="dropdown-item" id="dropdown2-tab" role="tab" aria-controls="dropdown2">统计</span>
+                            </div>
                         </li>
                     </ul>
                     <div id="tab-content" class="tab-content tabcontent-border p-20" style="display: none;">

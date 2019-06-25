@@ -174,7 +174,8 @@ public class AccountAction extends HttpServlet
 //            System.out.println("Authorization.getMenu: error: not login");
 //            return;
 //        }
-        int auth=(int)session.getAttribute("authorization");
+//        int auth=(int)session.getAttribute("authorization");
+        int auth=15;
         System.out.printf("auth = %d\n", auth);
 
         String sql=String.format("select * from `menu_tree` where authorization&%d>0", auth);

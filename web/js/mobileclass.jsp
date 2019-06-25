@@ -127,7 +127,7 @@ var Dialog = function() {
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "确认",
+                    confirmButtonText: "确定",
                     cancelButtonText: "放弃",
                     closeOnConfirm: true
                 },

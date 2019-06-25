@@ -908,6 +908,7 @@ ul.list-style-none li a:hover {
 .dropdown-item {
     padding: 8px 1rem;
     color: #67757c;
+    cursor: pointer;
 }
 
 .custom-select {
@@ -2247,6 +2248,7 @@ textarea {
     color: #ffffff;
     margin-right: 3px;
     padding: 5px 15px;
+    display: none;
 }
 
 .dt-buttons .dt-button:hover {

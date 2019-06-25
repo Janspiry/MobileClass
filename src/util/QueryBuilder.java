@@ -1,5 +1,7 @@
 package util;
 
+import java.util.regex.Pattern;
+
 /**
  * Created by silenus on 2019/5/11.
  */
@@ -47,10 +49,16 @@ public class QueryBuilder {
     {
         setAuthorization(filterInt(value));
     }
-    public void setAuthorization(int value)
+    public boolean setAuthorization(int value)
     {
-        if(0 <= value && value <= 15)authorization = value;
-        else authorization = -1;
+        if(0 <= value && value <= 15){
+            authorization = value;
+            return true;
+        }
+        else {
+            authorization = -1;
+            return false;
+        }
     }
 
     private String username;
@@ -59,7 +67,19 @@ public class QueryBuilder {
         if(username == null || username.length() == 0)return null;
         else return username;
     }
-    public void setUsername(String value){ username = filter(value); }
+    public boolean setUsername(String value)
+    {
+        String pat = "^[_0-9A-Za-z]+$";
+        if(Pattern.matches(pat, value))
+        {
+            username=value;
+            return true;
+        }
+        else {
+            username=null;
+            return false;
+        }
+    }
 
     private String password;
     public String getPassword()
@@ -75,17 +95,27 @@ public class QueryBuilder {
         if(fullname == null || fullname.length() == 0)return null;
         else return fullname;
     }
-    public void setFullname(String value){ fullname = filter(value); }
+    public boolean setFullname(String value){
+        String pat = "^[\\u4e00-\\u9fa5_a-zA-Z0-9]+$";
+        if(Pattern.matches(pat, value)){
+            fullname=value;
+            return true;
+        }else{
+            fullname=null;
+            return false;
+        }
+    }
 
     private int gender;
     public int getGender()
     {
         return gender;
     }
-    public void setGender(String value)
+    public boolean setGender(String value)
     {
         gender = filterInt(value);
         if(gender == 0)gender = -1;
+        return true;
     }
 
     private String schoolnum;
@@ -94,7 +124,18 @@ public class QueryBuilder {
         if(schoolnum == null || schoolnum.length() == 0)return null;
         else return schoolnum;
     }
-    public void setSchoolnum(String value){ schoolnum = filter(value); }
+    public boolean setSchoolnum(String value){
+        String pat = "^[_0-9A-Za-z]+$";
+        if(Pattern.matches(pat, value))
+        {
+            schoolnum=value;
+            return true;
+        }
+        else {
+            schoolnum=null;
+            return false;
+        }
+    }
 
     private String nativeplace;
     public String getNativeplace()
@@ -102,7 +143,16 @@ public class QueryBuilder {
         if(nativeplace == null || nativeplace.length() == 0)return null;
         else return nativeplace;
     }
-    public void setNativeplace(String value){ nativeplace = filter(value); }
+    public boolean setNativeplace(String value){
+        String pat = "^[\\u4e00-\\u9fa5_a-zA-Z0-9]+$";
+        if(Pattern.matches(pat, value)){
+            nativeplace=value;
+            return true;
+        }else{
+            nativeplace=null;
+            return false;
+        }
+    }
 
     private String email;
     public String getEmail()
@@ -110,7 +160,16 @@ public class QueryBuilder {
         if(email == null || email.length() == 0)return null;
         else return email;
     }
-    public void setEmail(String value){ email = filter(value); }
+    public boolean setEmail(String value){
+        String pat = "^[_a-zA-Z0-9]+@[_a-zA-Z0-9]+(.com)?$";
+        if(Pattern.matches(pat, value)){
+            email=value;
+            return true;
+        }else{
+            email=null;
+            return false;
+        }
+    }
 
     private String phone;
     public String getPhone()
@@ -118,7 +177,16 @@ public class QueryBuilder {
         if(phone == null || phone.length() == 0)return null;
         else return phone;
     }
-    public void setPhone(String value){ phone = filter(value); }
+    public boolean setPhone(String value){
+        String pat = "^[0-9]{3,15}$";
+        if(Pattern.matches(pat, value)){
+            phone=value;
+            return true;
+        }else{
+            phone=null;
+            return false;
+        }
+    }
 
     private int filterInt(String value)
     {
@@ -324,6 +392,53 @@ public class QueryBuilder {
             throw new IllegalArgumentException("tableName missed");
         }
         String sql = String.format("delete from `%s` %s", getTablename(), getWhereClause());
+        System.out.println(sql);
+        return sql;
+    }
+
+    public String getUpdateStmt(){
+        System.out.println("QueryBuilder.getUpdateStmt");
+        if(getGuid()==-1){
+            throw new IllegalArgumentException("getUpdateStmt: 没有设置guid");
+        }
+        String sql = String.format("update `%s` set guid=%d", getTablename(), getGuid());
+        if(getAuthorization()!=-1)
+        {
+            sql += String.format(", `authorization`=%d", getAuthorization());
+        }
+        if(getUsername()!=null)
+        {
+            sql += String.format(", `username`='%s'", getUsername());
+        }
+        if(getPassword()!=null)
+        {
+            sql += String.format(", `password`='%s'", getPassword());
+        }
+        if(getFullname()!=null)
+        {
+            sql += String.format(", `fullname`='%s'", getFullname());
+        }
+        if(getGender()!=-1)
+        {
+            sql += String.format(", `gender`=%d", getGender());
+        }
+        if(getSchoolnum()!=null)
+        {
+            sql += String.format(", `schoolnum`='%s'", getSchoolnum());
+        }
+        if(getNativeplace()!=null)
+        {
+            sql += String.format(", `nativeplace`='%s'", getNativeplace());
+        }
+        if(getEmail()!=null)
+        {
+            sql += String.format(", `email`='%s'", getEmail());
+        }
+        if(getPhone()!=null)
+        {
+            sql += String.format(", `phone`='%s'", getPhone());
+        }
+        sql += String.format(" where `guid`=%d", getGuid());
         System.out.println(sql);
         return sql;
     }
