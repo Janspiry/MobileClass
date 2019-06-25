@@ -239,6 +239,10 @@ function statisticRecord(){
     window.location.href="file_statistic.jsp";
 
 };
+function printRecord(){
+    window.location.href="file_print.jsp";
+
+};
 
 function sortRecord(){
     var key1 = $("#key1").val();

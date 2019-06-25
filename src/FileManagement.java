@@ -104,7 +104,9 @@ public class FileManagement extends HttpServlet {
                 {
                     String value = item.getString() ;//这里是表单context,grades等的值
                     value =new String(item.getString().getBytes("iso-8859-1"),"utf-8");
-                    if(name=="context"||name.equals("context")){
+                    if(name=="title"||name.equals("title")){
+                        title=value;
+                    } else if(name=="context"||name.equals("context")){
                         context=value;
                     }
                 }
@@ -116,7 +118,6 @@ public class FileManagement extends HttpServlet {
                     int start = value.lastIndexOf("\\");
                     //截取 上传文件的 字符串名字，加1是 去掉反斜杠，
                     String filename = value.substring(start+1);
-                    title=filename;
                     fileUrl="/upload/"+filename;
                     if(filename.isEmpty()){
                         continue;
@@ -186,6 +187,7 @@ public class FileManagement extends HttpServlet {
             System.out.printf("result[%d].guid=%d\n",i, queryResult.getJSONObject(i).getInt("guid"));
         }
         out.print(queryResult);
+        session.setAttribute("jsonData",queryResult);
         out.flush();
         out.close();
         System.out.println("exit getResult");
@@ -255,7 +257,7 @@ public class FileManagement extends HttpServlet {
         System.out.println("exit modifyResult");
     }
     private void getStatistics(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.getStatistics");
+        System.out.println("enter FileManagement.getStatistics");
         String sql = queryBuilder.getSelectStmt();
         String dateFormat = request.getParameter("interval");
         if(dateFormat==null || dateFormat.length()==0)
@@ -263,7 +265,7 @@ public class FileManagement extends HttpServlet {
             System.out.println("getStatistics: miss argument 'interval'");
             return;
         }
-        if(Objects.equals(dateFormat, "hour"))dateFormat="%Y-%m-%d %H:00:00";
+        if(Objects.equals(dateFormat, "year"))dateFormat="%Y";
         else if(Objects.equals(dateFormat, "day"))dateFormat="%Y-%m-%d";
         else if(Objects.equals(dateFormat, "month"))dateFormat="%Y-%m";
         sql = String.format("select " +
@@ -288,7 +290,7 @@ public class FileManagement extends HttpServlet {
         out.print(list);
         out.flush();
         out.close();
-        System.out.println("exit AuthorizationAction.getStatistics");
+        System.out.println("exit FileManagement.getStatistics");
     }
 
 
