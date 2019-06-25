@@ -2,20 +2,36 @@
  * Created by silenus on 2019/6/16.
  */
 
-var cnt = 0;
+var isVisible = false;
 var TabView = function(){
+
+    var showTabView = function(){
+        $('#tab-content').show(100);
+        $('#fold-icon').removeClass('fa fa-angle-down');
+        $('#fold-icon').addClass('fa fa-angle-up');
+        isVisible=true;
+    }
+
+    var hideTabView = function(){
+        $('#tab-content').hide(100);
+        $('#fold-icon').removeClass('fa fa-angle-up');
+        $('#fold-icon').addClass('fa fa-angle-down');
+        //$('.nav-link').removeClass('active');
+        isVisible=false;
+    }
+
     var renderFoldBtn = function(){
         $('#fold-btn').click(function() {
-            if(cnt == 0){
-                $('#tab-content').hide(100);
-                $('#fold-icon').removeClass('fa fa-angle-up');
-                $('#fold-icon').addClass('fa fa-angle-down');
+            if(isVisible){
+                hideTabView();
             } else {
-                $('#tab-content').show(100);
-                $('#fold-icon').removeClass('fa fa-angle-down');
-                $('#fold-icon').addClass('fa fa-angle-up');
+                showTabView();
             }
-            cnt = (cnt + 1) % 2;
+        });
+        $('#myTab .nav-item').not('.dropdown').click(function(){
+            if(!isVisible){
+                showTabView();
+            }
         });
     };
 

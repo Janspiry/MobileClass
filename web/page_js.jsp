@@ -35,3 +35,6 @@
 <script src="<%=request.getContextPath()%>/js/lib/owl-carousel/owl.carousel-init.js"></script>
 <!--Custom JavaScript -->
 <script src="<%=request.getContextPath()%>/js/custom.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/jquery/jquery.validate.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/toastr/toastr.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/sweetalert/sweetalert.min.js"></script>

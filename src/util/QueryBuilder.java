@@ -85,6 +85,7 @@ public class QueryBuilder {
     public void setGender(String value)
     {
         gender = filterInt(value);
+        if(gender == 0)gender = -1;
     }
 
     private String schoolnum;
@@ -195,12 +196,8 @@ public class QueryBuilder {
         phone=null;
     }
 
-    public String getSelectStmt(){
-        if(getTablename() == null)
-        {
-            throw new IllegalArgumentException("tableName missed");
-        }
-        String sql = String.format("select * from `%s` where 1=1", getTablename());
+    private String getWhereClause(){
+        String sql="where 1=1";
         if(getGuid()!=-1)
             sql += String.format(" and `guid`=%d", getGuid());
         if(getCreate_time_from()!=null && getCreate_time_to()!=null)
@@ -222,7 +219,17 @@ public class QueryBuilder {
             sql += String.format(" and `email`='%s'", getEmail());
         if(getPhone()!=null)
             sql += String.format(" and `phone`='%s'", getPhone());
-        System.out.println("sql is "+sql);
+        return sql;
+    }
+
+    public String getSelectStmt(){
+        System.out.println("QueryBuilder.getSelectStmt");
+        if(getTablename() == null)
+        {
+            throw new IllegalArgumentException("tableName missed");
+        }
+        String sql = String.format("select * from `%s` %s", getTablename(), getWhereClause());
+        System.out.println(sql);
         return sql;
     }
 
@@ -307,6 +314,17 @@ public class QueryBuilder {
         String sql = String.format("insert into `%s` %s %s",
                 getTablename(), keyList.toString(), valList.toString());
         System.out.println("insert statement is "+sql);
+        return sql;
+    }
+
+    public String getDeleteStmt(){
+        System.out.println("QueryBuilder.getDeleteStmt");
+        if(getTablename() == null)
+        {
+            throw new IllegalArgumentException("tableName missed");
+        }
+        String sql = String.format("delete from `%s` %s", getTablename(), getWhereClause());
+        System.out.println(sql);
         return sql;
     }
 }
