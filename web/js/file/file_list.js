@@ -47,9 +47,40 @@ function Record(){
         // buttons: [
         //     'excel', 'pdf', 'print'
         // ],
-        buttons: [
-            'excel', 'print'
+        // buttons: [
+        //     'excel', 'print'
+        // ],
+        buttons:[
+            {
+                extend: 'print',
+                className: 'buttons-print hidden',
+                messageTop: '移动互动课堂|文件信息列表',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7,8 ]
+                }
+            },
+            {
+                extend: 'excel',
+                title: 'fileinfo',
+                className: 'buttons-excel hidden',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7,8 ]
+                }
+            },
+            {
+                extend: 'csv',
+                title: 'fileinfo',
+                className: 'buttons-csv hidden',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7,8 ]
+                }
+            },
+
         ],
+        fixedHeader: true,
+        fixedColumns: {
+            leftColumns: 1
+        },
         ordering: false,
         "oLanguage": {
             "aria": {
@@ -119,11 +150,17 @@ function Record(){
         });
     });
     $('#example23 tbody').on('click', '.delete-button', function (event) {
-        var id = $(this).parent().prev().text();
-        deleteRecord(id);
-        var table = $('#example23').DataTable();
-        table.row($(this).parents('tr')).remove().draw();
-        event.preventDefault();
+        var _this=this;
+        Dialog.showComfirm("确定要删除这条记录吗？", "警告", function(){
+            var id = $(_this).parent().prev().text();
+            console.log("id"+id);
+            deleteRecord(id);
+            var table = $('#example23').DataTable();
+            table.row($(_this).parents('tr')).remove().draw();
+            event.preventDefault();
+            Dialog.showSuccess("记录已删除", "操作成功");
+        });
+
     });
     $("#example23 tbody").on("click", ".edit-button", function (event) {
         var tds = $(this).parents("tr").children();
@@ -184,10 +221,10 @@ function deleteRecord(id) {
     if (id !="") {
         url += "&guid=" + id;
     }
+    console.log("删除操作url"+url);
     $.post(url, function (jsonObject) {
-        alert("删除成功！");
+
     });
-    event.preventDefault();
 }
 function getAllRecord(){
     var dataTable = $('#example23').DataTable();
@@ -237,10 +274,15 @@ function addRecord(){
 
 function statisticRecord(){
     window.location.href="file_statistic.jsp";
-
 };
 function printRecord(){
     window.location.href="file_print.jsp";
+};
+function expordExcel(){
+    $(".dt-buttons .buttons-excel").click();
+};
+function expordCsv(){
+    $(".dt-buttons .buttons-csv").click();
 
 };
 

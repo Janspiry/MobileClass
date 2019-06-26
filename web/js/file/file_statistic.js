@@ -76,7 +76,15 @@ var Page = function(){
                 "valueField": "count"
             }],
             "export": {
-                "enabled": true
+                "enabled": true,
+                "menu":[{
+                    "class": "export-main",
+                    "menu": [
+                        { "fileName": "文件上传时间统计", "format": "png", "label": "导出为PNG" },
+                        { "fileName": "文件上传时间统计", "format": "jpg", "label": "导出为JPG" },
+                        { "fileName": "文件上传时间统计", "format": "svg", "label": "导出为SVG" },
+                    ]
+                }]
             }
 
         });

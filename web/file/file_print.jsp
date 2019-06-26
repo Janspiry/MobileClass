@@ -44,8 +44,8 @@
 <div>
     <div>
         <div class="container-fluid">
-            <button type="button" onclick="returnBack()" class="no_print btn btn-success m-b-10 m-l-5">返回</button>
             <button type="button" onclick="printRecord()" class="no_print btn btn-success m-b-10 m-l-5">打印</button>
+            <button type="button" onclick="returnBack()" class="no_print btn btn-success m-b-10 m-l-5">返回</button>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
@@ -66,18 +66,6 @@
                                         <th>修改数</th>
                                     </tr>
                                     </thead>
-                                    <tfoot>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>文件名</th>
-                                        <th>文件简介</th>
-                                        <th>上传者</th>
-                                        <th>上传时间</th>
-                                        <th>最近修改时间</th>
-                                        <th>下载数</th>
-                                        <th>修改数</th>
-                                    </tr>
-                                    </tfoot>
                                     <tbody>
 
                                     </tbody>
@@ -115,8 +103,7 @@
     .no_print {
         display: none;
     }
-
-    .page_next {
-        page-break-after: always;
-    }
 </style>
+<script>
+
+</script>>
