@@ -13,6 +13,7 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import javax.xml.crypto.Data;
+import java.util.Objects;
 import java.util.regex.*;
 
 /**
@@ -46,6 +47,9 @@ public class UserInfoAction extends HttpServlet
                     break;
                 case "update":
                     Update(request, response);
+                    break;
+                case "statistics":
+                    Statistics(request, response);
                     break;
                 default:
                     throw new Exception("UserInfoAction: 未知的请求类型");
@@ -149,6 +153,41 @@ public class UserInfoAction extends HttpServlet
             json.put("errno", 0);
         }
         out.print(json);
+        out.flush();
+        out.close();
+    }
+
+    private void Statistics(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
+        System.out.println("enter UserInfoAction.Statistics");
+        String dateFormat = request.getParameter("interval");
+        if(dateFormat==null || dateFormat.length()==0)
+        {
+            System.out.println("getStatistics: miss argument 'interval'");
+            return;
+        }
+        if(dateFormat.equals("hour"))dateFormat="%Y-%m-%d %H:00:00";
+        else if(dateFormat.equals("day"))dateFormat="%Y-%m-%d";
+        else if(dateFormat.equals("month"))dateFormat="%Y-%m";
+        String sql = String.format("select " +
+                        "DATE_FORMAT(create_time,'%s') as tt, " +
+                        " count(*) as cnt " +
+                        " from (%s) as tmp " +
+                        " group by tt ",
+                dateFormat, queryBuilder.getSelectStmt());
+        System.out.println("UserInfoAction.Statistics: sql = "+sql);
+        DatabaseHelper db=new DatabaseHelper();
+        ResultSet rs=db.executeQuery(sql);
+        JSONArray list = new JSONArray();
+        while(rs.next())
+        {
+            JSONObject item = new JSONObject();
+            item.put("time", rs.getString("tt"));
+            item.put("count", rs.getString("cnt"));
+            list.put(item);
+        }
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        out.print(list);
         out.flush();
         out.close();
     }

@@ -563,7 +563,7 @@
 
         var sta_onclick = function(evt){
             console.log("sta_onclick");
-
+            window.location.href = "<%=request.getContextPath()%>/userinfo/statistics.jsp";
         }
 
         return {
