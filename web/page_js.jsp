@@ -9,13 +9,18 @@
 
 <!-- All Jquery -->
 <script src="<%=request.getContextPath()%>/js/lib/jquery/jquery.min.js"></script>
+
 <!-- Bootstrap tether Core JavaScript -->
 <script src="<%=request.getContextPath()%>/js/lib/bootstrap/js/popper.min.js"></script>
+
 <script src="<%=request.getContextPath()%>/js/lib/bootstrap/js/bootstrap.min.js"></script>
-<!-- slimscrollbar scrollbar JavaScript -->
-<script src="<%=request.getContextPath()%>/js/jquery.slimscroll.js"></script>
+
 <!--Menu sidebar -->
 <script src="<%=request.getContextPath()%>/js/sidebarmenu.js"></script>
+
+<!-- slimscrollbar scrollbar JavaScript -->
+<script src="<%=request.getContextPath()%>/js/jquery.slimscroll.js"></script>
+
 <!--stickey kit -->
 <script src="<%=request.getContextPath()%>/js/lib/sticky-kit-master/dist/sticky-kit.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/sparklinechart/jquery.sparkline.min.js"></script>

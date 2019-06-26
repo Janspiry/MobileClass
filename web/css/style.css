@@ -2103,7 +2103,7 @@ textarea {
 
 .modal-dialog {
     margin: 30px auto;
-    position: relative;
+    position: absolute;
     top: 50%;
     transform: translateY(-50%) !important;
     width: 70%;
@@ -2248,7 +2248,6 @@ textarea {
     color: #ffffff;
     margin-right: 3px;
     padding: 5px 15px;
-    display: none;
 }
 
 .dt-buttons .dt-button:hover {

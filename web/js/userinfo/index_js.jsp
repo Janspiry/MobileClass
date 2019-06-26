@@ -305,6 +305,7 @@
                 buttons:[
                     {
                         extend: 'print',
+                        className: 'buttons-print hidden',
                         messageTop: '移动互动课堂 用户信息列表',
                         exportOptions: {
                             columns: [ 2,3,4,5,6,7,8 ]
@@ -312,21 +313,25 @@
                     },
                     {
                         extend: 'excel',
-//                        messageTop: '移动互动课堂 用户信息列表',
+                        title: 'userinfo_export',
+                        className: 'buttons-excel hidden',
                         exportOptions: {
                             columns: [ 2,3,4,5,6,7,8 ]
                         }
                     },
                     {
                         extend: 'csv',
-//                        messageTop: '移动互动课堂 用户信息列表',
+                        title: 'userinfo_export',
+                        className: 'buttons-csv hidden',
                         exportOptions: {
                             columns: [ 2,3,4,5,6,7,8 ]
                         }
                     },
                     {
-                        extend: 'pdf',
-//                        messageTop: '移动互动课堂 用户信息列表',
+                        extend: 'pdfHtml5',
+                        title: 'userinfo_export',
+                        bom: true,
+                        className: 'buttons-pdf hidden',
                         exportOptions: {
                             columns: [ 2,3,4,5,6,7,8 ]
                         }
@@ -432,6 +437,7 @@
             $("#tab-excel").click(excel_onclick);
             $("#tab-csv").click(csv_onclick);
             $("#tab-pdf").click(pdf_onclick);
+            $("#tab-sta").click(sta_onclick);
         }
 
         var fetchResult = function(){
@@ -553,6 +559,11 @@
         var pdf_onclick = function(){
             console.log("pdf_onclick");
             $(".dt-buttons .buttons-pdf").click();
+        }
+
+        var sta_onclick = function(evt){
+            console.log("sta_onclick");
+
         }
 
         return {

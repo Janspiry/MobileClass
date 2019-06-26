@@ -19,7 +19,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <link href="<%=request.getContextPath()%>/css/lib/nestable/nestable.css" rel="stylesheet">
+    <%--<link href="<%=request.getContextPath()%>/css/lib/nestable/nestable.css" rel="stylesheet">--%>
     <%--<title>移动互动课堂 | 用户信息管理</title>--%>
     <%@include file="../page_css.jsp"%>
 </head>
@@ -43,6 +43,8 @@
         </div>
         <!-- End Bread crumb -->
 
+
+
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
@@ -56,199 +58,20 @@
                                 <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">更多</span>
                             </a>
                             <div class="dropdown-menu">
-                                <span class="dropdown-item" id="tab-print" role="tab" aria-controls="dropdown1">打印</span>
-                                <span class="dropdown-item" id="tab-excel" role="tab" aria-controls="dropdown1">导出为Excel</span>
-                                <span class="dropdown-item" id="tab-csv" role="tab" aria-controls="dropdown1">导出为CSV</span>
-                                <span class="dropdown-item" id="tab-pdf" role="tab" aria-controls="dropdown1">导出为PDF</span>
-                                <span class="dropdown-item" id="dropdown2-tab" role="tab" aria-controls="dropdown2">统计</span>
+                                <span class="dropdown-item" id="tab-print" role="tab">打印</span>
+                                <span class="dropdown-item" id="tab-excel" role="tab">导出为Excel</span>
+                                <span class="dropdown-item" id="tab-csv" role="tab">导出为CSV</span>
+                                <%--<span class="dropdown-item" id="tab-pdf" role="tab" aria-controls="dropdown1">导出为PDF</span>--%>
+                                <a class="dropdown-item" id="tab-sta" role="tab" data-toggle="modal" href="#basic">统计</a>
                             </div>
                         </li>
                     </ul>
                     <div id="tab-content" class="tab-content tabcontent-border p-20" style="display: none;">
                         <div role="tabpanel" class="tab-pane active" id="tab-query">
-                            <form id="form-query" action="#" class="form-horizontal">
-                                <div class="form-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">用户名</label>
-                                                <div class="col-md-9">
-                                                    <input name="username" type="text" class="form-control" placeholder="User Name">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">籍贯</label>
-                                                <div class="col-md-9">
-                                                    <input name="nativeplace" type="text" class="form-control" placeholder="Native Place">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">姓名</label>
-                                                <div class="col-md-9">
-                                                    <input name="fullname" type="text" class="form-control" placeholder="Full Name">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">邮箱</label>
-                                                <div class="col-md-9">
-                                                    <input name="email" type="text" class="form-control" placeholder="Email">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">性别</label>
-                                                <div class="col-md-9">
-                                                    <select name="gender" class="form-control">
-                                                        <option value="0">-- Gender --</option>
-                                                        <option value="1">男</option>
-                                                        <option value="2">女</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">电话</label>
-                                                <div class="col-md-9">
-                                                    <input name="phone" type="text" class="form-control" placeholder="Phone">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">学号</label>
-                                                <div class="col-md-9">
-                                                    <input name="schoolnum" type="text" class="form-control" placeholder="School Number">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="form-actions">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-offset-3 col-md-9">
-                                                    <button type="submit" class="btn btn-success">查询</button>
-                                                    <button type="clear" class="btn btn-inverse">清空</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6"> </div>
-                                    </div>
-                                </div>
-                            </form>
+                            <%@include file="form_query.jsp"%>
                         </div>
                         <div class="tab-pane" id="tab-add" role="tabpanel">
-                            <form id="form-add" action="#" class="form-horizontal">
-                                <div class="form-body">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">用户名</label>
-                                                <div class="col-md-9">
-                                                    <input name="username" type="text" class="form-control" placeholder="User Name">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">密码</label>
-                                                <div class="col-md-9">
-                                                    <input name="password" type="password" class="form-control" placeholder="Password">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">姓名</label>
-                                                <div class="col-md-9">
-                                                    <input name="fullname" type="text" class="form-control" placeholder="Full Name">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">籍贯</label>
-                                                <div class="col-md-9">
-                                                    <input name="nativeplace" type="text" class="form-control" placeholder="Native Place">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">性别</label>
-                                                <div class="col-md-9">
-                                                    <select name="gender" class="form-control">
-                                                        <option value="0">-- Gender --</option>
-                                                        <option value="1">男</option>
-                                                        <option value="2">女</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">邮箱</label>
-                                                <div class="col-md-9">
-                                                    <input name="email" type="text" class="form-control" placeholder="Email">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">学号</label>
-                                                <div class="col-md-9">
-                                                    <input name="schoolnum" type="text" class="form-control" placeholder="School Number">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group row">
-                                                <label class="control-label text-right col-md-3">电话</label>
-                                                <div class="col-md-9">
-                                                    <input name="phone" type="text" class="form-control" placeholder="Phone">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <hr>
-                                <div class="form-actions">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="row">
-                                                <div class="col-md-offset-3 col-md-9">
-                                                    <button type="submit" class="btn btn-success">添加</button>
-                                                    <button type="clear" class="btn btn-inverse">清空</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-6"> </div>
-                                    </div>
-                                </div>
-                            </form>
+                            <%@include file="form_add.jsp"%>
                         </div>
                         <div role="tabpanel" class="tab-pane active" id="tab-sort">
                             <%--<div class="row">--%>
@@ -289,12 +112,6 @@
 
                                 <%--<div class="col-lg-1"></div>--%>
                             <%--</div>--%>
-
-                        </div>
-                        <div class="tab-pane fade" id="dropdown1" role="tabpanel" aria-labelledby="dropdown1-tab">
-
-                        </div>
-                        <div class="tab-pane fade" id="dropdown2" role="tabpanel" aria-labelledby="dropdown2-tab">
 
                         </div>
                     </div>
@@ -345,7 +162,7 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-<script src="<%=request.getContextPath()%>/js/lib/nestable/jquery.nestable.js"></script>
+<%--<script src="<%=request.getContextPath()%>/js/lib/nestable/jquery.nestable.js"></script>--%>
 
 <script src="../js/tabview.js"></script>
 <%@include file="../js/mobileclass.jsp"%>
