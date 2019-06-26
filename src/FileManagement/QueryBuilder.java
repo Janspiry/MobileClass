@@ -18,32 +18,22 @@ public class QueryBuilder {
     public void setTableName(String value){ tableName = filter(value); }
 
     private int guid;
-    private int questionnaireId;
-    private int url;
     private int userId;
-    private int problemId;
-    private int answeFlag;
-    private int userFlag;
-    private int answerNum;
+    private int changNum;
+    private int downloadNum;
 
     private String title;
     private String content;
-    private String limitTime;
-
+    private String fileUrl;
     private String userName;
-    private String creator;
     private String createTime;
     private String changeTime;
-    private String problem;
-    private String answer;
 
     //传递条件查询用
     private String action;
-    private String type;
     private String timeFrom;
     private String timeTo;
     private String timeInterval;
-    private String status;
 
     private String sortIndex;
     private String orderBy;
@@ -56,69 +46,29 @@ public class QueryBuilder {
     public void setGuid(String guid) {
         this.guid = filterInt(guid);
     }
-    public int getQuestionnaireId() {
-        return questionnaireId;
+
+    public int getChangNum() {
+        return changNum;
     }
 
-    public void setQuestionnaireId(String questionnaireId) {
-        this.questionnaireId = filterInt(questionnaireId);
+    public void setChangNum(String changNum) {
+        this.changNum = filterInt(changNum);
     }
 
-    public int getproblemId() {
-        return problemId;
+    public int getDownloadNum() {
+        return downloadNum;
     }
 
-    public void setProblemId(String problemId) {
-        this.problemId = filterInt(problemId);
+    public void setDownloadNum(String downloadNum) {
+        this.downloadNum = filterInt(downloadNum);
     }
 
-
-    public int getAnswerNum() {
-        return answerNum;
+    public String getfileUrl() {
+        return fileUrl;
     }
 
-    public void setAnswerNum(String answerNum) {
-        this.answerNum = filterInt(answerNum);
-    }
-    public int getAnsweFlag() {
-        return answeFlag;
-    }
-
-    public void setAnsweFlag(String answeFlag) {
-        this.answeFlag = filterInt(answeFlag);
-    }
-
-    public int getUserFlag() {
-        return userFlag;
-    }
-
-    public void setUserFlag(String userFlag) {
-        this.userFlag = filterInt(userFlag);
-    }
-
-
-
-    public String getProblem() {
-        return problem;
-    }
-
-    public void setProblem(String problem) {
-        this.problem = filter(problem);
-    }
-    public String getAnswer() {
-        return answer;
-    }
-
-    public void setAnswer(String answer) {
-        this.answer = filter(answer);
-    }
-
-    public int getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = filterInt(url);
+    public void setfileUrl(String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 
     public String getTitle() {
@@ -151,13 +101,7 @@ public class QueryBuilder {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-    public String getCreator() {
-        return creator;
-    }
 
-    public void setCreator(String creator) {
-        this.creator = creator;
-    }
 
     public String getCreateTime() {
         return createTime;
@@ -183,21 +127,6 @@ public class QueryBuilder {
         this.action = action;
     }
 
-    public String getLimitTime() {
-        return limitTime;
-    }
-
-    public void setLimitTime(String limitTime) {
-        this.limitTime = limitTime;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
 
     public String getTimeFrom() {
         return timeFrom;
@@ -215,13 +144,7 @@ public class QueryBuilder {
         this.timeTo = timeTo;
     }
 
-    public String getStatus() {
-        return status;
-    }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
 
     public String getTimeInterval() {
         return timeInterval;
@@ -308,31 +231,23 @@ public class QueryBuilder {
 
     public void clear(){
         guid=-1;
-        questionnaireId=-1;
         userId=-1;
-        problemId=-1;
-        answeFlag=0;
-        userFlag=0;
-        url=-1;
+        changNum=-1;
+        downloadNum=-1;
 
         title=null;
         content=null;
-        limitTime=null;
-
         userName=null;
-        creator=null;
         createTime=null;
         changeTime=null;
-        problem=null;
-        answer=null;
+        fileUrl=null;
+
 
         //传递条件查询用
         action=null;
-        type=null;
         timeFrom=null;
         timeTo=null;
         timeInterval=null;
-        status=null;
 
         sortIndex=null;
         orderBy=null;
@@ -341,29 +256,23 @@ public class QueryBuilder {
 
     public String getSelectStmt(){
         String sql="";
-        String where=" where problem_id=-1";
+        String where="";
         System.out.println("where:"+where);
         if(getTitle()!=null && !getTitle().equals("null") && !getTitle().isEmpty()){
             if(!where.isEmpty()){
                 where=where+" and title like '%"+getTitle()+"%'";
             }else{
-                where="where title like '%"+getTitle()+"%'";
+                where=" where title like '%"+getTitle()+"%'";
             }
         }
-        if(getCreator()!=null && !getCreator().equals("null") && !getCreator().isEmpty()){
+        if(getUserName()!=null && !getUserName().equals("null") && !getUserName().isEmpty()){
             if(!where.isEmpty()){
-                where=where+" and author_name like '%"+getCreator()+"%'";
+                where=where+" and user_name like '%"+getUserName()+"%'";
             }else{
-                where="where author_name like '%"+getCreator()+"%'";
+                where=" where user_name like '%"+getUserName()+"%'";
             }
         }
-        if(getTimeFrom()!=null && getTimeTo()!=null && !getTimeFrom().isEmpty()){
-            if(!where.isEmpty()){
-                where=where+" and create_time between '"+getTimeFrom()+"' and '"+getTimeTo()+"'";
-            }else{
-                where="where create_time between '"+getTimeFrom()+"' and '"+getTimeTo()+"'";
-            }
-        }
+
         String orderBy="";
         if(getOrderBy()!=null&&getOrderBy()!=""){
             orderBy=" order by "+getOrderBy();
@@ -390,18 +299,7 @@ public class QueryBuilder {
             valList.append(valList.length()==0 ? "values(" : ",");
             valList.append(getGuid());
         }
-        keyList.append(keyList.length()==0 ? '(' : ',');
-        keyList.append("questionnaire_id");
-        valList.append(valList.length()==0 ? "values(" : ",");
-        valList.append(getQuestionnaireId());
 
-        if(getUrl()!=-1)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("url");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(getUrl());
-        }
         if(getUserId()!=-1)
         {
             keyList.append(keyList.length()==0 ? '(' : ',');
@@ -409,19 +307,19 @@ public class QueryBuilder {
             valList.append(valList.length()==0 ? "values(" : ",");
             valList.append(getUserId());
         }
-        if(getAnsweFlag()!=-1)
+        if(getDownloadNum()!=-1)
         {
             keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("answer_flag");
+            keyList.append("download_num");
             valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(getAnsweFlag());
+            valList.append(getDownloadNum());
         }
-        if(getUserFlag()!=-1)
+        if(getChangNum()!=-1)
         {
             keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("user_flag");
+            keyList.append("change_num");
             valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(getUserFlag());
+            valList.append(getChangNum());
         }
 
         if(getUserName()!=null)
@@ -438,31 +336,14 @@ public class QueryBuilder {
             valList.append(valList.length()==0 ? "values(" : ",");
             valList.append(String.format("'%s'", getTitle()));
         }
-        keyList.append(keyList.length()==0 ? '(' : ',');
-        keyList.append("problem_id");
-        valList.append(valList.length()==0 ? "values(" : ",");
-        valList.append(getproblemId());
-        if(getProblem()!=null)
+        if(getContent()!=null)
         {
             keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("problem");
+            keyList.append("context");
             valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getProblem()));
+            valList.append(String.format("'%s'", getContent()));
         }
-        if(getAnswer()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("answer");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getAnswer()));
-        }
-        if(getCreator()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("author_name");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getCreator()));
-        }
+
         if(getCreateTime()!=null)
         {
             keyList.append(keyList.length()==0 ? '(' : ',');
@@ -470,12 +351,12 @@ public class QueryBuilder {
             valList.append(valList.length()==0 ? "values(" : ",");
             valList.append(String.format("'%s'", getCreateTime()));
         }
-        if(getLimitTime()!=null)
+        if(getfileUrl()!=null)
         {
             keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("limit_time");
+            keyList.append("file_url");
             valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getLimitTime()));
+            valList.append(String.format("'%s'", getfileUrl()));
         }
         if(getChangeTime()!=null)
         {
@@ -484,78 +365,12 @@ public class QueryBuilder {
             valList.append(valList.length()==0 ? "values(" : ",");
             valList.append(String.format("'%s'", getChangeTime()));
         }
-        if(getStatus()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("status");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getStatus()));
-        }
 
         keyList.append(')');
         valList.append(')');
         String sql = String.format("insert into `%s` %s %s",
                 getTablename(), keyList.toString(), valList.toString());
         System.out.println("insert statement is "+sql);
-        return sql;
-    }
-
-    //回答
-    public String getAnswerSql() throws SQLException {
-        String sql="";
-        String where="";
-        System.out.print("构造sql语句: ");
-        System.out.println("id:"+getGuid()+" type:"+getType());
-        String type=getType();
-
-        DatabaseHelper db = new DatabaseHelper();
-        ResultSet rs;
-        if(type!=null&&(type.equals("user")||type=="user")){
-            //构造sql语句，根据传递过来的查询条件参数
-            sql="select * from "+getTablename()+" where guid="+getGuid();
-            rs=db.executeQuery(sql);
-            String questionId="";
-            rs.next();
-            questionId=rs.getString("questionnaire_id");
-
-            where=" where questionnaire_id="+questionId+" and user_flag=1";
-            System.out.println("where:"+where);
-
-            if(getUserName()!=null&&getUserName()!=""){
-                where=where+" and user_name like '%"+getUserName()+"%'";
-            }
-            String orderBy="";
-            if(getOrderBy()!=null&&getOrderBy()!=""){
-                orderBy=" order by "+getOrderBy();
-            }
-            if(orderBy==""||orderBy.equals("")){
-                orderBy=" order by create_time desc";
-            }
-            System.out.println("where+order:"+where);
-            sql="select * from "+getTablename()+where+orderBy;
-        }else if(type!=null&&(type.equals("question")||type=="question")){
-            sql="select * from "+getTablename()+" where guid="+getGuid();
-            rs = db.executeQuery(sql);
-            String questionId="";
-            while (rs.next()) {
-                questionId=rs.getString("questionnaire_id");
-            }
-            sql="select * from "+getTablename()+" where problem_id!=-1 and questionnaire_id="
-                    +questionId+" and user_flag=0 and answer_flag=0 order by problem_id asc";
-        }else if(type!=null&&(type.equals("answer")||type=="answer")){
-            sql="select * from "+getTablename()+" where guid="+getGuid();
-            rs = db.executeQuery(sql);
-            String questionId="";
-            String userId="";
-            while (rs.next()) {
-                questionId=rs.getString("questionnaire_id");
-                userId=rs.getString("user_id");
-            }
-            sql="select * from "+getTablename()+" where questionnaire_id="+
-                    questionId+" and problem_id!=-1 and user_id="+userId+
-                    " and answer_flag=1 order by problem_id asc";
-        }
-        System.out.println("get sql:"+sql);
         return sql;
     }
 

@@ -44,7 +44,7 @@
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="javascript:void(0)">移动互动课堂</a></li>
-                    <li class="breadcrumb-item active">文件上传</li>
+                    <li class="breadcrumb-item active">文件统计</li>
                 </ol>
             </div>
         </div>
@@ -52,44 +52,31 @@
         <!-- Container fluid  -->
         <div class="container-fluid">
             <!-- Start Page Content -->
-            <button type="button" id="submit_button" class="btn btn-primary m-b-10 m-l-5">确认上传</button>
-            <button type="button" onclick="returnBack()" class="btn btn-success m-b-10 m-l-5">取消上传</button>
             <%--<form  role="form" id="page_form" name="page_form" action="add_record">--%>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 class="card-title">上传文件</h4>
-                                <h6 class="card-subtitle">选择或<code>拖动</code>要上传的文件到此区域</h6>
-                                <form id="myDropzone" action="/FileManagement?action=add_record" class="dropzone">
-                                    <div class="row">
-                                        <div class="col-md-12 ">
-                                            <div class="form-group">
-                                                <label>问卷名</label>
-                                                <input type="text" id="title" name="title" class="form-control" required>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-12 ">
-                                            <div class="form-group">
-                                                <label class="control-label">文件介绍</label>
-                                                <input type="text" id="context" name="context" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fallback">
-                                        <input name="file" type="file"/>
-                                    </div>
-                                </form>
-                                <%--<div id="myDropzone"  class="dropzone">--%>
-
-                                <%--</div>--%>
-                            </div>
+            <button type="button" onclick="returnBack()" class="btn btn-success m-b-10 m-l-5">返回</button>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="control-label">统计时间间隔</label>
+                        <select id="interval" name="interval">
+                            <option value="day" selected="selected">日</option>
+                            <option value="month">月</option>
+                            <option value="year">年</option>
+                        </select>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="card">
+                        <div class="card-title">
+                            <h4>文件统计</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="chartdiv"></div>
                         </div>
                     </div>
                 </div>
-            <%--</form>--%>
+            </div>
+        <%--</form>--%>
 
             <!-- End PAge Content -->
         </div>
@@ -113,8 +100,21 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/dropzone/dropzone.js"></script>
 
+<!-- Amchart -->
+<script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/chart-amchart/serial.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/chart-amchart/export.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/chart-amchart/light.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/chart-amchart/ammap.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/chart-amchart/worldLow.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/chart-amchart/pie.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/chart-amchart/amstock.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/chart-amchart/amchart-init.js"></script>
 
-<script src="<%=request.getContextPath()%>/js/file/file_add.js"></script>
+
+
+
+<script src="<%=request.getContextPath()%>/js/file/file_statistic.js"></script>
 <%--<script src="<%=request.getContextPath()%>/js/lib/atatables/datatables-init.js"></script>--%>
 
 </body>
@@ -123,5 +123,6 @@
 <script type="text/javascript">
     jQuery(document).ready(function() {
         MobileClass.init();
+        Page.init();
     });
 </script>

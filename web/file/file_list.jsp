@@ -166,9 +166,10 @@
                                                         <div class="button-list">
                                                             <div class="btn-group">
                                                                 <button type="button" onclick="" class="btn btn-pink btn-flat m-b-10 m-l-5">返回</button>
-                                                                <button type="button" onclick="addRecord()" class="btn btn-success btn-flat  m-b-10 m-l-5">增加</button>
+                                                                <button type="button" onclick="addRecord()" class="btn btn-success btn-flat  m-b-10 m-l-5">上传</button>
                                                                 <button type="button" onclick="statisticRecord()" class="btn btn-dark btn-flat m-b-10 m-l-5">统计</button>
-                                                                <button type="button" onclick="getAllRecord()" class="btn btn-primary btn-flat  m-b-10 m-l-5">所有记录</button>
+                                                                <button type="button" onclick="getAllRecord()" class="btn btn-primary btn-flat  m-b-10 m-l-5">所有文件</button>
+                                                                <button type="button" onclick="printRecord()" class="btn btn-pink btn-flat m-b-10 m-l-5">打印</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -197,7 +198,7 @@
                             <h4 class="card-title">文件列表</h4>
                             <h6 class="card-subtitle">这是所有用户上传的文件</h6>
                             <div class="table-responsive m-t-40">
-                                <table id="example23" class="display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                                <table id="example23" class="display nowrap table table-hover table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                     <tr>
                                         <th>ID</th>

@@ -2,7 +2,7 @@
  * Created by Janspiry on 2019/6/15.
  */
 
-import Questionnaire.QueryBuilder;
+import FileManagement.QueryBuilder;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
@@ -104,7 +104,9 @@ public class FileManagement extends HttpServlet {
                 {
                     String value = item.getString() ;//这里是表单context,grades等的值
                     value =new String(item.getString().getBytes("iso-8859-1"),"utf-8");
-                    if(name=="context"||name.equals("context")){
+                    if(name=="title"||name.equals("title")){
+                        title=value;
+                    } else if(name=="context"||name.equals("context")){
                         context=value;
                     }
                 }
@@ -116,7 +118,6 @@ public class FileManagement extends HttpServlet {
                     int start = value.lastIndexOf("\\");
                     //截取 上传文件的 字符串名字，加1是 去掉反斜杠，
                     String filename = value.substring(start+1);
-                    title=filename;
                     fileUrl="/upload/"+filename;
                     if(filename.isEmpty()){
                         continue;
@@ -143,8 +144,23 @@ public class FileManagement extends HttpServlet {
         }
         System.out.println("title:"+title);
         System.out.println("context:"+context);
+        String userId=session.getAttribute("guid")==null?null:(String)session.getAttribute("guid");
+        String creator=(String)session.getAttribute("username");
+        String createTime=(new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
+        queryBuilder.clear();
+        queryBuilder.setUserId(userId);
+        queryBuilder.setUserName(creator);
+        queryBuilder.setTitle(title);
+        queryBuilder.setContent(context);
+        queryBuilder.setCreateTime(createTime);
+        queryBuilder.setChangeTime(createTime);
+        queryBuilder.setfileUrl(fileUrl);
+        queryBuilder.setDownloadNum("0");
+        queryBuilder.setChangNum("1");
 
-
+        DatabaseHelper db = new DatabaseHelper();
+        String sql=queryBuilder.getInsertStmt();
+        db.execute(sql);
     }
     private void getRecord(HttpServletRequest request, HttpServletResponse response) throws IOException, JSONException, SQLException {
         response.setContentType("application/json; charset=UTF-8");
@@ -171,6 +187,7 @@ public class FileManagement extends HttpServlet {
             System.out.printf("result[%d].guid=%d\n",i, queryResult.getJSONObject(i).getInt("guid"));
         }
         out.print(queryResult);
+        session.setAttribute("jsonData",queryResult);
         out.flush();
         out.close();
         System.out.println("exit getResult");
@@ -194,6 +211,10 @@ public class FileManagement extends HttpServlet {
         String context = request.getParameter("context");
         String title = request.getParameter("title");
         String changeTime=(new SimpleDateFormat("yyyy-MM-dd")).format(new Date());
+        //修改内容
+
+        String downloadNum = request.getParameter("downloadNum");
+        //修改下载数
 
         String tableName="file";
         String sql="select * from "+tableName+" where guid="+guid;
@@ -205,14 +226,18 @@ public class FileManagement extends HttpServlet {
         chang_num++;
 
         sql="update "+tableName+" set";
-        if(title!=null&&title!=""){
-            sql=sql+" title='"+title+"'";
+        if(downloadNum!=null&&downloadNum!=""){
+            sql=sql+" download_num='"+downloadNum+"'";
+        }else{
+            if(title!=null&&title!=""){
+                sql=sql+" title='"+title+"'";
+            }
+            if(context!=null&&context!=""){
+                sql=sql+" ,context='"+context+"'";
+            }
+            sql=sql+" ,change_time='"+changeTime+"'";
+            sql=sql+" ,change_num='"+chang_num+"'";
         }
-        if(context!=null&&context!=""){
-            sql=sql+" ,context='"+context+"'";
-        }
-        sql=sql+" ,change_time='"+changeTime+"'";
-        sql=sql+" ,change_num='"+chang_num+"'";
         sql=sql+" where guid="+guid;
         System.out.println("modify sql = "+sql);
         db.execute(sql);
@@ -232,7 +257,7 @@ public class FileManagement extends HttpServlet {
         System.out.println("exit modifyResult");
     }
     private void getStatistics(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.getStatistics");
+        System.out.println("enter FileManagement.getStatistics");
         String sql = queryBuilder.getSelectStmt();
         String dateFormat = request.getParameter("interval");
         if(dateFormat==null || dateFormat.length()==0)
@@ -240,7 +265,7 @@ public class FileManagement extends HttpServlet {
             System.out.println("getStatistics: miss argument 'interval'");
             return;
         }
-        if(Objects.equals(dateFormat, "hour"))dateFormat="%Y-%m-%d %H:00:00";
+        if(Objects.equals(dateFormat, "year"))dateFormat="%Y";
         else if(Objects.equals(dateFormat, "day"))dateFormat="%Y-%m-%d";
         else if(Objects.equals(dateFormat, "month"))dateFormat="%Y-%m";
         sql = String.format("select " +
@@ -265,7 +290,7 @@ public class FileManagement extends HttpServlet {
         out.print(list);
         out.flush();
         out.close();
-        System.out.println("exit AuthorizationAction.getStatistics");
+        System.out.println("exit FileManagement.getStatistics");
     }
 
 

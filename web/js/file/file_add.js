@@ -39,3 +39,6 @@ $("#myDropzone").dropzone({
         });
     }
 })
+function returnBack(){
+    window.location.href=ContextPath+"/file/file_list.jsp";
+};
