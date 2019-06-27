@@ -1,5 +1,5 @@
 var question_list=[];
-var module="/FileManagement";
+var module="/QuestionnaireAnswer";
 var existResultset="0";
 var ContextPath=$("#ContextPath").val();
 var initurl=ContextPath+module;
@@ -31,7 +31,7 @@ var Page = function(){
                 "inside": true
             }],
             "categoryAxis": {
-                "title": "上传时间"
+                "title": "回答时间"
             },
             "chartScrollbar": {
                 "graph": "g1",
@@ -68,7 +68,7 @@ var Page = function(){
 
             "graphs": [{
                 "alphaField": "alpha",
-                "balloonText": "<span style='font-size:13px;'>[[category]]上传的文件数[[title]]:<b>[[value]]</b> [[additional]]</span>",
+                "balloonText": "<span style='font-size:13px;'>[[category]]回答的用户数[[title]]:<b>[[value]]</b> [[additional]]</span>",
                 "dashLengthField": "dashLengthColumn",
                 "fillAlphas": 1,
                 "title": "数量",
@@ -80,9 +80,9 @@ var Page = function(){
                 "menu":[{
                     "class": "export-main",
                     "menu": [
-                        { "fileName": "文件上传时间统计", "format": "png", "label": "导出为PNG" },
-                        { "fileName": "文件上传时间统计", "format": "jpg", "label": "导出为JPG" },
-                        { "fileName": "文件上传时间统计", "format": "svg", "label": "导出为SVG" },
+                        { "fileName": "用户问卷回答时间统计", "format": "png", "label": "导出为PNG" },
+                        { "fileName": "用户问卷回答时间统计", "format": "jpg", "label": "导出为JPG" },
+                        { "fileName": "用户问卷回答时间统计", "format": "svg", "label": "导出为SVG" },
                     ]
                 }]
             }
@@ -122,6 +122,6 @@ var Page = function(){
     };
 }();
 function returnBack(){
-    window.location.href=ContextPath+"/file/file_list.jsp";
+    history.back();
 };
 

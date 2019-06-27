@@ -3,54 +3,39 @@ var module="/QuestionnairePublish";
 var existResultset="0";
 var ContextPath=$("#ContextPath").val();
 function Record(){
-    $(document).ready(function() {
-        $('#myTable').DataTable();
-        $(document).ready(function() {
-            var table = $('#example').DataTable({
-                "columnDefs": [{
-                    "visible": false,
-                    "targets": 2
-                }],
-                "order": [
-                    [2, 'asc']
-                ],
-                "displayLength": 25,
-                "drawCallback": function(settings) {
-                    var api = this.api();
-                    var rows = api.rows({
-                        page: 'current'
-                    }).nodes();
-                    var last = null;
-                    api.column(2, {
-                        page: 'current'
-                    }).data().each(function(group, i) {
-                        if (last !== group) {
-                            $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-                            last = group;
-                        }
-                    });
-                }
-            });
-            // Order by the grouping
-            $('#example tbody').on('click', 'tr.group', function() {
-                var currentOrder = table.order()[0];
-                if (currentOrder[0] === 2 && currentOrder[1] === 'asc') {
-                    table.order([2, 'desc']).draw();
-                } else {
-                    table.order([2, 'asc']).draw();
-                }
-            });
-        });
-    });
     var dataTable=$('#example23').DataTable({
         dom: 'Bfrtip',
+        buttons:[
+            {
+                extend: 'print',
+                className: 'buttons-print hidden',
+                messageTop: '移动互动课堂|问卷信息列表',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7]
+                }
+            },
+            {
+                extend: 'excel',
+                title: 'questionnaire_info',
+                className: 'buttons-excel hidden',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7]
+                }
+            },
+            {
+                extend: 'csv',
+                title: 'questionnaire_info',
+                className: 'buttons-csv hidden',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7]
+                }
+            },
 
-        // buttons: [
-        //     'excel', 'pdf', 'print'
-        // ],
-        buttons: [
-            'excel', 'print'
         ],
+        fixedHeader: true,
+        fixedColumns: {
+            leftColumns: 1
+        },
         ordering: false,
         "oLanguage": {
             "aria": {
@@ -72,6 +57,7 @@ function Record(){
                 "sLast":     "末页"
             }
         },
+        "autoWidth": true,
         "columnDefs": [
             {
                 "targets":1,
@@ -79,7 +65,7 @@ function Record(){
                 "mRender":
                     function(data, type, full) {
                         sReturn=
-                            "<button type=\"button\" class=\"detail-button btn btn-default btn-sm btn-rounded m-b-10\">详情</button>"+
+                            "<button type=\"button\" class=\"detail-button btn btn-default btn-sm btn-rounded m-b-10\">用户</button>"+
                             "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改</button>"+
                             "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除</button>"
                         if(full[7]=="processing"){
@@ -121,11 +107,16 @@ function Record(){
     getAllRecord();
 
     $('#example23 tbody').on('click', '.delete-button', function (event) {
-        var id = $(this).parent().prev().text();
-        deleteRecord(id);
-        var table = $('#example23').DataTable();
-        table.row($(this).parents('tr')).remove().draw();
-        event.preventDefault();
+        var _this=this;
+        Dialog.showComfirm("确定要删除这条记录吗？", "警告", function(){
+            var id = $(_this).parent().prev().text();
+            console.log("id"+id);
+            deleteRecord(id);
+            var table = $('#example23').DataTable();
+            table.row($(_this).parents('tr')).remove().draw();
+            event.preventDefault();
+            Dialog.showSuccess("记录已删除", "操作成功");
+        });
     });
     $("#example23 tbody").on("click", ".edit-button", function (event) {
         var tds = $(this).parents("tr").children();
@@ -183,7 +174,7 @@ function Record(){
             url += "&limit_time=" + limit_time;
         }
         getSelectedRecord(url);
-
+        Dialog.showSuccess("记录已修改", "操作成功");
     });
     $('#example23 tbody').on('click', '.answer-button', function (event) {
         var id = $(this).parent().prev().text();
@@ -209,13 +200,13 @@ function isDate(dateString) {
     //年月日时分正则表达式
     var r = dateString.match(/^(\d{1,4})\-(\d{1,2})\-(\d{1,2})$/);
     if (r == null) {
-        alert("请输入正确格式的日期\n\r如：2019-09-09\n\r");
+        Dialog.showText("格式错误","请输入正确格式的日期如：2019-09-09");
         return false;
     }
     var d = new Date(r[1], r[2] - 1, r[3]);
     var num = (d.getFullYear() == r[1] && (d.getMonth() + 1) == r[2] && d.getDate() == r[3]);
     if (num == 0) {
-        alert("请输入正确格式的日期\n\r如：2019-09-09\n\r");
+        Dialog.showText("格式错误","请输入正确格式的日期如：2019-09-09");
     }
     return (num != 0);
 }
@@ -265,9 +256,18 @@ function addRecord(){
 
 function statisticRecord(){
     window.location.href="questionnaire_statistic.jsp";
-
 };
 
+function printRecord(){
+    window.location.href="questionnaire_print.jsp";
+};
+function expordExcel(){
+    $(".dt-buttons .buttons-excel").click();
+};
+function expordCsv(){
+    $(".dt-buttons .buttons-csv").click();
+
+};
 function sortRecord(){
     var key1 = $("#key1").val();
     var key2 = $("#key2").val();
@@ -340,7 +340,8 @@ function answerProblem(id){
         if(json.length>0){
             window.location.href=ContextPath+"/questionnaire/answer/answer_problem.jsp?id="+id;
         }else{
-            alert("你已回答过此问卷");
+            Dialog.showError("错误","你已回答过此问卷");
+            // alert("你已回答过此问卷");
         }
     })
 };

@@ -2,6 +2,48 @@ var Data=[];
 var module="/FileManagement";
 var existResultset="0";
 var ContextPath=$("#ContextPath").val();
+var initurl=ContextPath+module;
+Dropzone.autoDiscover = false;// 禁止对所有元素的自动查找，由于Dropzone会自动查找class为dropzone的元素，自动查找后再在这里进行初始化，有时候（并不是都这样）会导致重复初始化的错误，所以在此加上这段代码避免这样的错误。
+$("#myDropzone").dropzone({
+    //项目使用.net，所以此处的action就这样了。该参数必须指定。
+    url: initurl+"?action=add_record",
+    method: 'post',
+    parallelUploads: 1,//有多少文件将上载到并行处理,默认2(一次最多上传不能超过6个，小于等于6个的传完后，再上传  //第二批的文件)
+    maxFiles:1,
+    maxFilesize: 30,//以MB为单位[上传文件的大小限制]
+    autoProcessQueue: false,//关闭自动上传功能，默认会true会自动上传,也就是添加一张图片向服务器发送一次请求
+    addRemoveLinks: true,//在每个预览文件下面添加一个remove[删除]或者cancel[取消](如果文件已经上传)上传文件的链  接
+    uploadMultiple: false,//允许上传多文件
+    dictCancelUpload: '取消',
+    dictRemoveFile: '删除',
+    init: function () {
+        var tmp=document.getElementById("myDropzone");
+        // var title = $("#title")
+        // var context = $("#context")
+        var submitButton = $("#submit_button")
+        var title=tmp.title.value
+        var context=tmp.context.value
+        var addr=initurl+"?action=add_record";
+        myDropzone = this; // closure
+        //为上传按钮添加点击事件
+        submitButton.on("click", function () {
+            myDropzone.options.url = addr;
+            if (myDropzone.getAcceptedFiles().length != 0) {
+                //手动指定
+                console.log("addr"+addr);
+                myDropzone.processQueue();
+            }
+        });
+
+        this.on("success", function (file, res) {
+            console.log("上传文件成功");
+            window.location.href=ContextPath+"/file/file_list.jsp";
+        });
+    }
+})
+
+
+
 function Record(){
     $(document).ready(function() {
         $('#myTable').DataTable();
@@ -47,9 +89,40 @@ function Record(){
         // buttons: [
         //     'excel', 'pdf', 'print'
         // ],
-        buttons: [
-            'excel', 'print'
+        // buttons: [
+        //     'excel', 'print'
+        // ],
+        buttons:[
+            {
+                extend: 'print',
+                className: 'buttons-print hidden',
+                messageTop: '移动互动课堂|文件信息列表',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7,8 ]
+                }
+            },
+            {
+                extend: 'excel',
+                title: 'fileinfo',
+                className: 'buttons-excel hidden',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7,8 ]
+                }
+            },
+            {
+                extend: 'csv',
+                title: 'fileinfo',
+                className: 'buttons-csv hidden',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7,8 ]
+                }
+            },
+
         ],
+        fixedHeader: true,
+        fixedColumns: {
+            leftColumns: 1
+        },
         ordering: false,
         "oLanguage": {
             "aria": {
@@ -119,11 +192,17 @@ function Record(){
         });
     });
     $('#example23 tbody').on('click', '.delete-button', function (event) {
-        var id = $(this).parent().prev().text();
-        deleteRecord(id);
-        var table = $('#example23').DataTable();
-        table.row($(this).parents('tr')).remove().draw();
-        event.preventDefault();
+        var _this=this;
+        Dialog.showComfirm("确定要删除这条记录吗？", "警告", function(){
+            var id = $(_this).parent().prev().text();
+            console.log("id"+id);
+            deleteRecord(id);
+            var table = $('#example23').DataTable();
+            table.row($(_this).parents('tr')).remove().draw();
+            event.preventDefault();
+            Dialog.showSuccess("记录已删除", "操作成功");
+        });
+
     });
     $("#example23 tbody").on("click", ".edit-button", function (event) {
         var tds = $(this).parents("tr").children();
@@ -169,6 +248,7 @@ function Record(){
             url += "&context=" + context;
         }
         getSelectedRecord(url);
+        Dialog.showSuccess("修改记录成功","操作成功");
     });
 }
 function downloadRecord(url) {
@@ -184,10 +264,10 @@ function deleteRecord(id) {
     if (id !="") {
         url += "&guid=" + id;
     }
+    console.log("删除操作url"+url);
     $.post(url, function (jsonObject) {
-        alert("删除成功！");
+
     });
-    event.preventDefault();
 }
 function getAllRecord(){
     var dataTable = $('#example23').DataTable();
@@ -237,10 +317,15 @@ function addRecord(){
 
 function statisticRecord(){
     window.location.href="file_statistic.jsp";
-
 };
 function printRecord(){
     window.location.href="file_print.jsp";
+};
+function expordExcel(){
+    $(".dt-buttons .buttons-excel").click();
+};
+function expordCsv(){
+    $(".dt-buttons .buttons-csv").click();
 
 };
 

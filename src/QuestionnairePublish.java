@@ -54,15 +54,6 @@ public class QuestionnairePublish extends HttpServlet {
                 case "modify_record":
                     modifyRecord(request, response);
                     break;
-                case "doQuery":
-                    doQuery(request, response);
-                    break;
-                case "doSort":
-                    doSort(request, response);
-                    break;
-                case "doUpdate":
-                    doUpdate(request, response);
-                    break;
                 case "getStatistics":
                     getStatistics(request, response);
                     break;
@@ -157,6 +148,7 @@ public class QuestionnairePublish extends HttpServlet {
             System.out.printf("result[%d].guid=%d\n",i, queryResult.getJSONObject(i).getInt("guid"));
         }
         out.print(queryResult);
+        session.setAttribute("jsonData",queryResult);
         out.flush();
         out.close();
         System.out.println("exit getResult");
@@ -234,70 +226,8 @@ public class QuestionnairePublish extends HttpServlet {
         System.out.println("exit modifyResult");
     }
 
-    private void doQuery(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.doQuery");
-        queryBuilder.clear();
-        queryBuilder.setTableName("userinfo");
-        queryBuilder.setGuid(request.getParameter("guid"));
-        queryBuilder.setUserName(request.getParameter("username"));
-        String sql=queryBuilder.getSelectStmt();
-        DatabaseHelper db=new DatabaseHelper();
-        ResultSet rs = db.executeQuery(sql);
-        processResult(rs);
-        HttpSession session = request.getSession();
-        session.setAttribute("authmng_exist_result", true);
-        System.out.println("exit AuthorizationAction.doQuery");
-        response.sendRedirect("templates/admin/authmng.jsp");
-    }
-
-    private void doSort(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.doSort");
-        String sql=queryBuilder.getSelectStmt();
-        String key1=request.getParameter("key1");
-        String sort1=request.getParameter("sort1");
-        String key2=request.getParameter("key2");
-        String sort2=request.getParameter("sort2");
-        sql+=String.format(" order by %s %s", key1, sort1);
-        if(!key1.equals(key2))sql+=String.format(", %s %s", key2, sort2);
-        System.out.println("doSort sql = " + sql);
-        DatabaseHelper db=new DatabaseHelper();
-        ResultSet rs = db.executeQuery(sql);
-        processResult(rs);
-        HttpSession session = request.getSession();
-        session.setAttribute("authmng_exist_result", true);
-        System.out.println("exit AuthorizationAction.doSort");
-        response.sendRedirect("templates/admin/authmng.jsp");
-    }
-
-    private void doUpdate(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.doUpdate");
-        String guid = request.getParameter("guid");
-        String[] guidList = guid.split(",");
-        int auth=0;
-        String auth1=request.getParameter("auth1");
-        if(auth1!=null && auth1.equals("on"))auth|=1;
-        String auth2=request.getParameter("auth2");
-        if(auth2!=null && auth2.equals("on"))auth|=2;
-        String auth4=request.getParameter("auth4");
-        if(auth4!=null && auth4.equals("on"))auth|=4;
-        String auth8=request.getParameter("auth8");
-        if(auth8!=null && auth8.equals("on"))auth|=8;
-        String sql = String.format("update `userinfo` set authorization=%d where 0=1", auth);
-        for(int i=0; i<guidList.length; i++)
-        {
-            sql+=String.format(" or guid=%s", guidList[i]);
-        }
-        System.out.println("doUpdate sql = "+sql);
-        DatabaseHelper db=new DatabaseHelper();
-        db.execute(sql);
-        HttpSession session = request.getSession();
-        session.setAttribute("authmng_exist_result", false);
-        System.out.println("exit AuthorizationAction.doUpdate");
-        response.sendRedirect("templates/admin/authmng.jsp");
-    }
-
     private void getStatistics(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.getStatistics");
+        System.out.println("enter FileManagement.getStatistics");
         String sql = queryBuilder.getSelectStmt();
         String dateFormat = request.getParameter("interval");
         if(dateFormat==null || dateFormat.length()==0)
@@ -305,7 +235,7 @@ public class QuestionnairePublish extends HttpServlet {
             System.out.println("getStatistics: miss argument 'interval'");
             return;
         }
-        if(Objects.equals(dateFormat, "hour"))dateFormat="%Y-%m-%d %H:00:00";
+        if(Objects.equals(dateFormat, "year"))dateFormat="%Y";
         else if(Objects.equals(dateFormat, "day"))dateFormat="%Y-%m-%d";
         else if(Objects.equals(dateFormat, "month"))dateFormat="%Y-%m";
         sql = String.format("select " +
@@ -330,9 +260,8 @@ public class QuestionnairePublish extends HttpServlet {
         out.print(list);
         out.flush();
         out.close();
-        System.out.println("exit AuthorizationAction.getStatistics");
+        System.out.println("exit FileManagement.getStatistics");
     }
-
 
     private void processResult(ResultSet rs) throws JSONException, SQLException {
         queryResult = new JSONArray("[]");

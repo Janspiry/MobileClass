@@ -47,53 +47,56 @@
                 <div class="row">
                     <div class="col-md-6 col-lg-3">
                         <div class="card">
-                            <a href="javascript:alert(1);"></a>
+                            <a href="<%=request.getContextPath()%>/userinfo/index.jsp"></a>
                             <div class="stat-widget-five">
                                 <div class="stat-icon">
                                     <i class="ti-home bg-primary"></i>
                                 </div>
                                 <div class="stat-content">
-                                    <div class="stat-heading color-primary">New User</div>
-                                    <div class="stat-text">2700</div>
+                                    <div class="stat-heading color-primary">用户信息管理</div>
+                                    <div class="stat-text">系统用户概览</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <div class="card">
+                            <a href="<%=request.getContextPath()%>/questionnaire/publish/questionnaire_list.jsp"></a>
                             <div class="stat-widget-five">
                                 <div class="stat-icon">
                                     <i class="ti-file bg-success"></i>
                                 </div>
                                 <div class="stat-content">
-                                    <div class="stat-heading color-success">Profit</div>
-                                    <div class="stat-text">3600000</div>
+                                    <div class="stat-heading color-success">问卷管理</div>
+                                    <div class="stat-text">问卷概览</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <div class="card">
+                            <a href="<%=request.getContextPath()%>/file/file_list.jsp"></a>
                             <div class="stat-widget-five">
                                 <div class="stat-icon">
                                     <i class="ti-info bg-danger"></i>
                                 </div>
                                 <div class="stat-content">
-                                    <div class="stat-heading color-danger">Growth</div>
-                                    <div class="stat-text">200%</div>
+                                    <div class="stat-heading color-danger">文件管理</div>
+                                    <div class="stat-text">文件概览</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <div class="card">
+                            <a href="<%=request.getContextPath()%>/userinfo/index.jsp"></a>
                             <div class="stat-widget-five">
                                 <div class="stat-icon bg-warning">
                                     <i class="ti-world"></i>
                                 </div>
                                 <div class="stat-content">
-                                    <div class="stat-heading color-warning">Revenue</div>
-                                    <div class="stat-text">226000</div>
+                                    <div class="stat-heading color-warning">权限管理</div>
+                                    <div class="stat-text">用户权限概览</div>
                                 </div>
                             </div>
                         </div>
