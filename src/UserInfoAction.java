@@ -48,8 +48,17 @@ public class UserInfoAction extends HttpServlet
                 case "update":
                     Update(request, response);
                     break;
+                case "sort":
+                    Sort(request, response);
+                    break;
                 case "statistics":
                     Statistics(request, response);
+                    break;
+                case "clearQuery":
+                    ClearQuery();
+                    break;
+                case "clearSort":
+                    ClearSort();
                     break;
                 default:
                     throw new Exception("UserInfoAction: 未知的请求类型");
@@ -157,6 +166,20 @@ public class UserInfoAction extends HttpServlet
         out.close();
     }
 
+    private void Sort(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
+        System.out.println("enter UserInfoAction.Sort");
+        response.setContentType("application/json; charset=UTF-8");
+        String sortBy = request.getParameter("sortBy");
+        System.out.println(sortBy);
+        queryBuilder.setSortBy(sortBy);
+        PrintWriter out = response.getWriter();
+        JSONObject json = new JSONObject();
+        json.put("errno", 0);
+        out.print(json);
+        out.flush();
+        out.close();
+    }
+
     private void Statistics(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
         System.out.println("enter UserInfoAction.Statistics");
         String dateFormat = request.getParameter("interval");
@@ -190,6 +213,14 @@ public class UserInfoAction extends HttpServlet
         out.print(list);
         out.flush();
         out.close();
+    }
+
+    private void ClearQuery(){
+        queryBuilder.clear();
+    }
+
+    private void ClearSort(){
+        queryBuilder.setSortBy(null);
     }
 
     private void processResult(ResultSet rs) throws JSONException, SQLException {

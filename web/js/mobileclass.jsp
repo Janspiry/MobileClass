@@ -80,13 +80,13 @@ String.format = function() {
 var Dialog = function() {
     var showSuccess = function(sMsg, sTitle){
         toastr.success(sMsg, sTitle,{
-            "positionClass": "toast-top-center",
+            "positionClass": "toast-bottom-right",
             timeOut: 3000,
             "closeButton": true,
             "debug": false,
             "newestOnTop": true,
             "progressBar": true,
-            "preventDuplicates": true,
+            "preventDuplicates": false,
             "onclick": null,
             "showDuration": "300",
             "hideDuration": "1000",
@@ -101,13 +101,13 @@ var Dialog = function() {
 
     var showError = function(sMsg, sTitle){
         toastr.error(sMsg, sTitle,{
-            "positionClass": "toast-top-center",
+            "positionClass": "toast-bottom-right",
             timeOut: 3000,
             "closeButton": true,
             "debug": false,
             "newestOnTop": true,
             "progressBar": true,
-            "preventDuplicates": true,
+            "preventDuplicates": false,
             "onclick": null,
             "showDuration": "300",
             "hideDuration": "1000",
@@ -119,6 +119,48 @@ var Dialog = function() {
             "tapToDismiss": false
         });
     };
+
+    var showInfo = function(sMsg, sTitle) {
+        toastr.info(sMsg,sTitle,{
+            "positionClass": "toast-bottom-right",
+            timeOut: 3000,
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "tapToDismiss": false
+        })
+    }
+
+    var showWarning = function(sMsg, sTitle) {
+        toastr.warning(sMsg, sTitle,{
+            "positionClass": "toast-bottom-right",
+            timeOut: 3000,
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "tapToDismiss": false
+        })
+    }
 
     var showComfirm = function(sText, sTitle, fnCallback) {
         swal({

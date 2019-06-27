@@ -263,41 +263,108 @@
 
     }();
 
-    var Page = function(){
+    var FormSort = function(){
+
+        var choice = [
+            ['username','用户名'],
+            ['fullname','姓名'],
+            ['schoolnum','学号'],
+            ['nativeplace','籍贯'],
+            ['email','邮箱'],
+            ['phone','电话']
+        ];
+
+        var addEventListener = function(){
+            $('.btn-dark').click(btnOrder_onclick);
+            $('#form-sort-submit').click(btnSubmit_onclick);
+            $('#form-sort-reset').click(btnReset_onclick);
+        }
+
+        var btnOrder_onclick = function(evt){
+            var i = $(evt.target).children('i');
+            if(i.hasClass('fa fa-sort-amount-asc')){
+                i.html('降序');
+                i.removeClass('fa fa-sort-amount-asc');
+                i.addClass('fa fa-sort-amount-desc');
+            }else{
+                i.html('升序');
+                i.removeClass('fa fa-sort-amount-desc');
+                i.addClass('fa fa-sort-amount-asc');
+            }
+            evt.preventDefault();
+        }
+
+        var btnSubmit_onclick = function(evt){
+            console.log('btnSubmit_onclick');
+            var li = $('#form-sort-rule').find('li');
+            var rule = '';
+            $.each(li, function(i, val){
+                if(rule.length > 0)rule += ',';
+                rule += " `" + $(val).attr("data-id") + "`";
+                if($(val).find('i').hasClass('fa fa-sort-amount-asc')){
+                    rule += ' asc';
+                }else{
+                    rule += ' desc';
+                }
+            });
+            console.log(rule);
+            var url = "<%=request.getContextPath()%>/UserInfoAction?action=sort";
+            var param = {"sortBy": rule};
+            $.post(url, param, function(res){
+                console.log('btnSubmit_onclick callback');
+                console.log(res);
+                Page.fetchResult();
+            });
+        }
+
+        var btnReset_onclick = function(evt){
+            console.log('btnReset_onclick');
+            initNestable();
+        }
 
         var initNestable = function(){
-            var choice = [
-                ['username','用户名'],
-                ['fullname','姓名'],
-                ['schoolnum','学号'],
-                ['nativeplace','籍贯'],
-                ['email','邮箱'],
-                ['phone','电话']
-            ];
             var li="  <li class='dd-item dd3-item' data-id='{0}'>"
-                +"  <div class='dd-handle dd3-handle'></div>"
-                +"  <div class='dd3-content'>"
-                +"  <div class='row'>"
-                +"      <h5 class='col-md-9'>{1}</h5>"
-                +"      <button type='button' class='col-md-2 btn btn-info btn-xs btn-rounded m-b-10 m-l-5'>升序</button>"
-                +"  </div>"
-                +"</div></li>";
-            if(choice.length>0){
-                $('#form-sort-rule').html(String.format(li, choice[0][0], choice[0][1]));
-            }
-            var html="";
-            for(var i=1;i<choice.length;i++){
+                    +"  <div class='dd-handle dd3-handle'></div>"
+                    +"  <div class='dd3-content'>"
+                    +"      <div class='row'>"
+                    +"          <h5 class='col-md-8'>{1}</h5>"
+                    +"          <button type='button' class='col-md-3 btn btn-dark btn-xs btn-outline btn-rounded' style='margin-top:-4px;'>"
+                    +"              <i class='fa fa-sort-amount-asc' style='pointer-events: none;'>升序</i>"
+                    +"          </button>"
+                    +"      </div>"
+                    +"</div></li>";
+            var pref='<ol class="dd-list">';
+            var suff='</ol>';
+            var html='';
+//            if(choice.length > 0){
+//                html+=String.format(li, choice[0][0], choice[0][1]);
+//            }
+            $('#form-sort-rule').html("<div class='dd-empty'></div>");
+            html="";
+            for(var i=0;i<choice.length;i++){
                 html+=String.format(li, choice[i][0], choice[i][1]);
             }
-            $('#form-sort-choice').html(html);
-            $('#form-sort-rule').nestable({
-                "maxDepth": 0
-            });
-            $('#form-sort-choice').nestable({
-                "maxDepth": 0
-            });
-
+            $('#form-sort-choice').html(pref+html+suff);
         };
+
+        return {
+            init: function(){
+                initNestable();
+                $('#form-sort-rule').nestable({
+                    "maxDepth": 1,
+                    "group": 1
+                });
+                $('#form-sort-choice').nestable({
+                    "maxDepth": 1,
+                    "group": 1
+                });
+                addEventListener();
+            }
+        };
+
+    }();
+
+    var Page = function(){
 
         var initDataTable = function(){
             var dataTable=$('#myDataTable').DataTable({
@@ -571,7 +638,7 @@
                 initDataTable();
                 FormQuery.init();
                 FormAdd.init();
-//                initNestable();
+                FormSort.init();
                 addEventListener();
             },
             fetchResult: fetchResult

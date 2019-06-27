@@ -50,18 +50,18 @@
                 <div class="card-body">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <label id="fold-btn"> <a class="nav-link" href="#"><span><i id="fold-icon" style="font-size:20px" class="fa fa-angle-down"></i></span></a> </label>
-                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-query" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">查询</span></a> </li>
-                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-add" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">添加</span></a> </li>
-                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-sort" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">排序</span></a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-query" role="tab"><span class="hidden-sm-up"><i class="fa fa-search"></i></span> <span class="hidden-xs-down">查询</span></a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-add" role="tab"><span class="hidden-sm-up"><i class="fa fa-plus"></i></span> <span class="hidden-xs-down">添加</span></a> </li>
+                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-sort" role="tab"><span class="hidden-sm-up"><i class="fa fa-sort-alpha-asc"></i></span> <span class="hidden-xs-down">排序</span></a> </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                <span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">更多</span>
+                                <span class="hidden-sm-up"><i class="fa fa-ellipsis-h"></i></span> <span class="hidden-xs-down">更多</span>
                             </a>
                             <div class="dropdown-menu">
                                 <span class="dropdown-item" id="tab-print" role="tab">打印</span>
                                 <span class="dropdown-item" id="tab-excel" role="tab">导出为Excel</span>
                                 <span class="dropdown-item" id="tab-csv" role="tab">导出为CSV</span>
-                                <%--<span class="dropdown-item" id="tab-pdf" role="tab" aria-controls="dropdown1">导出为PDF</span>--%>
+                                <%--<span class="dropdown-item" id="tab-pdf" role="tab">导出为PDF</span>--%>
                                 <a class="dropdown-item" id="tab-sta" role="tab" data-toggle="modal" href="#basic">统计</a>
                             </div>
                         </li>
@@ -73,46 +73,8 @@
                         <div class="tab-pane" id="tab-add" role="tabpanel">
                             <%@include file="form_add.jsp"%>
                         </div>
-                        <div role="tabpanel" class="tab-pane active" id="tab-sort">
-                            <%--<div class="row">--%>
-                                <%--<div class="col-lg-1"></div>--%>
-
-                                <%--<div class="col-lg-5">--%>
-                                    <%--<div class="card">--%>
-                                        <%--<div class="card-body">--%>
-                                            <%--<h4 class="card-title">排序规则</h4>--%>
-                                            <%--<div class="card-content">--%>
-                                                <%--<div class="nestable">--%>
-                                                    <%--<div class="dd" id="form-sort-rule">--%>
-                                                        <%--<ol class="dd-list">--%>
-
-                                                        <%--</ol>--%>
-                                                    <%--</div>--%>
-                                                <%--</div>--%>
-                                            <%--</div>--%>
-                                        <%--</div>--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-
-                                <%--<div class="col-lg-5">--%>
-                                    <%--<div class="card">--%>
-                                        <%--<div class="card-body">--%>
-                                            <%--<h4 class="card-title">候选规则</h4>--%>
-                                            <%--<div class="card-content">--%>
-                                                <%--<div class="nestable">--%>
-                                                    <%--<div class="dd" id="form-sort-choice">--%>
-                                                        <%--<ol class="dd-list">--%>
-                                                        <%--</ol>--%>
-                                                    <%--</div>--%>
-                                                <%--</div>--%>
-                                            <%--</div>--%>
-                                        <%--</div>--%>
-                                    <%--</div>--%>
-                                <%--</div>--%>
-
-                                <%--<div class="col-lg-1"></div>--%>
-                            <%--</div>--%>
-
+                        <div role="tabpanel" class="tab-pane" id="tab-sort">
+                            <%@include file="form_sort.jsp"%>
                         </div>
                     </div>
                 </div>
@@ -160,7 +122,7 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
-<script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 <%--<script src="<%=request.getContextPath()%>/js/lib/nestable/jquery.nestable.js"></script>--%>
 

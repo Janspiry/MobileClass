@@ -188,6 +188,15 @@ public class QueryBuilder {
         }
     }
 
+    private String sortBy;
+    public String getSortByClause(){
+        return (sortBy == null || sortBy.length() == 0) ? "" : "order by " + sortBy;
+    }
+    public boolean setSortBy(String value){
+        sortBy = value;
+        return true;
+    }
+
     private int filterInt(String value)
     {
         if(value == null || value.length() == 0)return -1;
@@ -245,8 +254,8 @@ public class QueryBuilder {
     }
 
     public QueryBuilder(String _tableName){
-        clear();
         setTableName(_tableName);
+        clear();
     }
 
     public void clear(){
@@ -262,6 +271,7 @@ public class QueryBuilder {
         nativeplace=null;
         email=null;
         phone=null;
+        sortBy = null;
     }
 
     private String getWhereClause(){
@@ -296,7 +306,7 @@ public class QueryBuilder {
         {
             throw new IllegalArgumentException("tableName missed");
         }
-        String sql = String.format("select * from `%s` %s", getTablename(), getWhereClause());
+        String sql = String.format("select * from `%s` %s %s", getTablename(), getWhereClause(), getSortByClause());
         System.out.println(sql);
         return sql;
     }
