@@ -49,9 +49,37 @@ function Record(){
         // buttons: [
         //     'excel', 'pdf', 'print'
         // ],
-        buttons: [
-            'excel', 'print'
+        buttons:[
+            {
+                extend: 'print',
+                className: 'buttons-print hidden',
+                messageTop: '移动互动课堂|问卷信息列表',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7]
+                }
+            },
+            {
+                extend: 'excel',
+                title: 'questionnaire_info',
+                className: 'buttons-excel hidden',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7]
+                }
+            },
+            {
+                extend: 'csv',
+                title: 'questionnaire_info',
+                className: 'buttons-csv hidden',
+                exportOptions: {
+                    columns: [ 0,2,3,4,5,6,7]
+                }
+            },
+
         ],
+        fixedHeader: true,
+        fixedColumns: {
+            leftColumns: 1
+        },
         ordering: false,
         "oLanguage": {
             "aria": {
@@ -101,11 +129,16 @@ function Record(){
     getAllRecord();
 
     $('#example23 tbody').on('click', '.delete-button', function (event) {
-        var id = $(this).parent().prev().text();
-        deleteRecord(id);
-        var table = $('#example23').DataTable();
-        table.row($(this).parents('tr')).remove().draw();
-        event.preventDefault();
+        var _this=this;
+        Dialog.showComfirm("确定要删除这条记录吗？", "警告", function(){
+            var id = $(_this).parent().prev().text();
+            console.log("id"+id);
+            deleteRecord(id);
+            var table = $('#example23').DataTable();
+            table.row($(_this).parents('tr')).remove().draw();
+            event.preventDefault();
+            Dialog.showSuccess("记录已删除", "操作成功");
+        });
     });
     $("#example23 tbody").on("click", ".edit-button", function (event) {
         var id = $(this).parent().prev().text();
@@ -122,7 +155,7 @@ function deleteRecord(id) {
         url += "&guid=" + id;
     }
     $.post(url, function (jsonObject) {
-        alert("删除成功！");
+
     });
     event.preventDefault();
 }
@@ -165,12 +198,19 @@ function getSelectedRecord(url){
     });
 }
 
-function addRecord(){
-    window.location.href="questionnaire_add.jsp";
-}
-
 function statisticRecord(){
-    window.location.href="questionnaire_statistic.jsp";
+    window.location.href="user_statistic.jsp";
+
+};
+
+function printRecord(){
+    window.location.href="user_print.jsp";
+};
+function expordExcel(){
+    $(".dt-buttons .buttons-excel").click();
+};
+function expordCsv(){
+    $(".dt-buttons .buttons-csv").click();
 
 };
 

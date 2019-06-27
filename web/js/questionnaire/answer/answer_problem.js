@@ -36,8 +36,12 @@ function showRecord(json){
                 "<code>问题"+problem_id+"</code>"+
             "</p>"+
             "<input name="+problemurl+" value="+problem+
-            " class=\"form-control input-rounded\" readonly=\"true\">"+
-        "</div>"
+            " class=\"form-control alert alert-dark\" type=\'hidden\'>"+
+            "<div class=\"alert alert-dark \">"+
+                problem+
+            "</div>"+
+
+    "</div>"
 
     html=html+
         "<div class=\"form-group\">"+

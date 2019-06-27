@@ -80,8 +80,8 @@ String.format = function() {
 var Dialog = function() {
     var showSuccess = function(sMsg, sTitle){
         toastr.success(sMsg, sTitle,{
-            "positionClass": "toast-top-center",
-            timeOut: 3000,
+            "positionClass": "toast-top-full-width",
+            timeOut: 1000,
             "closeButton": true,
             "debug": false,
             "newestOnTop": true,
@@ -101,8 +101,8 @@ var Dialog = function() {
 
     var showError = function(sMsg, sTitle){
         toastr.error(sMsg, sTitle,{
-            "positionClass": "toast-top-center",
-            timeOut: 3000,
+            "positionClass": "toast-top-full-width",
+            timeOut: 5000,
             "closeButton": true,
             "debug": false,
             "newestOnTop": true,
@@ -134,11 +134,15 @@ var Dialog = function() {
                 fnCallback
         );
     };
+    var showText = function(sText, sTitle, fnCallback) {
+        swal(sText,sTitle);
+    };
 
     return {
         showSuccess: showSuccess,
         showError: showError,
-        showComfirm: showComfirm
+        showComfirm: showComfirm,
+        showText:showText
     };
 }();
 </script>

@@ -33,17 +33,17 @@ function showRecord(json){
     var answerurl="answer"+problem_id;
     html=html+
         "<div class=\"form-group\">"+
-            "<p class=\"text-muted m-b-15 f-s-12\">"+
-                "<code>问题"+problem_id+"</code>"+
-            "</p>"+
-            "<input name="+problemurl+" value="+problem+
-            " class=\"form-control  input-flat\" readonly=\"true\">"+
+            "<div class=\"alert alert-danger \">"+
+                "["+problem_id+"]"+" "+problem+
+            "</div>"+
+
         "</div>"
 
     html=html+
         "<div class=\"form-group\">"+
-            "<input name="+answerurl+" value="+answer+
-            " class=\"form-control  input-flat\" readonly=\"true\" placeholder=\"输入答案\">"+
+            "<div class=\"alert alert-info  \">"+
+                 answer+
+            "</div>"+
         "</div>"
 };
 function returnBack(){

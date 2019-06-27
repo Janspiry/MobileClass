@@ -184,6 +184,8 @@ public class QuestionnaireAnswer extends HttpServlet {
             System.out.printf("result[%d].guid=%d\n",i, queryResult.getJSONObject(i).getInt("guid"));
         }
         out.print(queryResult);
+        session.setAttribute("jsonData",queryResult);
+        session.setAttribute("sql",sql);
         out.flush();
         out.close();
         System.out.println("exit getResult");
@@ -278,6 +280,7 @@ public class QuestionnaireAnswer extends HttpServlet {
         rs = db.executeQuery(sql);
         rs.next();
         String questionnaireId=rs.getString("questionnaire_id");
+
         int userid=Integer.parseInt(rs.getString("user_id"));
         String answer_num=rs.getString("answer_num");
 
@@ -292,6 +295,8 @@ public class QuestionnaireAnswer extends HttpServlet {
         //更新问题情况
 
         for(int j=1;j<=count;j++){
+            problemName="problem"+j;
+            answerName="answer"+j;
             problem=request.getParameter(problemName);
             answer=request.getParameter(answerName);
             String value1 =new String(problem.getBytes("iso-8859-1"),"utf-8");
@@ -310,15 +315,16 @@ public class QuestionnaireAnswer extends HttpServlet {
 
 
     private void getStatistics(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.getStatistics");
-        String sql = queryBuilder.getSelectStmt();
+        System.out.println("enter FileManagement.getStatistics");
+        HttpSession session = request.getSession();
+        String sql = session.getAttribute("sql").toString();
         String dateFormat = request.getParameter("interval");
         if(dateFormat==null || dateFormat.length()==0)
         {
             System.out.println("getStatistics: miss argument 'interval'");
             return;
         }
-        if(Objects.equals(dateFormat, "hour"))dateFormat="%Y-%m-%d %H:00:00";
+        if(Objects.equals(dateFormat, "year"))dateFormat="%Y";
         else if(Objects.equals(dateFormat, "day"))dateFormat="%Y-%m-%d";
         else if(Objects.equals(dateFormat, "month"))dateFormat="%Y-%m";
         sql = String.format("select " +
@@ -343,7 +349,7 @@ public class QuestionnaireAnswer extends HttpServlet {
         out.print(list);
         out.flush();
         out.close();
-        System.out.println("exit AuthorizationAction.getStatistics");
+        System.out.println("exit FileManagement.getStatistics");
     }
 
 
