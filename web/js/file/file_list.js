@@ -248,6 +248,7 @@ function Record(){
             url += "&context=" + context;
         }
         getSelectedRecord(url);
+        Dialog.showSuccess("修改记录成功","操作成功");
     });
 }
 function downloadRecord(url) {

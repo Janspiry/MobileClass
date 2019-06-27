@@ -8,26 +8,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <div class="row">
-
-    <div class="col-lg-12">
-        <label class="control-label">第一字段规则</label>
-        <select id="rule1" data-placeholder="asc" tabindex="1">
-            <option value="asc" selected="selected">升序</option>
-            <option value="desc">降序</option>
-        </select>
-        <label class="control-label">第二字段规则</label>
-        <select id="rule2"data-placeholder="asc" tabindex="2">
-            <option value="asc" selected="selected">升序</option>
-            <option value="desc">降序</option>
-        </select>
-        <label class="control-label">第三字段规则</label>
-        <select id="rule3" data-placeholder="asc" tabindex="3">
-            <option value="asc" selected="selected">升序</option>
-            <option value="desc">降序</option>
-        </select>
+    <div class="col-lg-6">
 
         <div class="form-group">
-            <label>字段选择</label>
+            <label class="control-label">字段选择</label>
             <select id="key1" class="form-control">
                 <option value="create_time" selected="selected">上传时间</option>
                 <option value="change_time" >最近修改时间</option>
@@ -48,6 +32,27 @@
                 <option value="download_num" >下载数</option>
                 <option value="change_time" >最近修改时间</option>
                 <option value="create_time">上传时间</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="form-group">
+            <label class="control-label">字段规则</label>
+            <select id="rule1" class="form-control" data-placeholder="asc" tabindex="1">
+                <option value="asc" selected="selected">升序</option>
+                <option value="desc">降序</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="rule2" class="form-control" data-placeholder="asc" tabindex="2">
+                <option value="asc" selected="selected">升序</option>
+                <option value="desc">降序</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <select id="rule3" class="form-control" data-placeholder="asc" tabindex="3">
+                <option value="asc" selected="selected">升序</option>
+                <option value="desc">降序</option>
             </select>
         </div>
     </div>
