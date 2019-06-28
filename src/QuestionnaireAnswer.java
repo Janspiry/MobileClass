@@ -177,7 +177,7 @@ public class QuestionnaireAnswer extends HttpServlet {
         String sql=queryBuilder.getAnswerSql();
         DatabaseHelper db=new DatabaseHelper();
         ResultSet rs=db.executeQuery(sql);
-        processResult(rs);
+        processResult(request,rs);
 
         for(int i=0;i<queryResult.length();i++)
         {
@@ -207,7 +207,7 @@ public class QuestionnaireAnswer extends HttpServlet {
         String sql=queryBuilder.getAnswerSql();
         DatabaseHelper db=new DatabaseHelper();
         ResultSet rs=db.executeQuery(sql);
-        processResult(rs);
+        processResult(request,rs);
 
 
         System.out.println("guid:"+guid);
@@ -353,7 +353,11 @@ public class QuestionnaireAnswer extends HttpServlet {
     }
 
 
-    private void processResult(ResultSet rs) throws JSONException, SQLException {
+    private void processResult(HttpServletRequest request,ResultSet rs) throws JSONException, SQLException {
+        HttpSession session = request.getSession();
+        int user_id=Integer.parseInt(session.getAttribute("guid").toString());
+        int authorization=Integer.parseInt(session.getAttribute("authorization").toString());
+
         queryResult = new JSONArray("[]");
         rs.beforeFirst();
         while(rs.next())
@@ -373,6 +377,12 @@ public class QuestionnaireAnswer extends HttpServlet {
             item.put("answer", rs.getString("answer"));
             item.put("problem", rs.getString("problem"));
             item.put("problem_id", rs.getString("problem_id"));
+
+            if(authorization>1||rs.getInt("user_id")==user_id){
+                item.put("authorization", 1);
+            }else{
+                item.put("authorization", 0);
+            }
             queryResult.put(item);
         }
     }

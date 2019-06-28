@@ -150,15 +150,22 @@ function Record(){
                 "mRender":
                     function(data, type, full) {
                         // console.log("这是文件url:"+data);
-                        sReturn=
-                            "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改</button>"+
-                            "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除</button>"
+                        // console.log("这是文件full:"+full);
+                        sReturn=""
+                            if(full[9]==1) {
+                                sReturn = sReturn +
+                                    "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改</button>" +
+                                    "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除</button>"
+                            }
                             // sReturn=sReturn+"<button type=\"button\" onclick=\"downloadRecord('"+data+"')\" class=\"download-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
                             sReturn=sReturn+"<button type=\"button\" class=\"download-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
                         return sReturn;
                     },
             },
-
+            {
+                "targets":9,
+                "bVisible":false,
+            },
         ],
         "aLengthMenu": [[10,15,20,25,40,50,-1],[10,15,20,25,40,50,"所有文件"]],
     });
@@ -286,7 +293,8 @@ function getAllRecord(){
             var download_num = json[i]["download_num"];
             var change_num = json[i]["change_num"];
             var file_url = json[i]["file_url"];
-            dataTable.row.add([id,file_url, title, context, user_name,create_time, change_time,download_num,change_num]).draw().node();
+            var authorization = json[i]["authorization"];
+            dataTable.row.add([id,file_url, title, context, user_name,create_time, change_time,download_num,change_num,authorization]).draw().node();
         }
     });
 }
@@ -306,7 +314,8 @@ function getSelectedRecord(url){
             var download_num = json[i]["download_num"];
             var change_num = json[i]["change_num"];
             var file_url = json[i]["file_url"];
-            dataTable.row.add([id,file_url, title, context, user_name,create_time, change_time,download_num,change_num]).draw().node();
+            var authorization = json[i]["authorization"];
+            dataTable.row.add([id,file_url, title, context, user_name,create_time, change_time,download_num,change_num,authorization]).draw().node();
         }
     });
 }

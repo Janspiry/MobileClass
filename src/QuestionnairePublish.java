@@ -140,7 +140,7 @@ public class QuestionnairePublish extends HttpServlet {
             String sql=queryBuilder.getSelectStmt();
             DatabaseHelper db=new DatabaseHelper();
             ResultSet rs=db.executeQuery(sql);
-            processResult(rs);
+            processResult(request,rs);
             session.setAttribute("exist_result", false);
         }
         for(int i=0;i<queryResult.length();i++)
@@ -213,7 +213,7 @@ public class QuestionnairePublish extends HttpServlet {
         sql=queryBuilder.getSelectStmt();
         db=new DatabaseHelper();
         rs=db.executeQuery(sql);
-        processResult(rs);
+        processResult(request,rs);
         PrintWriter out = response.getWriter();
         for(int i=0;i<queryResult.length();i++)
         {
@@ -263,7 +263,11 @@ public class QuestionnairePublish extends HttpServlet {
         System.out.println("exit FileManagement.getStatistics");
     }
 
-    private void processResult(ResultSet rs) throws JSONException, SQLException {
+    private void processResult(HttpServletRequest request,ResultSet rs) throws JSONException, SQLException {
+        HttpSession session = request.getSession();
+        int user_id=Integer.parseInt(session.getAttribute("guid").toString());
+        int authorization=Integer.parseInt(session.getAttribute("authorization").toString());
+
         queryResult = new JSONArray("[]");
         rs.beforeFirst();
         while(rs.next())
@@ -282,6 +286,12 @@ public class QuestionnairePublish extends HttpServlet {
             item.put("status", rs.getString("status"));
             item.put("answer", rs.getString("answer"));
             item.put("problem", rs.getString("problem"));
+
+            if(authorization>1||rs.getInt("user_id")==user_id){
+                item.put("authorization", 1);
+            }else{
+                item.put("authorization", 0);
+            }
             queryResult.put(item);
         }
     }
