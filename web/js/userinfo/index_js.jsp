@@ -26,6 +26,7 @@
                 errorElement: 'span', //default input error message container
                 errorClass: 'color-danger', // default input error message class
                 focusInvalid: false, // do not focus the last invalid input
+//                onsubmit: false,
                 ignore: "",
                 rules: {
                     username: {
@@ -86,13 +87,18 @@
                 },
 
                 submitHandler: function(form) {
-                    console.log("submitHandler");
-                    submitForm_onClick();
+                    alert("submitHandler");
+//                    submitForm_onClick();
                 }
             });
         };
 
-        var submitForm_onClick = function(){
+        var addEventListener = function(){
+            $('#form-query-submit').click(btnSubmit_onclick);
+            $('#form-query-reset').click(btnReset_onclick);
+        }
+
+        var btnSubmit_onclick = function(){
             if(!$('#form-query').valid())return;
             url = "<%=request.getContextPath()%>/UserInfoAction?action=query";
             var form=document.getElementById("form-query");
@@ -115,9 +121,20 @@
             });
         };
 
+        var btnReset_onclick = function(){
+            console.log('btnReset_onclick');
+            $('#form-query').find('input').val('');
+            $('#form-query').find('select').val('0');
+            url = "<%=request.getContextPath()%>/UserInfoAction?action=clearQuery";
+            $.post(url, function(){
+                Page.fetchResult();
+            })
+        }
+
         return {
             init: function(){
                 bindValidation();
+                addEventListener();
             }
         };
 
@@ -221,16 +238,20 @@
 
                 submitHandler: function(form) {
                     console.log("submitHandler");
-                    submitForm_onClick();
+
                 }
             });
         };
 
-        var submitForm_onClick = function() {
+        var addEventListener = function(){
+            $('#form-add-submit').click(btnSubmit_onclick);
+            $('#form-add-reset').click(btnReset_onclick);
+        }
+
+        var btnSubmit_onclick = function() {
             if(!$("#form-add").valid())return;
             url = "<%=request.getContextPath()%>/AccountAction?action=register";
             var form=document.getElementById("form-add");
-
             var param = {
                 "username": form.username.value,
                 "password": form.password.value,
@@ -255,9 +276,16 @@
             });
         };
 
+        var btnReset_onclick = function(){
+            console.log('btnReset_onclick');
+            $('#form-add').find('input').val('');
+            $('#form-add').find('select').val('0');
+        }
+
         return {
             init: function(){
                 bindValidation();
+                addEventListener();
             }
         };
 
@@ -275,7 +303,6 @@
         ];
 
         var addEventListener = function(){
-            $('.btn-dark').click(btnOrder_onclick);
             $('#form-sort-submit').click(btnSubmit_onclick);
             $('#form-sort-reset').click(btnReset_onclick);
         }
@@ -320,6 +347,10 @@
         var btnReset_onclick = function(evt){
             console.log('btnReset_onclick');
             initNestable();
+            var url = "<%=request.getContextPath()%>/UserInfoAction?action=clearSort";
+            $.post(url, function(){
+                Page.fetchResult();
+            })
         }
 
         var initNestable = function(){
@@ -336,15 +367,13 @@
             var pref='<ol class="dd-list">';
             var suff='</ol>';
             var html='';
-//            if(choice.length > 0){
-//                html+=String.format(li, choice[0][0], choice[0][1]);
-//            }
             $('#form-sort-rule').html("<div class='dd-empty'></div>");
             html="";
             for(var i=0;i<choice.length;i++){
                 html+=String.format(li, choice[i][0], choice[i][1]);
             }
             $('#form-sort-choice').html(pref+html+suff);
+            $('.btn-dark').click(btnOrder_onclick);
         };
 
         return {
@@ -515,7 +544,6 @@
                 console.log(json);
                 for (var i = 0; i < json.length; i++) {
                     var it=json[i];
-//                    var row=[it.guid, '', it.username, it.fullname, it.gender, it.schoolnum, it.nativeplace, it.email, it.phone];
                     dt.row.add(it).draw().node();
                 }
             });

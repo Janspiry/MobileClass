@@ -216,10 +216,12 @@ public class UserInfoAction extends HttpServlet
     }
 
     private void ClearQuery(){
+        System.out.println("enter UserInfoAction.ClearQuery");
         queryBuilder.clear();
     }
 
     private void ClearSort(){
+        System.out.println("enter UserInfoAction.ClearSort");
         queryBuilder.setSortBy(null);
     }
 
