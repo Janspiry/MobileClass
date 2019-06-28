@@ -7444,3 +7444,17 @@ only screen and (min-resolution: 2dppx) {
 .color-light {
     color: #e7ecf5;
 }
+
+.input-group .btn-default {
+    border-color: #e5e5e5;
+}
+.input-group .input-group-addon {
+    border-color: #e5e5e5;
+    background: #e5e5e5;
+    min-width: 39px;
+    text-align: center;
+    padding-top: 12px;
+}
+.input-group .input-group-addon > i {
+    color: #999;
+}

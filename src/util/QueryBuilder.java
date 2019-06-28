@@ -40,18 +40,34 @@ public class QueryBuilder {
     }
     public void setCreate_time_to(String value){ create_time_to = filter(value); }
 
+    private String modify_time_from;
+    public String getModify_time_from()
+    {
+        if(modify_time_from == null || modify_time_from.length() == 0)return null;
+        else return modify_time_from;
+    }
+    public void setModify_time_from(String value){ modify_time_from = filter(value); }
+
+    private String modify_time_to;
+    public String getModify_time_to()
+    {
+        if(modify_time_to == null || modify_time_to.length() == 0)return null;
+        else return modify_time_to;
+    }
+    public void setModify_time_to(String value){ modify_time_to = filter(value); }
+
     private int authorization;
     public int getAuthorization()
     {
         return authorization;
     }
-    public void setAuthorization(String value)
+    public boolean setAuthorization(String value)
     {
-        setAuthorization(filterInt(value));
+        return setAuthorization(filterInt(value));
     }
     public boolean setAuthorization(int value)
     {
-        if(0 <= value && value <= 15){
+        if(1 <= value && value <= 15){
             authorization = value;
             return true;
         }
@@ -69,6 +85,10 @@ public class QueryBuilder {
     }
     public boolean setUsername(String value)
     {
+        if(value==null){
+            username=null;
+            return true;
+        }
         String pat = "^[_0-9A-Za-z]+$";
         if(Pattern.matches(pat, value))
         {
@@ -96,6 +116,10 @@ public class QueryBuilder {
         else return fullname;
     }
     public boolean setFullname(String value){
+        if(value==null){
+            fullname=null;
+            return true;
+        }
         String pat = "^[\\u4e00-\\u9fa5_a-zA-Z0-9]+$";
         if(Pattern.matches(pat, value)){
             fullname=value;
@@ -125,6 +149,10 @@ public class QueryBuilder {
         else return schoolnum;
     }
     public boolean setSchoolnum(String value){
+        if(value==null){
+            schoolnum=null;
+            return true;
+        }
         String pat = "^[_0-9A-Za-z]+$";
         if(Pattern.matches(pat, value))
         {
@@ -144,6 +172,10 @@ public class QueryBuilder {
         else return nativeplace;
     }
     public boolean setNativeplace(String value){
+        if(value==null){
+            nativeplace=null;
+            return true;
+        }
         String pat = "^[\\u4e00-\\u9fa5_a-zA-Z0-9]+$";
         if(Pattern.matches(pat, value)){
             nativeplace=value;
@@ -161,6 +193,10 @@ public class QueryBuilder {
         else return email;
     }
     public boolean setEmail(String value){
+        if(value==null){
+            email=null;
+            return true;
+        }
         String pat = "^[_a-zA-Z0-9]+@[_a-zA-Z0-9]+(.com)?$";
         if(Pattern.matches(pat, value)){
             email=value;
@@ -178,6 +214,10 @@ public class QueryBuilder {
         else return phone;
     }
     public boolean setPhone(String value){
+        if(value==null){
+            phone=null;
+            return true;
+        }
         String pat = "^[0-9]{3,15}$";
         if(Pattern.matches(pat, value)){
             phone=value;
@@ -262,6 +302,8 @@ public class QueryBuilder {
         guid=-1;
         create_time_from=null;
         create_time_to=null;
+        modify_time_from=null;
+        modify_time_to=null;
         authorization=-1;
         username=null;
         password=null;
@@ -281,6 +323,9 @@ public class QueryBuilder {
         if(getCreate_time_from()!=null && getCreate_time_to()!=null)
             sql += String.format(" and `create_time` between '%s' and '%s'",
                     getCreate_time_from(), getCreate_time_to());
+        if(getModify_time_from()!=null && getModify_time_to()!=null)
+            sql += String.format(" and `modify_time` between '%s' and '%s'",
+                    getModify_time_from(), getModify_time_to());
         if(getAuthorization()!=-1)
             sql += String.format(" and `authorization` & %d > 0", getAuthorization());
         if(getUsername()!=null)

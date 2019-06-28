@@ -24,7 +24,6 @@ public class UserInfoAction extends HttpServlet
 {
     private static QueryBuilder queryBuilder = new QueryBuilder("userinfo");
     private static JSONArray result = new JSONArray();
-    private static boolean hasResult = false;
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -232,8 +231,8 @@ public class UserInfoAction extends HttpServlet
         {
             JSONObject item = new JSONObject();
             item.put("guid", rs.getInt("guid"));
-//            item.put("create_time", rs.getString("create_time"));
-//            item.put("modify_time", rs.getString("modify_time"));
+//            item.put("create_time", rs.getTimestamp("create_time"));
+//            item.put("modify_time", rs.getTimestamp("modify_time"));
 //            item.put("authorization", rs.getInt("authorization"));
             item.put("username", rs.getString("username"));
             item.put("fullname", rs.getString("fullname"));
@@ -244,7 +243,6 @@ public class UserInfoAction extends HttpServlet
             item.put("phone", rs.getString("phone"));
             result.put(item);
         }
-        hasResult=true;
     }
 
 }

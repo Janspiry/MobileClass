@@ -7,7 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<form id="form-query" method="post" action="javascript:alert(0);" class="form-horizontal">
+<form id="form-query" method="post" action="#" class="form-horizontal">
     <div class="form-body">
         <div class="row">
             <div class="col-md-6">

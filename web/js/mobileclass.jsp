@@ -122,7 +122,7 @@ var Dialog = function() {
 
     var showInfo = function(sMsg, sTitle) {
         toastr.info(sMsg,sTitle,{
-            "positionClass": "toast-bottom-right",
+            "positionClass": "toast-top-full-width",
             timeOut: 3000,
             "closeButton": true,
             "debug": false,
@@ -143,7 +143,7 @@ var Dialog = function() {
 
     var showWarning = function(sMsg, sTitle) {
         toastr.warning(sMsg, sTitle,{
-            "positionClass": "toast-bottom-right",
+            "positionClass": "toast-top-full-width",
             timeOut: 3000,
             "closeButton": true,
             "debug": false,
@@ -183,6 +183,8 @@ var Dialog = function() {
     return {
         showSuccess: showSuccess,
         showError: showError,
+        showWarning: showWarning,
+        showInfo: showInfo,
         showComfirm: showComfirm,
         showText:showText
     };
