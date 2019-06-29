@@ -1,10 +1,11 @@
 <%--
   Created by IntelliJ IDEA.
   User: silenus
-  Date: 2019/6/16
-  Time: 21:13
+  Date: 2019/6/29
+  Time: 16:48
   To change this template use File | Settings | File Templates.
 --%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
@@ -19,7 +20,6 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <%--<link href="<%=request.getContextPath()%>/css/lib/nestable/nestable.css" rel="stylesheet">--%>
     <%--<title>移动互动课堂 | 用户信息管理</title>--%>
     <%@include file="../page_css.jsp"%>
 </head>
@@ -36,45 +36,58 @@
             <div class="col-md-5 align-self-center"></div>
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="javascript:void(0)">移动互动课堂</a></li>
-                    <li class="breadcrumb-item active">用户信息管理</li>
+                    <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/index.jsp">移动互动课堂</a></li>
+                    <li class="breadcrumb-item active">分组管理</li>
                 </ol>
             </div>
         </div>
         <!-- End Bread crumb -->
-
-
 
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <label id="fold-btn"> <a class="nav-link" href="#"><span><i id="fold-icon" style="font-size:20px" class="fa fa-angle-down"></i></span></a> </label>
-                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-query" role="tab"><span class="hidden-sm-up"><i class="fa fa-search"></i></span> <span class="hidden-xs-down">查询</span></a> </li>
                         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-add" role="tab"><span class="hidden-sm-up"><i class="fa fa-plus"></i></span> <span class="hidden-xs-down">添加</span></a> </li>
-                        <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-sort" role="tab"><span class="hidden-sm-up"><i class="fa fa-sort-alpha-asc"></i></span> <span class="hidden-xs-down">排序</span></a> </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                <span class="hidden-sm-up"><i class="fa fa-ellipsis-h"></i></span> <span class="hidden-xs-down">更多</span>
-                            </a>
-                            <div class="dropdown-menu">
-                                <span class="dropdown-item" id="tab-print" role="tab">打印</span>
-                                <span class="dropdown-item" id="tab-excel" role="tab">导出为Excel</span>
-                                <span class="dropdown-item" id="tab-csv" role="tab">导出为CSV</span>
-                                <%--<span class="dropdown-item" id="tab-pdf" role="tab">导出为PDF</span>--%>
-                                <a class="dropdown-item" id="tab-sta" role="tab" data-toggle="modal" href="#basic">统计</a>
-                            </div>
-                        </li>
                     </ul>
                     <div id="tab-content" class="tab-content tabcontent-border p-20" style="display: none;">
-                        <div role="tabpanel" class="tab-pane active" id="tab-query">
-                            <%@include file="form_query.jsp"%>
-                        </div>
                         <div class="tab-pane" id="tab-add" role="tabpanel">
-                            <%@include file="form_add.jsp"%>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="tab-sort">
-                            <%@include file="form_sort.jsp"%>
+
+                            <form id="form-add" method="post" action="#" class="form-horizontal">
+                                <div class="form-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3">所有者</label>
+                                                <div class="col-md-9">
+                                                    <select id="id_or_email" name="id_or_email" class="form-control">
+                                                        <option value='email'>邮箱</option>
+                                                        <option value='owner_id'>ID</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group row">
+                                                <label class="control-label text-right col-md-3"></label>
+                                                <div class="col-md-9">
+                                                    <input name="owner" type="text" class="form-control" placeholder="所有者ID或邮箱">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-4"></div>
+                                        <button type="button" id="form-add-submit" class="col-md-2 btn btn-success">添加</button>
+                                        <button type="button" id="form-add-reset" class="col-md-2 btn btn-inverse" style="margin-left: 20px;">清空</button>
+                                    </div>
+                                </div>
+                            </form>
+
                         </div>
                     </div>
                 </div>
@@ -84,18 +97,17 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">用户列表</h4>
+                    <h4 class="card-title">成员列表</h4>
+                    <h6 class="card-title">当前分组：<%=request.getParameter("group_name")%></h6>
                     <div class="table-responsive m-t-40">
                         <table id="myDataTable" class="display nowrap table table-hover table-bordered" cellspacing="2px" width="100%">
                             <thead>
                             <tr>
-                                <th>GUID</th>
                                 <th>操作</th>
                                 <th>用户名</th>
                                 <th>姓名</th>
                                 <th>性别</th>
                                 <th>学号</th>
-                                <th>籍贯</th>
                                 <th>邮箱</th>
                                 <th>电话</th>
                             </tr>
@@ -124,11 +136,10 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-<%--<script src="<%=request.getContextPath()%>/js/lib/nestable/jquery.nestable.js"></script>--%>
 
 <script src="../js/tabview.js"></script>
 <%@include file="../js/mobileclass.jsp"%>
-<%@include file="../js/userinfo/index_js.jsp"%>
+<%@include file="../js/classgroup/member_js.jsp"%>
 </body>
 
 </html>

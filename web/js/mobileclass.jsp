@@ -65,6 +65,22 @@ var MobileClass = function(){
     };
 }();
 
+function sendRedirect(URL, PARAMTERS) {
+    var temp_form = document.createElement("form");
+    temp_form.action = URL;
+    temp_form.target = "_self";
+    temp_form.method = "post";
+    temp_form.style.display = "none";
+    for (var item in PARAMTERS) {
+        var opt = document.createElement("textarea");
+        opt.name = PARAMTERS[item].name;
+        opt.value = PARAMTERS[item].value;
+        temp_form.appendChild(opt);
+    }
+    document.body.appendChild(temp_form);
+    temp_form.submit();
+};
+
 String.format = function() {
     if( arguments.length == 0 )
         return null;
@@ -86,7 +102,7 @@ var Dialog = function() {
             "debug": false,
             "newestOnTop": true,
             "progressBar": true,
-            "preventDuplicates": true,
+            "preventDuplicates": false,
             "onclick": null,
             "showDuration": "300",
             "hideDuration": "1000",
@@ -107,7 +123,7 @@ var Dialog = function() {
             "debug": false,
             "newestOnTop": true,
             "progressBar": true,
-            "preventDuplicates": true,
+            "preventDuplicates": false,
             "onclick": null,
             "showDuration": "300",
             "hideDuration": "1000",
@@ -119,6 +135,48 @@ var Dialog = function() {
             "tapToDismiss": false
         });
     };
+
+    var showInfo = function(sMsg, sTitle) {
+        toastr.info(sMsg,sTitle,{
+            "positionClass": "toast-top-full-width",
+            timeOut: 3000,
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "tapToDismiss": false
+        })
+    }
+
+    var showWarning = function(sMsg, sTitle) {
+        toastr.warning(sMsg, sTitle,{
+            "positionClass": "toast-top-full-width",
+            timeOut: 3000,
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "preventDuplicates": false,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "tapToDismiss": false
+        })
+    }
 
     var showComfirm = function(sText, sTitle, fnCallback) {
         swal({
@@ -141,6 +199,8 @@ var Dialog = function() {
     return {
         showSuccess: showSuccess,
         showError: showError,
+        showWarning: showWarning,
+        showInfo: showInfo,
         showComfirm: showComfirm,
         showText:showText
     };

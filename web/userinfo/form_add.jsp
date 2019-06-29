@@ -89,15 +89,9 @@
     <hr>
     <div class="form-actions">
         <div class="row">
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-offset-3 col-md-9">
-                        <button type="submit" class="btn btn-success">添加</button>
-                        <button type="clear" class="btn btn-inverse">清空</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6"> </div>
+            <div class="col-md-4"></div>
+            <button type="button" id="form-add-submit" class="col-md-2 btn btn-success">添加</button>
+            <button type="button" id="form-add-reset" class="col-md-2 btn btn-inverse" style="margin-left: 20px;">清空</button>
         </div>
     </div>
 </form>

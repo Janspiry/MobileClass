@@ -19,7 +19,6 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="images/favicon.png">
-    <%--<link href="<%=request.getContextPath()%>/css/lib/nestable/nestable.css" rel="stylesheet">--%>
     <%--<title>移动互动课堂 | 用户信息管理</title>--%>
     <%@include file="../page_css.jsp"%>
 </head>
@@ -36,14 +35,12 @@
             <div class="col-md-5 align-self-center"></div>
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="javascript:void(0)">移动互动课堂</a></li>
-                    <li class="breadcrumb-item active">用户信息管理</li>
+                    <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/index.jsp">移动互动课堂</a></li>
+                    <li class="breadcrumb-item active">分组管理</li>
                 </ol>
             </div>
         </div>
         <!-- End Bread crumb -->
-
-
 
         <div class="col-md-12">
             <div class="card">
@@ -62,7 +59,7 @@
                                 <span class="dropdown-item" id="tab-excel" role="tab">导出为Excel</span>
                                 <span class="dropdown-item" id="tab-csv" role="tab">导出为CSV</span>
                                 <%--<span class="dropdown-item" id="tab-pdf" role="tab">导出为PDF</span>--%>
-                                <a class="dropdown-item" id="tab-sta" role="tab" data-toggle="modal" href="#basic">统计</a>
+                                <a class="dropdown-item" id="tab-sta" role="tab" data-toggle="modal">统计</a>
                             </div>
                         </li>
                     </ul>
@@ -84,20 +81,17 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="card-title">用户列表</h4>
+                    <h4 class="card-title">分组列表</h4>
                     <div class="table-responsive m-t-40">
                         <table id="myDataTable" class="display nowrap table table-hover table-bordered" cellspacing="2px" width="100%">
                             <thead>
                             <tr>
-                                <th>GUID</th>
                                 <th>操作</th>
-                                <th>用户名</th>
-                                <th>姓名</th>
-                                <th>性别</th>
-                                <th>学号</th>
-                                <th>籍贯</th>
-                                <th>邮箱</th>
-                                <th>电话</th>
+                                <th>组ID</th>
+                                <th>分组名称</th>
+                                <th>所有者ID</th>
+                                <th>所有者用户名</th>
+                                <th>所有者邮箱</th>
                             </tr>
                             </thead>
 
@@ -124,11 +118,10 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-<%--<script src="<%=request.getContextPath()%>/js/lib/nestable/jquery.nestable.js"></script>--%>
 
 <script src="../js/tabview.js"></script>
 <%@include file="../js/mobileclass.jsp"%>
-<%@include file="../js/userinfo/index_js.jsp"%>
+<%@include file="../js/classgroup/index_js.jsp"%>
 </body>
 
 </html>

@@ -24,7 +24,6 @@ public class UserInfoAction extends HttpServlet
 {
     private static QueryBuilder queryBuilder = new QueryBuilder("userinfo");
     private static JSONArray result = new JSONArray();
-    private static boolean hasResult = false;
 
     @Override
     public void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
@@ -48,8 +47,17 @@ public class UserInfoAction extends HttpServlet
                 case "update":
                     Update(request, response);
                     break;
+                case "sort":
+                    Sort(request, response);
+                    break;
                 case "statistics":
                     Statistics(request, response);
+                    break;
+                case "clearQuery":
+                    ClearQuery();
+                    break;
+                case "clearSort":
+                    ClearSort();
                     break;
                 default:
                     throw new Exception("UserInfoAction: 未知的请求类型");
@@ -157,6 +165,20 @@ public class UserInfoAction extends HttpServlet
         out.close();
     }
 
+    private void Sort(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
+        System.out.println("enter UserInfoAction.Sort");
+        response.setContentType("application/json; charset=UTF-8");
+        String sortBy = request.getParameter("sortBy");
+        System.out.println(sortBy);
+        queryBuilder.setSortBy(sortBy);
+        PrintWriter out = response.getWriter();
+        JSONObject json = new JSONObject();
+        json.put("errno", 0);
+        out.print(json);
+        out.flush();
+        out.close();
+    }
+
     private void Statistics(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
         System.out.println("enter UserInfoAction.Statistics");
         String dateFormat = request.getParameter("interval");
@@ -192,6 +214,16 @@ public class UserInfoAction extends HttpServlet
         out.close();
     }
 
+    private void ClearQuery(){
+        System.out.println("enter UserInfoAction.ClearQuery");
+        queryBuilder.clear();
+    }
+
+    private void ClearSort(){
+        System.out.println("enter UserInfoAction.ClearSort");
+        queryBuilder.setSortBy(null);
+    }
+
     private void processResult(ResultSet rs) throws JSONException, SQLException {
         result = new JSONArray("[]");
         rs.beforeFirst();
@@ -199,8 +231,8 @@ public class UserInfoAction extends HttpServlet
         {
             JSONObject item = new JSONObject();
             item.put("guid", rs.getInt("guid"));
-//            item.put("create_time", rs.getString("create_time"));
-//            item.put("modify_time", rs.getString("modify_time"));
+//            item.put("create_time", rs.getTimestamp("create_time"));
+//            item.put("modify_time", rs.getTimestamp("modify_time"));
 //            item.put("authorization", rs.getInt("authorization"));
             item.put("username", rs.getString("username"));
             item.put("fullname", rs.getString("fullname"));
@@ -211,7 +243,6 @@ public class UserInfoAction extends HttpServlet
             item.put("phone", rs.getString("phone"));
             result.put(item);
         }
-        hasResult=true;
     }
 
 }

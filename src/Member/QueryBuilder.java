@@ -1,4 +1,4 @@
-package util;
+package Member;
 
 import java.util.regex.Pattern;
 
@@ -6,13 +6,6 @@ import java.util.regex.Pattern;
  * Created by silenus on 2019/5/11.
  */
 public class QueryBuilder {
-    private String tableName;
-    public String getTablename()
-    {
-        if(tableName == null || tableName.length() == 0)return null;
-        else return tableName;
-    }
-    public void setTableName(String value){ tableName = filter(value); }
 
     private int guid;
     public int getGuid()
@@ -197,7 +190,7 @@ public class QueryBuilder {
             email=null;
             return true;
         }
-        String pat = "^[_a-zA-Z0-9]+@[_a-zA-Z0-9]+(.com)?$";
+        String pat = "^[_a-zA-Z0-9]+@[_a-zA-Z0-9]+(\\.com)?$";
         if(Pattern.matches(pat, value)){
             email=value;
             return true;
@@ -293,8 +286,7 @@ public class QueryBuilder {
         return esc.toString();
     }
 
-    public QueryBuilder(String _tableName){
-        setTableName(_tableName);
+    public QueryBuilder(){
         clear();
     }
 
@@ -319,182 +311,98 @@ public class QueryBuilder {
     private String getWhereClause(){
         String sql="where 1=1";
         if(getGuid()!=-1)
-            sql += String.format(" and `guid`=%d", getGuid());
+            sql += String.format(" and userinfo.guid=%d", getGuid());
         if(getCreate_time_from()!=null && getCreate_time_to()!=null)
-            sql += String.format(" and `create_time` between '%s' and '%s'",
+            sql += String.format(" and userinfo.create_time between '%s' and '%s'",
                     getCreate_time_from(), getCreate_time_to());
         if(getModify_time_from()!=null && getModify_time_to()!=null)
-            sql += String.format(" and `modify_time` between '%s' and '%s'",
+            sql += String.format(" and userinfo.modify_time between '%s' and '%s'",
                     getModify_time_from(), getModify_time_to());
         if(getAuthorization()!=-1)
-            sql += String.format(" and `authorization` & %d > 0", getAuthorization());
+            sql += String.format(" and userinfo.authorization & %d > 0", getAuthorization());
         if(getUsername()!=null)
-            sql += String.format(" and `username`='%s'", getUsername());
+            sql += String.format(" and userinfo.username='%s'", getUsername());
         if(getFullname()!=null)
-            sql += String.format(" and `fullname`='%s'", getFullname());
+            sql += String.format(" and userinfo.fullname='%s'", getFullname());
         if(getGender()!=-1)
-            sql += String.format(" and `gender`=%d", getGender());
+            sql += String.format(" and userinfo.gender=%d", getGender());
         if(getSchoolnum()!=null)
-            sql += String.format(" and `schoolnum`='%s'", getSchoolnum());
+            sql += String.format(" and userinfo.schoolnum='%s'", getSchoolnum());
         if(getNativeplace()!=null)
-            sql += String.format(" and `nativeplace`='%s'", getNativeplace());
+            sql += String.format(" and userinfo.nativeplace='%s'", getNativeplace());
         if(getEmail()!=null)
-            sql += String.format(" and `email`='%s'", getEmail());
+            sql += String.format(" and userinfo.email='%s'", getEmail());
         if(getPhone()!=null)
-            sql += String.format(" and `phone`='%s'", getPhone());
+            sql += String.format(" and userinfo.phone='%s'", getPhone());
         return sql;
     }
 
     public String getSelectStmt(){
         System.out.println("QueryBuilder.getSelectStmt");
-        if(getTablename() == null)
-        {
-            throw new IllegalArgumentException("tableName missed");
-        }
-        String sql = String.format("select * from `%s` %s %s", getTablename(), getWhereClause(), getSortByClause());
+        String sql = String.format("select * from `%s` %s %s", getWhereClause(), getSortByClause());
         System.out.println(sql);
         return sql;
     }
 
     public String getInsertStmt(){
-        if(getTablename() == null)
-        {
-            throw new IllegalArgumentException("tableName missed");
-        }
-        StringBuffer keyList = new StringBuffer(), valList = new StringBuffer();
-        if(getGuid()!=-1)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("guid");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(getGuid());
-        }
-        if(getAuthorization()!=-1)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("authorization");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(getAuthorization());
-        }
-        if(getUsername()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("username");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getUsername()));
-        }
-        if(getPassword()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("password");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getPassword()));
-        }
-        if(getFullname()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("fullname");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getFullname()));
-        }
-        if(getGender()!=-1)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("gender");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(getGender());
-        }
-        if(getSchoolnum()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("schoolnum");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getSchoolnum()));
-        }
-        if(getNativeplace()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("nativeplace");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getNativeplace()));
-        }
-        if(getEmail()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("email");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getEmail()));
-        }
-        if(getPhone()!=null)
-        {
-            keyList.append(keyList.length()==0 ? '(' : ',');
-            keyList.append("phone");
-            valList.append(valList.length()==0 ? "values(" : ",");
-            valList.append(String.format("'%s'", getPhone()));
-        }
-        keyList.append(')');
-        valList.append(')');
-        String sql = String.format("insert into `%s` %s %s",
-                getTablename(), keyList.toString(), valList.toString());
+        String sql="";
         System.out.println("insert statement is "+sql);
         return sql;
     }
 
     public String getDeleteStmt(){
-        System.out.println("QueryBuilder.getDeleteStmt");
-        if(getTablename() == null)
-        {
-            throw new IllegalArgumentException("tableName missed");
-        }
-        String sql = String.format("delete from `%s` %s", getTablename(), getWhereClause());
+
+//        String sql = String.format("delete from `%s` %s", getTablename(), getWhereClause());
+        String sql="";
         System.out.println(sql);
         return sql;
     }
 
     public String getUpdateStmt(){
         System.out.println("QueryBuilder.getUpdateStmt");
-        if(getGuid()==-1){
-            throw new IllegalArgumentException("getUpdateStmt: 没有设置guid");
-        }
-        String sql = String.format("update `%s` set guid=%d", getTablename(), getGuid());
-        if(getAuthorization()!=-1)
-        {
-            sql += String.format(", `authorization`=%d", getAuthorization());
-        }
-        if(getUsername()!=null)
-        {
-            sql += String.format(", `username`='%s'", getUsername());
-        }
-        if(getPassword()!=null)
-        {
-            sql += String.format(", `password`='%s'", getPassword());
-        }
-        if(getFullname()!=null)
-        {
-            sql += String.format(", `fullname`='%s'", getFullname());
-        }
-        if(getGender()!=-1)
-        {
-            sql += String.format(", `gender`=%d", getGender());
-        }
-        if(getSchoolnum()!=null)
-        {
-            sql += String.format(", `schoolnum`='%s'", getSchoolnum());
-        }
-        if(getNativeplace()!=null)
-        {
-            sql += String.format(", `nativeplace`='%s'", getNativeplace());
-        }
-        if(getEmail()!=null)
-        {
-            sql += String.format(", `email`='%s'", getEmail());
-        }
-        if(getPhone()!=null)
-        {
-            sql += String.format(", `phone`='%s'", getPhone());
-        }
-        sql += String.format(" where `guid`=%d", getGuid());
-        System.out.println(sql);
+        String sql="";
+//        if(getGuid()==-1){
+//            throw new IllegalArgumentException("getUpdateStmt: 没有设置guid");
+//        }
+//        String sql = String.format("update `%s` set guid=%d", getTablename(), getGuid());
+//        if(getAuthorization()!=-1)
+//        {
+//            sql += String.format(", `authorization`=%d", getAuthorization());
+//        }
+//        if(getUsername()!=null)
+//        {
+//            sql += String.format(", `username`='%s'", getUsername());
+//        }
+//        if(getPassword()!=null)
+//        {
+//            sql += String.format(", `password`='%s'", getPassword());
+//        }
+//        if(getFullname()!=null)
+//        {
+//            sql += String.format(", `fullname`='%s'", getFullname());
+//        }
+//        if(getGender()!=-1)
+//        {
+//            sql += String.format(", `gender`=%d", getGender());
+//        }
+//        if(getSchoolnum()!=null)
+//        {
+//            sql += String.format(", `schoolnum`='%s'", getSchoolnum());
+//        }
+//        if(getNativeplace()!=null)
+//        {
+//            sql += String.format(", `nativeplace`='%s'", getNativeplace());
+//        }
+//        if(getEmail()!=null)
+//        {
+//            sql += String.format(", `email`='%s'", getEmail());
+//        }
+//        if(getPhone()!=null)
+//        {
+//            sql += String.format(", `phone`='%s'", getPhone());
+//        }
+//        sql += String.format(" where `guid`=%d", getGuid());
+//        System.out.println(sql);
         return sql;
     }
 }

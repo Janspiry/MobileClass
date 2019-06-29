@@ -21,6 +21,22 @@
             return this.optional(element)||(checkIdzh.test(value));
         },"中文ID格式不正确");
 
+//        $.validator.addMethod("group",function(value,element,params){
+//            if(value==null || value.length==0)return true;
+//            var input = $('input[group='+params+']');
+//            $.each(input, function(i, val){
+//                console.log(i, val);
+//            });
+//        },"同组字段必须同时填写");
+//
+//        $.validator.addMethod("greaterThan",function(value,element,params){
+//            console.log('validator group');
+//            console.log(value);
+//            console.log(element);
+//            console.log(params);
+//            return true;
+//        },"该字段必须大于");
+
         var bindValidation = function(){
             $("#form-query").validate({
                 errorElement: 'span', //default input error message container
@@ -29,46 +45,33 @@
 //                onsubmit: false,
                 ignore: "",
                 rules: {
+                    guid: {
+                      number: true
+                    },
                     username: {
                         id: true
-                    },
-                    fullname: {
-                        id_zh: true
                     },
                     email: {
                         email: true
                     },
-                    phone: {
-                        number: true,
-                        rangelength: [3, 15]
-                    },
-                    schoolnum: {
-                        id: true
-                    },
-                    nativeplace: {
-                        id_zh: true
-                    },
+//                    create_time_from: {
+//                        group: 'create_time_group'
+//                    },
+//                    create_time_to: {
+//                        group: 'create_time_group',
+//                        greaterThan: '#create_time_from'
+//                    }
                 },
 
                 messages: { // custom messages for radio buttons and checkboxes
+                    guid: {
+                        number: "不是有效的GUID"
+                    },
                     username: {
                         id: "用户名只能包含字母、数字、下划线"
                     },
                     email: {
                         email: "邮箱格式不正确"
-                    },
-                    phone: {
-                        number: "电话格式不正确",
-                        rangelength: "电话格式不正确"
-                    },
-                    fullname: {
-                        id_zh: "姓名只能包含字母、数字、下划线、汉字"
-                    },
-                    schoolnum: {
-                        id: "学号只能包含字母、数字、下划线"
-                    },
-                    nativeplace: {
-                        id_zh: "籍贯只能包含字母、数字、下划线、汉字"
                     },
                 },
 
@@ -100,15 +103,29 @@
 
         var btnSubmit_onclick = function(){
             if(!$('#form-query').valid())return;
-            url = "<%=request.getContextPath()%>/UserInfoAction?action=query";
+            url = "<%=request.getContextPath()%>/AuthorizationAction?action=query";
             var form=document.getElementById("form-query");
+            var t1=form.create_time_from.value;
+            var t2=form.create_time_to.value;
+            var t3=form.modify_time_from.value;
+            var t4=form.modify_time_to.value;
+            if(t1.length>0 && t2.length>0 && t1>t2 || t3.length>0 && t4.length>0 && t3>t4){
+                Dialog.showWarning("开始日期不能大于结束日期", "警告");
+                return;
+            }
+            if(((t1.length>0)^(t2.length>0))>0 || ((t3.length>0)^(t4.length>0))>0){
+                Dialog.showWarning("开始日期和结束日期必须同时填写", "警告");
+                return;
+            }
             var param = {
+                "guid": form.guid.value,
                 "username": form.username.value,
-                "fullname": form.fullname.value,
-                "nativeplace": form.nativeplace.value,
                 "email": form.email.value,
-                "phone": form.phone.value,
-                "gender": form.gender.value
+                "authorization": form.authorization.value,
+                "create_time_from": form.create_time_from.value,
+                "create_time_to": form.create_time_to.value,
+                "modify_time_from": form.modify_time_from.value,
+                "modify_time_to": form.modify_time_to.value,
             };
             $.post(url, param, function(res){
                 console.log("userinfo query callback");
@@ -125,7 +142,7 @@
             console.log('btnReset_onclick');
             $('#form-query').find('input').val('');
             $('#form-query').find('select').val('0');
-            url = "<%=request.getContextPath()%>/UserInfoAction?action=clearQuery";
+            url = "<%=request.getContextPath()%>/AuthorizationAction?action=clearQuery";
             $.post(url, function(){
                 Page.fetchResult();
             })
@@ -153,35 +170,13 @@
                         id: true,
                         required: true
                     },
-                    password: {
-                        required: true,
-                        rangelength: [4, 20]
-                    },
                     email: {
                         required: true,
                         email: true
                     },
-                    phone: {
-                        required: true,
-                        number: true,
-                        rangelength: [3, 15]
-                    },
-                    fullname: {
-                        id_zh: true,
-                        required: true
-                    },
-                    gender: {
-                        required: true,
+                    authorization: {
                         min: 1
-                    },
-                    schoolnum: {
-                        id: true,
-                        required: true
-                    },
-                    nativeplace: {
-                        id_zh: true,
-                        required: true
-                    },
+                    }
                 },
 
                 messages: { // custom messages for radio buttons and checkboxes
@@ -189,35 +184,13 @@
                         id: "用户名只能包含字母、数字、下划线",
                         required: "请输入用户名"
                     },
-                    password: {
-                        required: "请输入密码",
-                        rangelength: "密码长度必须在4~20字符之间"
-                    },
                     email: {
                         required: "请输入邮箱",
                         email: "邮箱格式不正确"
                     },
-                    phone: {
-                        required: "请输入电话",
-                        number: "电话格式不正确",
-                        rangelength: "电话格式不正确"
-                    },
-                    fullname: {
-                        id_zh: "姓名只能包含字母、数字、下划线、汉字",
-                        required: "请输入姓名"
-                    },
-                    gender: {
-                        required: "请选择性别",
-                        min: "请选择性别"
-                    },
-                    schoolnum: {
-                        id: "学号只能包含字母、数字、下划线",
-                        required: "请输入学号"
-                    },
-                    nativeplace: {
-                        id_zh: "籍贯只能包含字母、数字、下划线、汉字",
-                        required: "请输入籍贯"
-                    },
+                    authorization: {
+                        min: "请选择权限"
+                    }
                 },
 
 
@@ -254,13 +227,8 @@
             var form=document.getElementById("form-add");
             var param = {
                 "username": form.username.value,
-                "password": form.password.value,
-                "fullname": form.fullname.value,
-                "nativeplace": form.nativeplace.value,
                 "email": form.email.value,
-                "phone": form.phone.value,
-                "gender": form.gender.value,
-                "schoolnum": form.schoolnum.value
+                "authorization": form.authorization.value,
             };
             $.post(url, param, function(res){
                 console.log("register callback");
@@ -294,12 +262,12 @@
     var FormSort = function(){
 
         var choice = [
+            ['guid','GUID'],
             ['username','用户名'],
             ['fullname','姓名'],
-            ['schoolnum','学号'],
-            ['nativeplace','籍贯'],
-            ['email','邮箱'],
-            ['phone','电话']
+            ['authorization','权限'],
+            ['create_time','创建时间'],
+            ['modify_time','修改时间'],
         ];
 
         var addEventListener = function(){
@@ -335,7 +303,7 @@
                 }
             });
             console.log(rule);
-            var url = "<%=request.getContextPath()%>/UserInfoAction?action=sort";
+            var url = "<%=request.getContextPath()%>/AuthorizationAction?action=sort";
             var param = {"sortBy": rule};
             $.post(url, param, function(res){
                 console.log('btnSubmit_onclick callback');
@@ -347,7 +315,7 @@
         var btnReset_onclick = function(evt){
             console.log('btnReset_onclick');
             initNestable();
-            var url = "<%=request.getContextPath()%>/UserInfoAction?action=clearSort";
+            var url = "<%=request.getContextPath()%>/AuthorizationAction?action=clearSort";
             $.post(url, function(){
                 Page.fetchResult();
             })
@@ -393,6 +361,23 @@
 
     }();
 
+    var DatetimePicker = function(){
+        var initDatetimePicker = function(){
+            $('.datetime-picker').datetimepicker({
+                format: "yyyy-mm-dd hh:ii:ss",
+                autoclose: true,
+                todayBtn: true,
+                minuteStep: 5
+            });
+        }
+
+        return {
+            init: function(){
+                initDatetimePicker();
+            }
+        }
+    }();
+
     var Page = function(){
 
         var initDataTable = function(){
@@ -402,34 +387,34 @@
                     {
                         extend: 'print',
                         className: 'buttons-print hidden',
-                        messageTop: '移动互动课堂 用户信息列表',
+                        messageTop: '移动互动课堂 用户权限',
                         exportOptions: {
-                            columns: [ 2,3,4,5,6,7,8 ]
+                            columns: [ 1,2,3,4,5,6 ]
                         }
                     },
                     {
                         extend: 'excel',
-                        title: 'userinfo_export',
+                        title: 'authorization_export',
                         className: 'buttons-excel hidden',
                         exportOptions: {
-                            columns: [ 2,3,4,5,6,7,8 ]
+                            columns: [ 1,2,3,4,5,6 ]
                         }
                     },
                     {
                         extend: 'csv',
-                        title: 'userinfo_export',
+                        title: 'authorization_export',
                         className: 'buttons-csv hidden',
                         exportOptions: {
-                            columns: [ 2,3,4,5,6,7,8 ]
+                            columns: [ 1,2,3,4,5,6 ]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
-                        title: 'userinfo_export',
+                        title: 'authorization_export',
                         bom: true,
                         className: 'buttons-pdf hidden',
                         exportOptions: {
-                            columns: [ 2,3,4,5,6,7,8 ]
+                            columns: [ 1,2,3,4,5,6 ]
                         }
                     }
                 ],
@@ -462,12 +447,8 @@
                 "columnDefs": [
                     {
                         "targets":0,
-                        "bVisible":false,
-                        "data": "guid"
-                    },
-                    {
-                        "targets":1,
                         "data": null,
+                        "orderable": false,
                         "mRender":
                                 function(data, type, full) {
                                     sReturn=
@@ -475,6 +456,10 @@
                                             "<button type='button' class='delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5'>删除</button>"
                                     return sReturn;
                                 },
+                    },
+                    {
+                        "targets":1,
+                        "data": "guid",
                         "orderable": false
                     },
                     {
@@ -484,39 +469,39 @@
                     },
                     {
                         "targets":3,
-                        "data": "fullname",
+                        "data": "email",
                         "orderable": false
                     },
                     {
                         "targets":4,
-                        "data": "gender",
+                        "data": "authorization",
                         "orderable":false,
                         "mRender":function(data,type,full){
                             var res="null";
-                            if(data===1)res="男";
-                            else if(data===2)res="女";
+                            if((data & 8) > 0)res="开发者";
+                            else if((data & 4) > 0)res="管理员";
+                            else if((data & 2) > 0)res="教师";
+                            else if((data & 1) > 0)res="学生";
                             return res;
                         }
                     },
                     {
                         "targets":5,
-                        "data": "schoolnum",
-                        "orderable": false
+                        "data": "create_time",
+                        "orderable": false,
+                        "mRender":function(data,type,full){
+                            if(data==null)return '(null)';
+                            else return data;
+                        }
                     },
                     {
                         "targets":6,
-                        "data": "nativeplace",
-                        "orderable": false
-                    },
-                    {
-                        "targets":7,
-                        "data": "email",
-                        "orderable": false
-                    },
-                    {
-                        "targets":8,
-                        "data": "phone",
-                        "orderable": false
+                        "data": "modify_time",
+                        "orderable": false,
+                        "mRender":function(data,type,full){
+                            if(data==null)return '(null)';
+                            else return data;
+                        }
                     },
                 ],
                 "aLengthMenu": [[10,20,50,-1],[10,20,50,"所有记录"]],
@@ -536,26 +521,13 @@
             $("#tab-sta").click(sta_onclick);
         }
 
-        var fetchResult = function(){
-            var dt = $('#myDataTable').DataTable();
-            dt.clear().draw();
-            var url="<%=request.getContextPath()%>/UserInfoAction?action=getResult";
-            $.post(url, function (json) {
-                console.log(json);
-                for (var i = 0; i < json.length; i++) {
-                    var it=json[i];
-                    dt.row.add(it).draw().node();
-                }
-            });
-        };
-
         var delete_button_onclick = function(evt){
             var node=$(evt.target).parents('tr');
             var table=$('#myDataTable').DataTable();
             var id = table.row(node).data()['guid'];
             console.log("delete_button_onClick", id);
             Dialog.showComfirm("确定要删除这条记录吗？", "警告", function(){
-                url="<%=request.getContextPath()%>/UserInfoAction?action=delete";
+                url="<%=request.getContextPath()%>/AuthorizationAction?action=delete";
                 param={
                     "guid": id
                 };
@@ -572,17 +544,21 @@
             var that = $(evt.target);
             var tds = that.parents("tr").children();
             $.each(tds, function (i, val) {
-                if(i==0)return true;
+                if(!(2<=i && i<=4))return true;
                 var jqob = $(val);
                 var put=null;
-                if(i==3){
-                    put=$("<select style='width: 75px;' class='form-control'>"
-                          +"  <option value='1'>男</option>"
-                          +"  <option value='2'>女</option>"
+                if(i==4){
+                    put=$("<select style='width: 100px;' class='form-control'>"
+                          +"  <option value='1'>学生</option>"
+                          +"  <option value='2'>教师</option>"
+                          +"  <option value='4'>管理员</option>"
+                          +"  <option value='8'>开发者</option>"
                           +"</select>");
-                    var val = "0";
-                    if(jqob.text()=="男")val="1";
-                    else if(jqob.text()=="女")val="2";
+                    var val="null";
+                    if(jqob.text()=='学生')val="1";
+                    else if(jqob.text()=='教师')val="2";
+                    else if(jqob.text()=='管理员')val="4";
+                    else if(jqob.text()=='开发者')val="8";
                     put.val(val);
                 }else{
                     put=$("<input type='text'>");
@@ -605,16 +581,16 @@
             var dt = $('#myDataTable').DataTable();
             var row = dt.row(that.parents("tr"));
             var tr = that.parents("tr");
-            var param = {"guid": row.data()['guid']};
-            param["username"] = tr.children().eq(1).children("input").val();
-            param["fullname"] = tr.children().eq(2).children("input").val();
-            param["gender"] = parseInt(tr.children().eq(3).children("select").val());
-            param["schoolnum"] = tr.children().eq(4).children("input").val();
-            param["nativeplace"] = tr.children().eq(5).children("input").val();
-            param["email"] = tr.children().eq(6).children("input").val();
-            param["phone"] = tr.children().eq(7).children("input").val();
+            var param = {
+                "guid": row.data()['guid'],
+                "create_time": row.data()['create_time'],
+                "modify_time": row.data()['modify_time'],
+            };
+            param["username"] = tr.children().eq(2).children("input").val();
+            param["email"] = tr.children().eq(3).children("input").val();
+            param["authorization"] = parseInt(tr.children().eq(4).children("select").val());
             console.log(param);
-            var url = "<%=request.getContextPath()%>/UserInfoAction?action=update";
+            var url = "<%=request.getContextPath()%>/AuthorizationAction?action=update";
             $.post(url, param, function(res){
                 console.log("save_button_onclick callback");
                 console.log(res);
@@ -656,8 +632,21 @@
 
         var sta_onclick = function(evt){
             console.log("sta_onclick");
-            window.location.href = "<%=request.getContextPath()%>/userinfo/statistics.jsp";
+            window.location.href = "<%=request.getContextPath()%>/auth/statistics.jsp";
         }
+
+        var fetchResult = function(){
+            var dt = $('#myDataTable').DataTable();
+            dt.clear().draw();
+            var url="<%=request.getContextPath()%>/AuthorizationAction?action=getResult";
+            $.post(url, function (json) {
+                console.log(json);
+                for (var i = 0; i < json.length; i++) {
+                    var it=json[i];
+                    dt.row.add(it).draw().node();
+                }
+            });
+        };
 
         return {
             init: function(){
@@ -665,10 +654,12 @@
                 FormQuery.init();
                 FormAdd.init();
                 FormSort.init();
+                DatetimePicker.init();
                 addEventListener();
             },
             fetchResult: fetchResult
         };
 
     }();
+
 </script>

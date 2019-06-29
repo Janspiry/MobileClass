@@ -133,7 +133,8 @@ public class AccountAction extends HttpServlet
         String password = request.getParameter("password");
 
         JSONObject res = new JSONObject();
-        if (password == null || password.length() == 0)
+//        if (password == null || password.length() == 0)
+        if(false)
         {
             res.put("register_errno", 1);
             res.put("register_msg", "密码不能为空");

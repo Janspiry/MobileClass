@@ -43,3 +43,4 @@
 <script src="<%=request.getContextPath()%>/js/lib/jquery/jquery.validate.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/toastr/toastr.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/sweetalert/sweetalert.min.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/nestable/jquery.nestable.js"></script>

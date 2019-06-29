@@ -26,49 +26,40 @@
                 errorElement: 'span', //default input error message container
                 errorClass: 'color-danger', // default input error message class
                 focusInvalid: false, // do not focus the last invalid input
-//                onsubmit: false,
                 ignore: "",
                 rules: {
+                    group_id: {
+                      number: true
+                    },
+                    group_name: {
+                        id_zh: true
+                    },
+                    owner_id: {
+                        number: true
+                    },
                     username: {
                         id: true
-                    },
-                    fullname: {
-                        id_zh: true
                     },
                     email: {
                         email: true
                     },
-                    phone: {
-                        number: true,
-                        rangelength: [3, 15]
-                    },
-                    schoolnum: {
-                        id: true
-                    },
-                    nativeplace: {
-                        id_zh: true
-                    },
                 },
 
                 messages: { // custom messages for radio buttons and checkboxes
+                    group_id: {
+                        number: "不是有效的组ID"
+                    },
+                    group_name: {
+                        id_zh: "分组名称只能包含字母、数字、下划线、中文"
+                    },
+                    owner_id: {
+                        number: "不是有效的所有者ID"
+                    },
                     username: {
                         id: "用户名只能包含字母、数字、下划线"
                     },
                     email: {
                         email: "邮箱格式不正确"
-                    },
-                    phone: {
-                        number: "电话格式不正确",
-                        rangelength: "电话格式不正确"
-                    },
-                    fullname: {
-                        id_zh: "姓名只能包含字母、数字、下划线、汉字"
-                    },
-                    schoolnum: {
-                        id: "学号只能包含字母、数字、下划线"
-                    },
-                    nativeplace: {
-                        id_zh: "籍贯只能包含字母、数字、下划线、汉字"
                     },
                 },
 
@@ -100,18 +91,17 @@
 
         var btnSubmit_onclick = function(){
             if(!$('#form-query').valid())return;
-            url = "<%=request.getContextPath()%>/UserInfoAction?action=query";
+            url = "<%=request.getContextPath()%>/ClassGroupAction?action=query";
             var form=document.getElementById("form-query");
             var param = {
+                "group_id": form.group_id.value,
+                "group_name": form.group_name.value,
+                "owner_id": form.owner_id.value,
                 "username": form.username.value,
-                "fullname": form.fullname.value,
-                "nativeplace": form.nativeplace.value,
                 "email": form.email.value,
-                "phone": form.phone.value,
-                "gender": form.gender.value
             };
             $.post(url, param, function(res){
-                console.log("userinfo query callback");
+                console.log("classgroup query callback");
                 console.log(res);
                 if(res.errno != 0){
                     showError(res.msg);
@@ -125,7 +115,7 @@
             console.log('btnReset_onclick');
             $('#form-query').find('input').val('');
             $('#form-query').find('select').val('0');
-            url = "<%=request.getContextPath()%>/UserInfoAction?action=clearQuery";
+            url = "<%=request.getContextPath()%>/ClassGroupAction?action=clearQuery";
             $.post(url, function(){
                 Page.fetchResult();
             })
@@ -142,6 +132,23 @@
 
     var FormAdd = function(){
 
+        $.validator.addMethod("name",function(value,element,params){
+            var checkId = /^[^/\\'"%&\$\<\>]+$/;
+            return this.optional(element)||(checkId.test(value));
+        },"名称包含非法字符");
+
+        $.validator.addMethod("owner_id",function(value,element,params){
+            if($('#id_or_email').val()!='owner_id')return true;
+            var checkId = /^[1-9][0-9]*$/;
+            return this.optional(element)||(checkId.test(value));
+        },"所有者ID格式不正确");
+
+        $.validator.addMethod("owner_email",function(value,element,params){
+            if($('#id_or_email').val()!='email')return true;
+            var checkId = /^[_a-zA-Z0-9]+@[_a-zA-Z0-9]+(\.com)?$/;
+            return this.optional(element)||(checkId.test(value));
+        },"所有者邮箱格式不正确");
+
         var bindValidation = function(){
             $("#form-add").validate({
                 errorElement: 'span', //default input error message container
@@ -149,78 +156,25 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "",
                 rules: {
-                    username: {
-                        id: true,
+                    group_name: {
+                        name: true,
                         required: true
                     },
-                    password: {
+                    owner: {
                         required: true,
-                        rangelength: [4, 20]
-                    },
-                    email: {
-                        required: true,
-                        email: true
-                    },
-                    phone: {
-                        required: true,
-                        number: true,
-                        rangelength: [3, 15]
-                    },
-                    fullname: {
-                        id_zh: true,
-                        required: true
-                    },
-                    gender: {
-                        required: true,
-                        min: 1
-                    },
-                    schoolnum: {
-                        id: true,
-                        required: true
-                    },
-                    nativeplace: {
-                        id_zh: true,
-                        required: true
+                        owner_id: true,
+                        owner_email: true
                     },
                 },
 
                 messages: { // custom messages for radio buttons and checkboxes
-                    username: {
-                        id: "用户名只能包含字母、数字、下划线",
-                        required: "请输入用户名"
+                    group_name: {
+                        required: "请输入分组名称"
                     },
-                    password: {
-                        required: "请输入密码",
-                        rangelength: "密码长度必须在4~20字符之间"
-                    },
-                    email: {
-                        required: "请输入邮箱",
-                        email: "邮箱格式不正确"
-                    },
-                    phone: {
-                        required: "请输入电话",
-                        number: "电话格式不正确",
-                        rangelength: "电话格式不正确"
-                    },
-                    fullname: {
-                        id_zh: "姓名只能包含字母、数字、下划线、汉字",
-                        required: "请输入姓名"
-                    },
-                    gender: {
-                        required: "请选择性别",
-                        min: "请选择性别"
-                    },
-                    schoolnum: {
-                        id: "学号只能包含字母、数字、下划线",
-                        required: "请输入学号"
-                    },
-                    nativeplace: {
-                        id_zh: "籍贯只能包含字母、数字、下划线、汉字",
-                        required: "请输入籍贯"
+                    owner: {
+                        required: "请输入所有者ID或邮箱",
                     },
                 },
-
-
 
                 highlight: function(element) { // hightlight error inputs
                     $(element)
@@ -250,28 +204,23 @@
 
         var btnSubmit_onclick = function() {
             if(!$("#form-add").valid())return;
-            url = "<%=request.getContextPath()%>/AccountAction?action=register";
+            url = "<%=request.getContextPath()%>/ClassGroupAction?action=add";
             var form=document.getElementById("form-add");
             var param = {
-                "username": form.username.value,
-                "password": form.password.value,
-                "fullname": form.fullname.value,
-                "nativeplace": form.nativeplace.value,
-                "email": form.email.value,
-                "phone": form.phone.value,
-                "gender": form.gender.value,
-                "schoolnum": form.schoolnum.value
+                "group_name": form.group_name.value,
+                "id_or_email": form.id_or_email.value,
+                "owner": form.owner.value,
             };
             $.post(url, param, function(res){
                 console.log("register callback");
                 console.log(res);
-                if(res.register_errno == 0)
+                if(res.errno == 0)
                 {
-                    Dialog.showSuccess("用户添加成功", "操作成功");
+                    Dialog.showSuccess("分组添加成功", "操作成功");
                     Page.fetchResult();
                 }
                 else {
-                    Dialog.showError(res.register_msg, "错误");
+                    Dialog.showError(res.msg, "错误");
                 }
             });
         };
@@ -294,12 +243,11 @@
     var FormSort = function(){
 
         var choice = [
-            ['username','用户名'],
-            ['fullname','姓名'],
-            ['schoolnum','学号'],
-            ['nativeplace','籍贯'],
-            ['email','邮箱'],
-            ['phone','电话']
+            ['classgroup.group_id','组ID'],
+            ['classgroup.group_name','分组名称'],
+            ['classgroup.owner_id','所有者ID'],
+            ['userinfo.username','用户名'],
+            ['userinfo.email','邮箱'],
         ];
 
         var addEventListener = function(){
@@ -327,7 +275,7 @@
             var rule = '';
             $.each(li, function(i, val){
                 if(rule.length > 0)rule += ',';
-                rule += " `" + $(val).attr("data-id") + "`";
+                rule += $(val).attr("data-id");
                 if($(val).find('i').hasClass('fa fa-sort-amount-asc')){
                     rule += ' asc';
                 }else{
@@ -335,7 +283,7 @@
                 }
             });
             console.log(rule);
-            var url = "<%=request.getContextPath()%>/UserInfoAction?action=sort";
+            var url = "<%=request.getContextPath()%>/ClassGroupAction?action=sort";
             var param = {"sortBy": rule};
             $.post(url, param, function(res){
                 console.log('btnSubmit_onclick callback');
@@ -347,7 +295,7 @@
         var btnReset_onclick = function(evt){
             console.log('btnReset_onclick');
             initNestable();
-            var url = "<%=request.getContextPath()%>/UserInfoAction?action=clearSort";
+            var url = "<%=request.getContextPath()%>/ClassGroupAction?action=clearSort";
             $.post(url, function(){
                 Page.fetchResult();
             })
@@ -402,34 +350,34 @@
                     {
                         extend: 'print',
                         className: 'buttons-print hidden',
-                        messageTop: '移动互动课堂 用户信息列表',
+                        messageTop: '移动互动课堂 分组管理',
                         exportOptions: {
-                            columns: [ 2,3,4,5,6,7,8 ]
+                            columns: [ 1,2,3,4,5 ]
                         }
                     },
                     {
                         extend: 'excel',
-                        title: 'userinfo_export',
+                        title: 'classgroup_export',
                         className: 'buttons-excel hidden',
                         exportOptions: {
-                            columns: [ 2,3,4,5,6,7,8 ]
+                            columns: [ 1,2,3,4,5 ]
                         }
                     },
                     {
                         extend: 'csv',
-                        title: 'userinfo_export',
+                        title: 'classgroup_export',
                         className: 'buttons-csv hidden',
                         exportOptions: {
-                            columns: [ 2,3,4,5,6,7,8 ]
+                            columns: [ 1,2,3,4,5 ]
                         }
                     },
                     {
                         extend: 'pdfHtml5',
-                        title: 'userinfo_export',
+                        title: 'classgroup_export',
                         bom: true,
                         className: 'buttons-pdf hidden',
                         exportOptions: {
-                            columns: [ 2,3,4,5,6,7,8 ]
+                            columns: [ 1,2,3,4,5 ]
                         }
                     }
                 ],
@@ -462,61 +410,41 @@
                 "columnDefs": [
                     {
                         "targets":0,
-                        "bVisible":false,
-                        "data": "guid"
-                    },
-                    {
-                        "targets":1,
                         "data": null,
+                        "orderable": false,
                         "mRender":
                                 function(data, type, full) {
                                     sReturn=
+                                            "<button type='button' class='member-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5'>成员</button>"+
                                             "<button type='button' class='edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5'>修改</button>"+
                                             "<button type='button' class='delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5'>删除</button>"
                                     return sReturn;
                                 },
+                    },
+                    {
+                        "targets":1,
+                        "data": "group_id",
                         "orderable": false
                     },
                     {
                         "targets":2,
-                        "data": "username",
+                        "data": "group_name",
                         "orderable": false
                     },
                     {
                         "targets":3,
-                        "data": "fullname",
+                        "data": "owner_id",
                         "orderable": false
                     },
                     {
                         "targets":4,
-                        "data": "gender",
+                        "data": "username",
                         "orderable":false,
-                        "mRender":function(data,type,full){
-                            var res="null";
-                            if(data===1)res="男";
-                            else if(data===2)res="女";
-                            return res;
-                        }
                     },
                     {
                         "targets":5,
-                        "data": "schoolnum",
-                        "orderable": false
-                    },
-                    {
-                        "targets":6,
-                        "data": "nativeplace",
-                        "orderable": false
-                    },
-                    {
-                        "targets":7,
                         "data": "email",
-                        "orderable": false
-                    },
-                    {
-                        "targets":8,
-                        "data": "phone",
-                        "orderable": false
+                        "orderable": false,
                     },
                 ],
                 "aLengthMenu": [[10,20,50,-1],[10,20,50,"所有记录"]],
@@ -525,6 +453,7 @@
         };
 
         var addEventListener = function(){
+            $("#myDataTable tbody").on("click", ".member-button", member_button_onclick);
             $('#myDataTable tbody').on('click', '.delete-button', delete_button_onclick);
             $("#myDataTable tbody").on("click", ".edit-button", edit_button_onclick);
             $("#myDataTable tbody").on("click", ".save-button", save_button_onclick);
@@ -536,28 +465,32 @@
             $("#tab-sta").click(sta_onclick);
         }
 
-        var fetchResult = function(){
+        var member_button_onclick = function(evt){
+            var that = $(evt.target);
             var dt = $('#myDataTable').DataTable();
-            dt.clear().draw();
-            var url="<%=request.getContextPath()%>/UserInfoAction?action=getResult";
-            $.post(url, function (json) {
-                console.log(json);
-                for (var i = 0; i < json.length; i++) {
-                    var it=json[i];
-                    dt.row.add(it).draw().node();
-                }
-            });
-        };
+            var data = dt.row(that.parents("tr")).data();
+            if("<%=session.getAttribute("guid")%>" != data["owner_id"].toString()){
+                Dialog.showWarning("你不是该组的所有者", "警告");
+            }else{
+                sendRedirect("<%=request.getContextPath()%>/classgroup/member.jsp", {
+                    "group_id": data["group_id"],
+                    "group_name": data["group_name"]
+                })
+                <%--window.location.href = "<%=request.getContextPath()%>/classgroup/member.jsp?" +--%>
+                <%--"group_id=" + data["group_id"] +--%>
+                <%--"&group_name=" + data["group_name"];--%>
+            }
+        }
 
         var delete_button_onclick = function(evt){
             var node=$(evt.target).parents('tr');
             var table=$('#myDataTable').DataTable();
-            var id = table.row(node).data()['guid'];
+            var id = table.row(node).data()['group_id'];
             console.log("delete_button_onClick", id);
             Dialog.showComfirm("确定要删除这条记录吗？", "警告", function(){
-                url="<%=request.getContextPath()%>/UserInfoAction?action=delete";
+                url="<%=request.getContextPath()%>/ClassGroupAction?action=delete";
                 param={
-                    "guid": id
+                    "group_id": id
                 };
                 $.post(url, param, function(res){
                     console.log(res);
@@ -572,22 +505,11 @@
             var that = $(evt.target);
             var tds = that.parents("tr").children();
             $.each(tds, function (i, val) {
-                if(i==0)return true;
+                if(i<2 || i==3 || i==4)return true;
                 var jqob = $(val);
                 var put=null;
-                if(i==3){
-                    put=$("<select style='width: 75px;' class='form-control'>"
-                          +"  <option value='1'>男</option>"
-                          +"  <option value='2'>女</option>"
-                          +"</select>");
-                    var val = "0";
-                    if(jqob.text()=="男")val="1";
-                    else if(jqob.text()=="女")val="2";
-                    put.val(val);
-                }else{
-                    put=$("<input type='text'>");
-                    put.val(jqob.text());
-                }
+                put=$("<input type='text'>");
+                put.val(jqob.text());
                 jqob.html(put);
             });
             that.html("保存");
@@ -605,21 +527,20 @@
             var dt = $('#myDataTable').DataTable();
             var row = dt.row(that.parents("tr"));
             var tr = that.parents("tr");
-            var param = {"guid": row.data()['guid']};
-            param["username"] = tr.children().eq(1).children("input").val();
-            param["fullname"] = tr.children().eq(2).children("input").val();
-            param["gender"] = parseInt(tr.children().eq(3).children("select").val());
-            param["schoolnum"] = tr.children().eq(4).children("input").val();
-            param["nativeplace"] = tr.children().eq(5).children("input").val();
-            param["email"] = tr.children().eq(6).children("input").val();
-            param["phone"] = tr.children().eq(7).children("input").val();
+            var param = {
+                "group_id": row.data()['group_id'],
+            };
+            param["group_name"] = tr.children().eq(2).children("input").val();
+            param["email"] = tr.children().eq(5).children("input").val();
             console.log(param);
-            var url = "<%=request.getContextPath()%>/UserInfoAction?action=update";
+            var url = "<%=request.getContextPath()%>/ClassGroupAction?action=update";
             $.post(url, param, function(res){
                 console.log("save_button_onclick callback");
                 console.log(res);
                 if(res.errno==0){
                     Dialog.showSuccess("修改成功", "");
+                    param["owner_id"]=res.owner_id;
+                    param["username"]=res.username;
                     row.data(param).draw(false);
                 }else{
                     Dialog.showError(res.msg, "修改失败");
@@ -656,8 +577,21 @@
 
         var sta_onclick = function(evt){
             console.log("sta_onclick");
-            window.location.href = "<%=request.getContextPath()%>/userinfo/statistics.jsp";
+            window.location.href = "<%=request.getContextPath()%>/classgroup/statistics.jsp";
         }
+
+        var fetchResult = function(){
+            var dt = $('#myDataTable').DataTable();
+            dt.clear().draw();
+            var url="<%=request.getContextPath()%>/ClassGroupAction?action=getResult";
+            $.post(url, function (json) {
+                console.log(json);
+                for (var i = 0; i < json.length; i++) {
+                    var it=json[i];
+                    dt.row.add(it).draw().node();
+                }
+            });
+        };
 
         return {
             init: function(){
@@ -671,4 +605,5 @@
         };
 
     }();
+
 </script>
