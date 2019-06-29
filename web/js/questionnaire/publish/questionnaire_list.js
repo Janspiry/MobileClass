@@ -3,6 +3,8 @@ var module="/QuestionnairePublish";
 var existResultset="0";
 var ContextPath=$("#ContextPath").val();
 function Record(){
+
+    $.fn.dataTable.ext.errMode = "none";
     var dataTable=$('#example23').DataTable({
         dom: 'Bfrtip',
         buttons:[
