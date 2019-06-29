@@ -179,7 +179,7 @@ public class FileManagement extends HttpServlet {
             String sql=queryBuilder.getSelectStmt();
             DatabaseHelper db=new DatabaseHelper();
             ResultSet rs=db.executeQuery(sql);
-            processResult(rs);
+            processResult(request,rs);
             session.setAttribute("exist_result", false);
         }
         for(int i=0;i<queryResult.length();i++)
@@ -246,7 +246,7 @@ public class FileManagement extends HttpServlet {
         queryBuilder.clear();
         sql=queryBuilder.getSelectStmt();
         rs=db.executeQuery(sql);
-        processResult(rs);
+        processResult(request,rs);
         for(int i=0;i<queryResult.length();i++)
         {
             System.out.printf("result[%d].guid=%d\n",i, queryResult.getJSONObject(i).getInt("guid"));
@@ -294,7 +294,11 @@ public class FileManagement extends HttpServlet {
     }
 
 
-    private void processResult(ResultSet rs) throws JSONException, SQLException {
+    private void processResult(HttpServletRequest request,ResultSet rs) throws JSONException, SQLException {
+        HttpSession session = request.getSession();
+        int user_id=Integer.parseInt(session.getAttribute("guid").toString());
+        int authorization=Integer.parseInt(session.getAttribute("authorization").toString());
+
         queryResult = new JSONArray("[]");
         rs.beforeFirst();
         while(rs.next())
@@ -310,6 +314,11 @@ public class FileManagement extends HttpServlet {
             item.put("change_num", rs.getInt("change_num"));
             item.put("download_num", rs.getInt("download_num"));
             item.put("file_url", rs.getString("file_url"));
+            if(authorization>1||rs.getInt("user_id")==user_id){
+                item.put("authorization", 1);
+            }else{
+                item.put("authorization", 0);
+            }
             queryResult.put(item);
         }
     }

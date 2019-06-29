@@ -107,10 +107,13 @@ function Record(){
                 "data": null,
                 "mRender":
                     function(data, type, full) {
-                        sReturn=
-                            "<button type=\"button\" class=\"detail-button btn btn-default btn-sm btn-rounded m-b-10\">回答详情</button>"+
-                            "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改回答</button>"+
+                    console.log("full"+full)
+                        sReturn= "<button type=\"button\" class=\"detail-button btn btn-default btn-sm btn-rounded m-b-10\">回答详情</button>"
+                        if(full[8]==1) {
+                            sReturn=sReturn+
+                            "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改回答</button>" +
                             "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除回答</button>"
+                        }
                         return sReturn;
                     },
                 "orderable": false
@@ -120,8 +123,8 @@ function Record(){
                 "orderable": false
             },
             {
-                "targets":3,
-                "orderable": false
+                "targets":8,
+                "bVisible": false
             },
         ],
         "aLengthMenu": [[10,15,20,25,40,50,-1],[10,15,20,25,40,50,"所有问卷"]],
@@ -175,7 +178,8 @@ function getAllRecord(){
             var create_time = json[i]["create_time"];
             var answer_num = json[i]["answer_num"];
             var user_name = json[i]["user_name"];
-            dataTable.row.add([id,'', title, author_name, create_time, change_time,answer_num,user_name]).draw().node();
+            var authorization = json[i]["authorization"];
+            dataTable.row.add([id,'', title, author_name, create_time, change_time,answer_num,user_name,authorization]).draw().node();
         }
     });
 }
@@ -193,7 +197,8 @@ function getSelectedRecord(url){
             var create_time = json[i]["create_time"];
             var answer_num = json[i]["answer_num"];
             var user_name = json[i]["user_name"];
-            dataTable.row.add([id,'', title, author_name, create_time, change_time,answer_num,user_name]).draw().node();
+            var authorization = json[i]["authorization"];
+            dataTable.row.add([id,'', title, author_name, create_time, change_time,answer_num,user_name,authorization]).draw().node();
         }
     });
 }

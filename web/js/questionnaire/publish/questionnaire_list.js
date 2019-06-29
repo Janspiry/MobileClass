@@ -64,10 +64,12 @@ function Record(){
                 "data": null,
                 "mRender":
                     function(data, type, full) {
-                        sReturn=
-                            "<button type=\"button\" class=\"detail-button btn btn-default btn-sm btn-rounded m-b-10\">用户</button>"+
-                            "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改</button>"+
-                            "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除</button>"
+                        sReturn= "<button type=\"button\" class=\"detail-button btn btn-default btn-sm btn-rounded m-b-10\">用户</button>"
+                            if(full[8]==1) {
+                                sReturn = sReturn +
+                                    "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改</button>" +
+                                    "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除</button>"
+                            }
                         if(full[7]=="processing"){
                             sReturn=sReturn+"<button type=\"button\" class=\"answer-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">回答</button>";
                         }
@@ -100,7 +102,11 @@ function Record(){
                         return sReturn;
                     },
 
-            }
+            },
+            {
+                "targets":8,
+                "bVisible": false
+            },
         ],
         "aLengthMenu": [[10,15,20,25,40,50,-1],[10,15,20,25,40,50,"所有问卷"]],
     });
@@ -226,7 +232,8 @@ function getAllRecord(){
             var limit_time = json[i]["limit_time"];
             var status = json[i]["status"];
             var answer_num = json[i]["answer_num"];
-            dataTable.row.add([id,'', title, author_name, create_time, limit_time,answer_num,status]).draw().node();
+            var authorization = json[i]["authorization"];
+            dataTable.row.add([id,'', title, author_name, create_time, limit_time,answer_num,status,authorization]).draw().node();
         }
     });
 }
@@ -244,7 +251,8 @@ function getSelectedRecord(url){
             var limit_time = json[i]["limit_time"];
             var status = json[i]["status"];
             var answer_num = json[i]["answer_num"];
-            dataTable.row.add([id,'', title, author_name, create_time, limit_time,answer_num,status]).draw().node();
+            var authorization = json[i]["authorization"];
+            dataTable.row.add([id,'', title, author_name, create_time, limit_time,answer_num,status,authorization]).draw().node();
         }
     });
 }
