@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.DatabaseHelper;
-import util.QueryBuilder;
+import ClassGroup.QueryBuilder;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -18,10 +18,11 @@ import java.util.Objects;
 import javax.servlet.*;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-@WebServlet("/AuthorizationAction")
-public class AuthorizationAction extends HttpServlet
+
+@WebServlet("/ClassGroupAction")
+public class ClassGroupAction extends HttpServlet
 {
-    private static QueryBuilder queryBuilder = new QueryBuilder("userinfo");
+    private static QueryBuilder queryBuilder = new QueryBuilder();
     private static JSONArray result = new JSONArray();
 
     @Override
@@ -29,7 +30,7 @@ public class AuthorizationAction extends HttpServlet
     {
         request.setCharacterEncoding("UTF-8");
         String action = request.getParameter("action");
-        System.out.println("AuthorizationAction action="+action);
+        System.out.println("ClassGroupAction action="+action);
         try
         {
             switch(action)
@@ -39,6 +40,9 @@ public class AuthorizationAction extends HttpServlet
                     break;
                 case "query":
                     doQuery(request, response);
+                    break;
+                case "add":
+                    Add(request, response);
                     break;
                 case "delete":
                     Delete(request, response);
@@ -59,7 +63,7 @@ public class AuthorizationAction extends HttpServlet
                     ClearSort();
                     break;
                 default:
-                    throw new Exception("AuthorizationAction: 未知的请求类型");
+                    throw new Exception("ClassGroupAction: 未知的请求类型");
             }
         }
         catch(Exception ex)
@@ -69,7 +73,7 @@ public class AuthorizationAction extends HttpServlet
     }
 
     private void getResult(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.getResult");
+        System.out.println("enter ClassGroupAction.getResult");
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
         String sql=queryBuilder.getSelectStmt();
@@ -82,22 +86,17 @@ public class AuthorizationAction extends HttpServlet
     }
 
     private void doQuery(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException{
-        System.out.println("enter AuthorizationAction.doQuery");
+        System.out.println("enter ClassGroupAction.doQuery");
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
         queryBuilder.clear();
-        queryBuilder.setGuid(request.getParameter("guid"));
+
+        queryBuilder.setGroupId(request.getParameter("group_id"));
+        queryBuilder.setGroupName(request.getParameter("group_name"));
+        queryBuilder.setOwnerId(request.getParameter("owner_id"));
         queryBuilder.setUsername(request.getParameter("username"));
         queryBuilder.setEmail(request.getParameter("email"));
-        queryBuilder.setAuthorization(request.getParameter("authorization"));
-        queryBuilder.setCreate_time_from(request.getParameter("create_time_from"));
-        queryBuilder.setCreate_time_to(request.getParameter("create_time_to"));
-        queryBuilder.setModify_time_from(request.getParameter("modify_time_from"));
-        queryBuilder.setModify_time_to(request.getParameter("modify_time_to"));
-//        String sql=queryBuilder.getSelectStmt();
-//        DatabaseHelper db=new DatabaseHelper();
-//        ResultSet rs=db.executeQuery(sql);
-//        processResult(rs);
+
         JSONObject json = new JSONObject();
         json.put("errno", 0);
         out.print(json);
@@ -105,15 +104,52 @@ public class AuthorizationAction extends HttpServlet
         out.close();
     }
 
-    private void Delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        System.out.println("enter AuthorizationAction.doQuery");
+    private void Add(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("enter ClassGroupAction.Add");
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
-        QueryBuilder q=new QueryBuilder(queryBuilder.getTablename());
-        q.setGuid(request.getParameter("guid"));
-        if(q.getGuid()==-1){
-            throw new Exception("AuthorizationAction.Delete: guid为空");
+        JSONObject json = new JSONObject();
+        DatabaseHelper db=new DatabaseHelper();
+        String guid = request.getParameter("owner");
+        if(request.getParameter("id_or_email").equals("owner_id")){
+            String sql = "select guid from `userinfo` where `guid`="+guid;
+            ResultSet rs = db.executeQuery(sql);
+            if(!rs.next()){
+                json.put("errno", 1);
+                json.put("msg", "GUID为\""+guid+"\"的用户不存在");
+            }
+        }else if(request.getParameter("id_or_email").equals("email")){
+            String email = request.getParameter("owner");
+            String sql = "select guid from `userinfo` where `email`='"+guid+"'";
+            ResultSet rs = db.executeQuery(sql);
+            if(!rs.next()){
+                json.put("errno", 2);
+                json.put("msg", "邮箱为\""+guid+"\"的用户不存在");
+            }else{
+                guid = rs.getString("guid");
+            }
+        }else{
+            throw new Exception("ClassGroupAction.Add: id_or_email设置不正确");
         }
+        if(!json.has("errno")){
+            json.put("errno", 0);
+            QueryBuilder q = new QueryBuilder();
+            q.setGroupName(request.getParameter("group_name"));
+            q.setOwnerId(guid);
+            String sql = q.getInsertStmt();
+            db.execute(sql);
+        }
+        out.print(json);
+        out.flush();
+        out.close();
+    }
+
+    private void Delete(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("enter ClassGroupAction.doQuery");
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        QueryBuilder q=new QueryBuilder();
+        q.setGroupId(request.getParameter("group_id"));
         String sql=q.getDeleteStmt();
         DatabaseHelper db=new DatabaseHelper();
         db.execute(sql);
@@ -125,28 +161,38 @@ public class AuthorizationAction extends HttpServlet
     }
 
     private void Update(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        System.out.println("enter AuthorizationAction.Update");
+        System.out.println("enter ClassGroupAction.Update");
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
-        QueryBuilder q=new QueryBuilder(queryBuilder.getTablename());
-        q.setGuid(request.getParameter("guid"));
+        QueryBuilder q=new QueryBuilder();
         JSONObject json = new JSONObject();
-        if(!q.setUsername(request.getParameter("username"))){
+        DatabaseHelper db = new DatabaseHelper();
+        String guid = null;
+        if(!q.setGroupName(request.getParameter("group_name"))){
             json.put("errno", 1);
-            json.put("msg", "用户名格式错误");
+            json.put("msg", "分组名称不合法");
         }
-        if(!q.setEmail(request.getParameter("email"))){
+        else if(!q.setEmail(request.getParameter("email"))){
             json.put("errno", 2);
             json.put("msg", "邮箱格式错误");
         }
-        if(!q.setAuthorization(request.getParameter("authorization"))){
+        String email = request.getParameter("email");
+        String sql = "select guid,username from `userinfo` where `email`='"+email+"'";
+        ResultSet rs = db.executeQuery(sql);
+        if(!rs.next()){
             json.put("errno", 3);
-            json.put("msg", "权限设置错误");
+            json.put("msg", "邮箱为\""+email+"\"的用户不存在");
+        }else{
+            guid = rs.getString("guid");
+            json.put("owner_id", rs.getInt("guid"));
+            json.put("username", rs.getString("username"));
         }
-        if(!json.has("errno")) {
-            String sql = q.getUpdateStmt();
-            DatabaseHelper db = new DatabaseHelper();
-            db.execute(sql);
+        if(!json.has("errno")){
+            q.setEmail(null);
+            q.setGroupId(request.getParameter("group_id"));
+            q.setOwnerId(guid);
+            String sql1 = q.getUpdateStmt();
+            db.execute(sql1);
             json.put("errno", 0);
         }
         out.print(json);
@@ -155,7 +201,7 @@ public class AuthorizationAction extends HttpServlet
     }
 
     private void Sort(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.Sort");
+        System.out.println("enter ClassGroupAction.Sort");
         response.setContentType("application/json; charset=UTF-8");
         String sortBy = request.getParameter("sortBy");
         System.out.println(sortBy);
@@ -169,14 +215,14 @@ public class AuthorizationAction extends HttpServlet
     }
 
     private void Statistics(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
-        System.out.println("enter AuthorizationAction.Statistics");
+        System.out.println("enter ClassGroupAction.Statistics");
         String sql = String.format("select " +
                         " authorization as auth, " +
                         " count(*) as cnt " +
                         " from (%s) as tmp " +
                         " group by authorization ",
                 queryBuilder.getSelectStmt());
-        System.out.println("AuthorizationAction.Statistics: sql = "+sql);
+        System.out.println("ClassGroupAction.Statistics: sql = "+sql);
         DatabaseHelper db=new DatabaseHelper();
         ResultSet rs=db.executeQuery(sql);
         JSONArray list = new JSONArray();
@@ -199,12 +245,12 @@ public class AuthorizationAction extends HttpServlet
     }
 
     private void ClearQuery(){
-        System.out.println("enter AuthorizationAction.ClearQuery");
+        System.out.println("enter ClassGroupAction.ClearQuery");
         queryBuilder.clear();
     }
 
     private void ClearSort(){
-        System.out.println("enter AuthorizationAction.ClearSort");
+        System.out.println("enter ClassGroupAction.ClearSort");
         queryBuilder.setSortBy(null);
     }
 
@@ -214,17 +260,11 @@ public class AuthorizationAction extends HttpServlet
         while(rs.next())
         {
             JSONObject item = new JSONObject();
-            item.put("guid", rs.getInt("guid"));
-            item.put("create_time", rs.getTimestamp("create_time"));
-            item.put("modify_time", rs.getTimestamp("modify_time"));
-            item.put("authorization", rs.getInt("authorization"));
+            item.put("group_id", rs.getInt("group_id"));
+            item.put("group_name", rs.getString("group_name"));
+            item.put("owner_id", rs.getInt("owner_id"));
             item.put("username", rs.getString("username"));
-//            item.put("fullname", rs.getString("fullname"));
-//            item.put("gender", rs.getInt("gender"));
-//            item.put("schoolnum", rs.getString("schoolnum"));
-//            item.put("nativeplace", rs.getString("nativeplace"));
             item.put("email", rs.getString("email"));
-//            item.put("phone", rs.getString("phone"));
             result.put(item);
         }
     }

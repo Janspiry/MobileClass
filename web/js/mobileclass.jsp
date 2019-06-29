@@ -65,6 +65,22 @@ var MobileClass = function(){
     };
 }();
 
+function sendRedirect(URL, PARAMTERS) {
+    var temp_form = document.createElement("form");
+    temp_form.action = URL;
+    temp_form.target = "_self";
+    temp_form.method = "post";
+    temp_form.style.display = "none";
+    for (var item in PARAMTERS) {
+        var opt = document.createElement("textarea");
+        opt.name = PARAMTERS[item].name;
+        opt.value = PARAMTERS[item].value;
+        temp_form.appendChild(opt);
+    }
+    document.body.appendChild(temp_form);
+    temp_form.submit();
+};
+
 String.format = function() {
     if( arguments.length == 0 )
         return null;
