@@ -186,6 +186,28 @@ var TableEditable = function () {
     };
 
 }();
+
+
+var DatePicker = function(){
+    var initDatePicker = function(){
+        $('.datetime-picker').datepicker({
+            opens : 'right', //日期选择框的弹出位置
+            autoclose:true,
+            format:"yyyy-mm-dd",
+            startDate:"0d",
+            errDealMode:1,
+            todayBtn:'linked',
+            language: 'cn',  //修改默认为cn
+            todayHighlight: true,
+        });
+    }
+
+    return {
+        init: function(){
+            initDatePicker();
+        }
+    }
+}();
 var Page=function() {
 
     var handleButtonEvent=function(){
@@ -242,3 +264,4 @@ var Page=function() {
 
 TableEditable.init();
 Page.init();
+DatePicker.init();

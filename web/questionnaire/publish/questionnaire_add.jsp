@@ -27,6 +27,14 @@
     <link href="../../css/lib/owl.carousel.min.css" rel="stylesheet" />
     <link href="../../css/lib/owl.theme.default.min.css" rel="stylesheet" />
     <link href="../../css/style.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker.standalone.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker3.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker3.min.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker3.standalone.css" rel="stylesheet">
+    <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker3.standalone.min.css" rel="stylesheet">
 </head>
 
 <body class="header-fix fix-sidebar">
@@ -64,7 +72,7 @@
                     <div class="col-md-12 ">
                         <div class="form-group">
                             <label class="control-label">截止日期</label>
-                            <input type="date" id="limit_time" name="limit_time" class="form-control">
+                            <input type="text" id="limit_time" name="limit_time" class="form-control datetime-picker">
                         </div>
                     </div>
                 </div>
@@ -123,6 +131,8 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 
+<script src="<%=request.getContextPath()%>/js/lib/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+<script src="<%=request.getContextPath()%>/js/lib/bootstrap-datepicker/bootstrap-datepicker.zh-CN.min.js"></script>
 
 <script src="<%=request.getContextPath()%>/js/questionnaire/publish/questionnaire_add.js"></script>
 <%--<script src="<%=request.getContextPath()%>/js/lib/atatables/datatables-init.js"></script>--%>
