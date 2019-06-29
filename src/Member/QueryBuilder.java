@@ -7,14 +7,24 @@ import java.util.regex.Pattern;
  */
 public class QueryBuilder {
 
-    private int guid;
-    public int getGuid()
+    private int group_id;
+    public int getGroupId()
     {
-        return guid;
+        return group_id;
     }
-    public void setGuid(String value)
+    public void setGroupId(String value)
     {
-        guid = filterInt(value);
+        group_id = filterInt(value);
+    }
+
+    private int user_id;
+    public int getUserId()
+    {
+        return user_id;
+    }
+    public void setUserId(String value)
+    {
+        user_id = filterInt(value);
     }
 
     private String create_time_from;
@@ -291,7 +301,8 @@ public class QueryBuilder {
     }
 
     public void clear(){
-        guid=-1;
+        group_id=-1;
+        user_id=-1;
         create_time_from=null;
         create_time_to=null;
         modify_time_from=null;
@@ -310,8 +321,10 @@ public class QueryBuilder {
 
     private String getWhereClause(){
         String sql="where 1=1";
-        if(getGuid()!=-1)
-            sql += String.format(" and userinfo.guid=%d", getGuid());
+        if(getGroupId()!=-1)
+            sql += String.format(" and groupmember.group_id=%d", getGroupId());
+        if(getUserId()!=-1)
+            sql += String.format(" and groupmember.user_id=%d", getUserId());
         if(getCreate_time_from()!=null && getCreate_time_to()!=null)
             sql += String.format(" and userinfo.create_time between '%s' and '%s'",
                     getCreate_time_from(), getCreate_time_to());
@@ -339,28 +352,37 @@ public class QueryBuilder {
 
     public String getSelectStmt(){
         System.out.println("QueryBuilder.getSelectStmt");
-        String sql = String.format("select * from `%s` %s %s", getWhereClause(), getSortByClause());
+        String sql = String.format(
+                "select userinfo.* " +
+                "from groupmember " +
+                "left join userinfo " +
+                "on groupmember.user_id = userinfo.guid " +
+                "%s %s",
+                getWhereClause(), getSortByClause()
+        );
         System.out.println(sql);
         return sql;
     }
 
     public String getInsertStmt(){
-        String sql="";
+        String sql = String.format("insert into `groupmember` (`group_id`, `user_id`) values('%s', '%s')", getGroupId(), getUserId());
         System.out.println("insert statement is "+sql);
         return sql;
     }
 
-    public String getDeleteStmt(){
-
-//        String sql = String.format("delete from `%s` %s", getTablename(), getWhereClause());
-        String sql="";
+    public String getDeleteStmt() throws Exception {
+        System.out.println("QueryBuilder.getDeleteStmt");
+        if(getUserId()==-1 || getGroupId()==-1){
+            throw new Exception("没有设置user_id或group_id");
+        }
+        String sql = String.format("delete from `groupmember` where `group_id`=%d and `user_id`=%d", getGroupId(), getUserId());
         System.out.println(sql);
         return sql;
     }
 
-    public String getUpdateStmt(){
-        System.out.println("QueryBuilder.getUpdateStmt");
-        String sql="";
+//    public String getUpdateStmt(){
+//        System.out.println("QueryBuilder.getUpdateStmt");
+//        String sql="";
 //        if(getGuid()==-1){
 //            throw new IllegalArgumentException("getUpdateStmt: 没有设置guid");
 //        }
@@ -403,6 +425,6 @@ public class QueryBuilder {
 //        }
 //        sql += String.format(" where `guid`=%d", getGuid());
 //        System.out.println(sql);
-        return sql;
-    }
+//        return sql;
+//    }
 }

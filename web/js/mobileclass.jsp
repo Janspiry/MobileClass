@@ -70,12 +70,14 @@ function sendRedirect(URL, PARAMTERS) {
     temp_form.action = URL;
     temp_form.target = "_self";
     temp_form.method = "post";
+    temp_form.acceptCharset = "UTF-8";
     temp_form.style.display = "none";
-    for (var item in PARAMTERS) {
+    for (var name in PARAMTERS) {
         var opt = document.createElement("textarea");
-        opt.name = PARAMTERS[item].name;
-        opt.value = PARAMTERS[item].value;
+        opt.name = name;
+        opt.value = PARAMTERS[name];
         temp_form.appendChild(opt);
+        console.log(opt);
     }
     document.body.appendChild(temp_form);
     temp_form.submit();
