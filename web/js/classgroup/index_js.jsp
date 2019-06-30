@@ -471,11 +471,12 @@
             var data = dt.row(that.parents("tr")).data();
             if("<%=session.getAttribute("guid")%>" != data["owner_id"].toString()){
                 Dialog.showWarning("你不是该组的所有者", "警告");
+                return;
             }else{
                 sendRedirect("<%=request.getContextPath()%>/classgroup/member.jsp", {
                     "group_id": data["group_id"],
                     "group_name": data["group_name"]
-                })
+                });
                 <%--window.location.href = "<%=request.getContextPath()%>/classgroup/member.jsp?" +--%>
                 <%--"group_id=" + data["group_id"] +--%>
                 <%--"&group_name=" + data["group_name"];--%>
@@ -485,6 +486,11 @@
         var delete_button_onclick = function(evt){
             var node=$(evt.target).parents('tr');
             var table=$('#myDataTable').DataTable();
+            var data = table.row(node).data();
+            if("<%=session.getAttribute("guid")%>" != data["owner_id"].toString()) {
+                Dialog.showWarning("你不是该组的所有者", "警告");
+                return;
+            }
             var id = table.row(node).data()['group_id'];
             console.log("delete_button_onClick", id);
             Dialog.showComfirm("确定要删除这条记录吗？", "警告", function(){
@@ -502,6 +508,12 @@
         };
 
         var edit_button_onclick = function(evt){
+            var dt = $('#myDataTable').DataTable();
+             data = dt.row($(evt.target).parents("tr")).data();
+            if("<%=session.getAttribute("guid")%>" != data["owner_id"].toString()){
+                Dialog.showWarning("你不是该组的所有者", "警告");
+                return;
+            }
             var that = $(evt.target);
             var tds = that.parents("tr").children();
             $.each(tds, function (i, val) {
@@ -515,7 +527,7 @@
             that.html("保存");
             that.removeClass("edit-button");
             that.addClass("save-button");
-            var btnDelete = that.siblings("button");
+            var btnDelete = that.siblings(".delete-button");
             btnDelete.html("取消");
             btnDelete.removeClass("delete-button");
             btnDelete.addClass("cancel-button");

@@ -7,6 +7,9 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    request.setCharacterEncoding("UTF-8");
+%>
 
 <!DOCTYPE html>
 <html>
@@ -37,11 +40,16 @@
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/index.jsp">移动互动课堂</a></li>
-                    <li class="breadcrumb-item active">分组管理</li>
+                    <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/classgroup/index.jsp">分组管理</a></li>
+                    <li class="breadcrumb-item active">分组成员</li>
                 </ol>
             </div>
         </div>
         <!-- End Bread crumb -->
+
+        <div class="container-fluid">
+            <button type="button" onclick="javascript: window.location.href='<%=request.getContextPath()%>/classgroup/index.jsp'" class="btn btn-success m-b-10 m-l-5">返回</button>
+        </div>
 
         <div class="col-md-12">
             <div class="card">
@@ -49,12 +57,21 @@
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <label id="fold-btn"> <a class="nav-link" href="#"><span><i id="fold-icon" style="font-size:20px" class="fa fa-angle-down"></i></span></a> </label>
                         <li class="nav-item"> <a class="nav-link" data-toggle="tab" href="#tab-add" role="tab"><span class="hidden-sm-up"><i class="fa fa-plus"></i></span> <span class="hidden-xs-down">添加</span></a> </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                <span class="hidden-sm-up"><i class="fa fa-ellipsis-h"></i></span> <span class="hidden-xs-down">更多</span>
+                            </a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" id="tab-sta" role="tab" data-toggle="modal">统计</a>
+                            </div>
+                        </li>
                     </ul>
                     <div id="tab-content" class="tab-content tabcontent-border p-20" style="display: none;">
                         <div class="tab-pane" id="tab-add" role="tabpanel">
 
                             <form id="form-add" method="post" action="#" class="form-horizontal">
                                 <div class="form-body">
+                                    <input type="hidden" id="group_id" name="group_id" value="<%=request.getParameter("group_id")%>">
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group row">
@@ -103,6 +120,7 @@
                         <table id="myDataTable" class="display nowrap table table-hover table-bordered" cellspacing="2px" width="100%">
                             <thead>
                             <tr>
+                                <th>user_id</th>
                                 <th>操作</th>
                                 <th>用户名</th>
                                 <th>姓名</th>

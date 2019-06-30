@@ -8,7 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import util.DatabaseHelper;
-import ClassGroup.QueryBuilder;
+import Member.QueryBuilder;
 
 import java.io.*;
 import java.net.URLEncoder;
@@ -38,6 +38,9 @@ public class MemberAction extends HttpServlet
                 case "getResult":
                     getResult(request, response);
                     break;
+                case "add":
+                    Add(request, response);
+                    break;
                 case "delete":
                     Delete(request, response);
                     break;
@@ -58,11 +61,59 @@ public class MemberAction extends HttpServlet
         System.out.println("enter MemberAction.getResult");
         response.setContentType("application/json; charset=UTF-8");
         PrintWriter out = response.getWriter();
+        queryBuilder.setGroupId(request.getParameter("group_id"));
         String sql=queryBuilder.getSelectStmt();
         DatabaseHelper db=new DatabaseHelper();
         ResultSet rs=db.executeQuery(sql);
         processResult(rs);
         out.print(result);
+        out.flush();
+        out.close();
+    }
+
+    private void Add(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        System.out.println("enter MemberAction.Add");
+        response.setContentType("application/json; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        JSONObject json = new JSONObject();
+        DatabaseHelper db=new DatabaseHelper();
+        String guid = request.getParameter("owner");
+        if(request.getParameter("id_or_email").equals("owner_id")){
+            String sql = "select guid from `userinfo` where `guid`="+guid;
+            ResultSet rs = db.executeQuery(sql);
+            if(!rs.next()){
+                json.put("errno", 1);
+                json.put("msg", "GUID为\""+guid+"\"的用户不存在");
+            }
+        }else if(request.getParameter("id_or_email").equals("email")){
+            String email = request.getParameter("owner");
+            String sql = "select guid from `userinfo` where `email`='"+guid+"'";
+            ResultSet rs = db.executeQuery(sql);
+            if(!rs.next()){
+                json.put("errno", 2);
+                json.put("msg", "邮箱为\""+guid+"\"的用户不存在");
+            }else{
+                guid = rs.getString("guid");
+            }
+        }else{
+            throw new Exception("MemberAction.Add: id_or_email设置不正确");
+        }
+        if(!json.has("errno")){
+            ResultSet rs = db.executeQuery("select * from `groupmember` where `group_id`="+request.getParameter("group_id")+" and `user_id`="+guid);
+            if(rs.next()){
+                json.put("errno",3);
+                json.put("msg","用户已是该组成员");
+            }
+        }
+        if(!json.has("errno")){
+            json.put("errno", 0);
+            QueryBuilder q = new QueryBuilder();
+            q.setGroupId(request.getParameter("group_id"));
+            q.setUserId(guid);
+            String sql = q.getInsertStmt();
+            db.execute(sql);
+        }
+        out.print(json);
         out.flush();
         out.close();
     }
@@ -73,6 +124,7 @@ public class MemberAction extends HttpServlet
         PrintWriter out = response.getWriter();
         QueryBuilder q=new QueryBuilder();
         q.setGroupId(request.getParameter("group_id"));
+        q.setUserId(request.getParameter("user_id"));
         String sql=q.getDeleteStmt();
         DatabaseHelper db=new DatabaseHelper();
         db.execute(sql);
@@ -86,23 +138,21 @@ public class MemberAction extends HttpServlet
     private void Statistics(HttpServletRequest request, HttpServletResponse response) throws JSONException, SQLException, IOException {
         System.out.println("enter MemberAction.Statistics");
         String sql = String.format("select " +
-                        " authorization as auth, " +
+                        " gender, " +
                         " count(*) as cnt " +
                         " from (%s) as tmp " +
-                        " group by authorization ",
+                        " group by gender ",
                 queryBuilder.getSelectStmt());
         System.out.println("MemberAction.Statistics: sql = "+sql);
         DatabaseHelper db=new DatabaseHelper();
         ResultSet rs=db.executeQuery(sql);
         JSONArray list = new JSONArray();
-        String[] cla = new String[]{"学生", "教师", "管理员", "开发者"};
+        String[] cla = new String[]{"男", "女"};
         while(rs.next())
         {
             JSONObject item = new JSONObject();
-            int auth = rs.getInt("auth");
-            int i=0;
-            while(auth > 0){ i++; auth>>=1;}
-            item.put("class", cla[i-1]);
+            int gender = rs.getInt("gender");
+            item.put("class", cla[gender-1]);
             item.put("count", rs.getString("cnt"));
             list.put(item);
         }
@@ -119,11 +169,13 @@ public class MemberAction extends HttpServlet
         while(rs.next())
         {
             JSONObject item = new JSONObject();
-            item.put("group_id", rs.getInt("group_id"));
-            item.put("group_name", rs.getString("group_name"));
-            item.put("owner_id", rs.getInt("owner_id"));
+            item.put("user_id", rs.getString("guid"));
             item.put("username", rs.getString("username"));
+            item.put("fullname", rs.getString("fullname"));
+            item.put("gender", rs.getInt("gender"));
+            item.put("schoolnum", rs.getString("schoolnum"));
             item.put("email", rs.getString("email"));
+            item.put("phone", rs.getString("phone"));
             result.put(item);
         }
     }

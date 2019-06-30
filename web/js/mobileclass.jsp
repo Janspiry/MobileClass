@@ -7,19 +7,19 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<%--%>
-    <%--if(session.getAttribute("guid")==null || (int)session.getAttribute("guid")<=0 || session.getAttribute("check")==null)--%>
-    <%--{--%>
-<%--%>--%>
-        <%--<script type="text/javascript">--%>
-            <%--console.log("check login failed");--%>
-            <%--alert("请先登录");--%>
-            <%--window.location.href="<%=request.getContextPath()%>/login.jsp";--%>
-        <%--</script>--%>
-<%--<%--%>
-        <%--return;--%>
-    <%--}--%>
-<%--%>--%>
+<%
+    if(session.getAttribute("guid")==null || ((String)session.getAttribute("guid")).length() == 0 || session.getAttribute("check")==null)
+    {
+%>
+        <script type="text/javascript">
+            console.log("check login failed");
+            alert("请先登录");
+            window.location.href="<%=request.getContextPath()%>/login.jsp";
+        </script>
+<%
+        return;
+    }
+%>
 
 <script type="text/javascript">
 var MobileClass = function(){
@@ -70,12 +70,14 @@ function sendRedirect(URL, PARAMTERS) {
     temp_form.action = URL;
     temp_form.target = "_self";
     temp_form.method = "post";
+    temp_form.acceptCharset = "UTF-8";
     temp_form.style.display = "none";
-    for (var item in PARAMTERS) {
+    for (var name in PARAMTERS) {
         var opt = document.createElement("textarea");
-        opt.name = PARAMTERS[item].name;
-        opt.value = PARAMTERS[item].value;
+        opt.name = name;
+        opt.value = PARAMTERS[name];
         temp_form.appendChild(opt);
+        console.log(opt);
     }
     document.body.appendChild(temp_form);
     temp_form.submit();

@@ -7,6 +7,12 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
+<%--<%--%>
+    <%--session.setAttribute("guid", "7");--%>
+    <%--session.setAttribute("username", "wkb");--%>
+    <%--session.setAttribute("email", "var_emailbox@qq.com");--%>
+<%--%>--%>
+
 <!DOCTYPE html>
 <html>
 
@@ -58,8 +64,6 @@
                                 <span class="dropdown-item" id="tab-print" role="tab">打印</span>
                                 <span class="dropdown-item" id="tab-excel" role="tab">导出为Excel</span>
                                 <span class="dropdown-item" id="tab-csv" role="tab">导出为CSV</span>
-                                <%--<span class="dropdown-item" id="tab-pdf" role="tab">导出为PDF</span>--%>
-                                <a class="dropdown-item" id="tab-sta" role="tab" data-toggle="modal">统计</a>
                             </div>
                         </li>
                     </ul>

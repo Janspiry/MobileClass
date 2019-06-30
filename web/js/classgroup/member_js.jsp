@@ -36,10 +36,6 @@
                 focusInvalid: false, // do not focus the last invalid input
                 ignore: "",
                 rules: {
-                    group_name: {
-                        name: true,
-                        required: true
-                    },
                     owner: {
                         required: true,
                         owner_id: true,
@@ -48,9 +44,6 @@
                 },
 
                 messages: { // custom messages for radio buttons and checkboxes
-                    group_name: {
-                        required: "请输入分组名称"
-                    },
                     owner: {
                         required: "请输入所有者ID或邮箱",
                     },
@@ -84,19 +77,19 @@
 
         var btnSubmit_onclick = function() {
             if(!$("#form-add").valid())return;
-            url = "<%=request.getContextPath()%>/ClassGroupAction?action=add";
+            url = "<%=request.getContextPath()%>/MemberAction?action=add";
             var form=document.getElementById("form-add");
             var param = {
-                "group_name": form.group_name.value,
+                "group_id": $('#group_id').val(),
                 "id_or_email": form.id_or_email.value,
                 "owner": form.owner.value,
             };
             $.post(url, param, function(res){
-                console.log("register callback");
+                console.log("btnSubmit_onclick callback");
                 console.log(res);
                 if(res.errno == 0)
                 {
-                    Dialog.showSuccess("分组添加成功", "操作成功");
+                    Dialog.showSuccess("成员添加成功", "操作成功");
                     Page.fetchResult();
                 }
                 else {
@@ -151,28 +144,34 @@
                 "autoWidth": true,
                 "columnDefs": [
                     {
-                        "targets":0,
+                      "targets":0,
+                        "data": "user_id",
+                        "orderable": false,
+                        "bVisible": false
+                    },
+                    {
+                        "targets":1,
                         "data": null,
                         "orderable": false,
                         "mRender":
                                 function(data, type, full) {
                                     sReturn=
-                                            "<button type='button' class='delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5'>删除</button>"
+                                            "<button type='button' class='delete-button btn btn-danger btn-sm btn-rounded m-b-10 m-l-5'>删除</button>"
                                     return sReturn;
                                 },
                     },
                     {
-                        "targets":1,
+                        "targets":2,
                         "data": "username",
                         "orderable": false
                     },
                     {
-                        "targets":2,
+                        "targets":3,
                         "data": "fullname",
                         "orderable": false
                     },
                     {
-                        "targets":3,
+                        "targets":4,
                         "data": "gender",
                         "orderable": false,
                         "mRender":function(data,type,full){
@@ -183,17 +182,17 @@
                         }
                     },
                     {
-                        "targets":4,
+                        "targets":5,
                         "data": "schoolnum",
                         "orderable":false,
                     },
                     {
-                        "targets":5,
+                        "targets":6,
                         "data": "email",
                         "orderable": false,
                     },
                     {
-                        "targets":6,
+                        "targets":7,
                         "data": "phone",
                         "orderable": false,
                     },
@@ -204,27 +203,21 @@
         };
 
         var addEventListener = function(){
-            $("#myDataTable tbody").on("click", ".member-button", member_button_onclick);
             $('#myDataTable tbody').on('click', '.delete-button', delete_button_onclick);
-            $("#myDataTable tbody").on("click", ".edit-button", edit_button_onclick);
-            $("#myDataTable tbody").on("click", ".save-button", save_button_onclick);
-            $("#myDataTable tbody").on("click", ".cancel-button", cancel_button_onclick);
-            $("#tab-print").click(print_onclick);
-            $("#tab-excel").click(excel_onclick);
-            $("#tab-csv").click(csv_onclick);
-            $("#tab-pdf").click(pdf_onclick);
             $("#tab-sta").click(sta_onclick);
         }
 
         var delete_button_onclick = function(evt){
             var node=$(evt.target).parents('tr');
             var table=$('#myDataTable').DataTable();
-            var id = table.row(node).data()['group_id'];
-            console.log("delete_button_onClick", id);
+            var group_id = $('#group_id').val();
+            var user_id = table.row(node).data()['user_id'];
+            console.log("delete_button_onClick", group_id, user_id);
             Dialog.showComfirm("确定要删除这条记录吗？", "警告", function(){
-                url="<%=request.getContextPath()%>/ClassGroupAction?action=delete";
+                url="<%=request.getContextPath()%>/MemberAction?action=delete";
                 param={
-                    "group_id": id
+                    "group_id": group_id,
+                    "user_id": user_id
                 };
                 $.post(url, param, function(res){
                     console.log(res);
@@ -243,8 +236,10 @@
         var fetchResult = function(){
             var dt = $('#myDataTable').DataTable();
             dt.clear().draw();
-            var url="<%=request.getContextPath()%>/ClassGroupAction?action=getResult";
-            $.post(url, function (json) {
+            var group_id = $('#group_id').val();
+            var param = {"group_id": group_id };
+            var url="<%=request.getContextPath()%>/MemberAction?action=getResult";
+            $.post(url, param, function (json) {
                 console.log(json);
                 for (var i = 0; i < json.length; i++) {
                     var it=json[i];

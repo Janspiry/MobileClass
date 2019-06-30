@@ -32,7 +32,7 @@
                     "inside": true
                 }],
                 "categoryAxis": {
-                    "title": "权限"
+                    "title": "性别"
                 },
                 "categoryField": "class",
                 "legend": {
@@ -60,9 +60,9 @@
 //                        "label": "<span id='chartExportBtn'>保存</span>",
                         "class": "export-main",
                         "menu": [
-                            { "fileName": "用户权限分布", "format": "png", "label": "导出为PNG" },
-                            { "fileName": "用户权限分布", "format": "jpg", "label": "导出为JPG" },
-                            { "fileName": "用户权限分布", "format": "svg", "label": "导出为SVG" },
+                            { "fileName": "member", "format": "png", "label": "导出为PNG" },
+                            { "fileName": "member", "format": "jpg", "label": "导出为JPG" },
+                            { "fileName": "member", "format": "svg", "label": "导出为SVG" },
                         ]
                     }]
                 }
@@ -75,7 +75,7 @@
         }
 
         var fetchData = function(){
-            var url = "<%=request.getContextPath()%>/AuthorizationAction?action=statistics";
+            var url = "<%=request.getContextPath()%>/MemberAction?action=statistics";
             $.post(url,function(json){
                 console.log("loadData callback");
                 console.log(json);
@@ -104,7 +104,5 @@
             }
         };
     }();
-    function returnBack(){
-        window.location.href="<%=request.getContextPath()%>/auth/index.jsp";
-    };
+
 </script>
