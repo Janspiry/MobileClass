@@ -40,7 +40,8 @@
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/index.jsp">移动互动课堂</a></li>
-                    <li class="breadcrumb-item active">分组管理</li>
+                    <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/classgroup/index.jsp">分组管理</a></li>
+                    <li class="breadcrumb-item active">分组成员</li>
                 </ol>
             </div>
         </div>

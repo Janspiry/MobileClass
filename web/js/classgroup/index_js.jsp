@@ -527,7 +527,7 @@
             that.html("保存");
             that.removeClass("edit-button");
             that.addClass("save-button");
-            var btnDelete = that.siblings("button");
+            var btnDelete = that.siblings(".delete-button");
             btnDelete.html("取消");
             btnDelete.removeClass("delete-button");
             btnDelete.addClass("cancel-button");

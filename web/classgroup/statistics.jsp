@@ -51,7 +51,7 @@
         </div>
 
         <div class="container-fluid">
-            <button type="button" onclick="window.location.href='<%=request.getContextPath()%>/classgroup/member.jsp';" class="btn btn-success m-b-10 m-l-5">返回</button>
+            <button type="button" onclick="window.history.back(-1);" class="btn btn-success m-b-10 m-l-5">返回</button>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">

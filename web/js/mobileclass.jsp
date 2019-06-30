@@ -7,19 +7,19 @@
 --%>
 
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%--<%--%>
-    <%--if(session.getAttribute("guid")==null || (int)session.getAttribute("guid")<=0 || session.getAttribute("check")==null)--%>
-    <%--{--%>
-<%--%>--%>
-        <%--<script type="text/javascript">--%>
-            <%--console.log("check login failed");--%>
-            <%--alert("请先登录");--%>
-            <%--window.location.href="<%=request.getContextPath()%>/login.jsp";--%>
-        <%--</script>--%>
-<%--<%--%>
-        <%--return;--%>
-    <%--}--%>
-<%--%>--%>
+<%
+    if(session.getAttribute("guid")==null || ((String)session.getAttribute("guid")).length() == 0 || session.getAttribute("check")==null)
+    {
+%>
+        <script type="text/javascript">
+            console.log("check login failed");
+            alert("请先登录");
+            window.location.href="<%=request.getContextPath()%>/login.jsp";
+        </script>
+<%
+        return;
+    }
+%>
 
 <script type="text/javascript">
 var MobileClass = function(){

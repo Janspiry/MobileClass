@@ -7,11 +7,11 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<%
-    session.setAttribute("guid", "7");
-    session.setAttribute("username", "wkb");
-    session.setAttribute("email", "var_emailbox@qq.com");
-%>
+<%--<%--%>
+    <%--session.setAttribute("guid", "7");--%>
+    <%--session.setAttribute("username", "wkb");--%>
+    <%--session.setAttribute("email", "var_emailbox@qq.com");--%>
+<%--%>--%>
 
 <!DOCTYPE html>
 <html>
