@@ -153,20 +153,25 @@ function Record(){
                 var limit_time = jqob.children("input").val();
                 if(!isDate(limit_time)){
                     valid_flag=0;
-                }else{
-                    jqob.html(limit_time);
-                    dataTable.cell(jqob).data(limit_time);
                 }
-            }else if (!jqob.has('button').length) {
-                var txt = jqob.children("input").val();
-                jqob.html(txt);
-                dataTable.cell(jqob).data(txt);
             }
-
+            else if(i==2){
+                var title = jqob.children("input").val();
+                if(title.length<1){
+                    Dialog.showWarning("问卷名不能为空哦","提示");
+                    valid_flag=0;
+                }
+            }
         });
         if(!valid_flag){
             return;
         }
+        $.each(tds, function (i, val) {
+            var jqob = $(val);
+            var txt = jqob.children("input").val();
+            jqob.html(txt);
+            dataTable.cell(jqob).data(txt);
+        });
         var data = row.data();
         var guid = data[0];
         var title = data[2];
@@ -350,7 +355,7 @@ function answerProblem(id){
         if(json.length>0){
             window.location.href=ContextPath+"/questionnaire/answer/answer_problem.jsp?id="+id;
         }else{
-            Dialog.showError("错误","你已回答过此问卷");
+            Dialog.showWarning("你已回答过此问卷","提示");
             // alert("你已回答过此问卷");
         }
     })

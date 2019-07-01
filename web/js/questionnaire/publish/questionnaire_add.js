@@ -25,7 +25,8 @@ var TableEditable = function () {
         function saveRow(oTable, nRow) {
             var jqInputs = $('input', nRow);
             if(jqInputs[0].value==null||jqInputs[0].value==""){
-                alert("问题不能为空");
+                Dialog.showWarning("问题不能为空","提示");
+                // alert("问题不能为空");
 
             }else{
                 oTable.fnUpdate(jqInputs[0].value, nRow, 0, false);
@@ -97,7 +98,8 @@ var TableEditable = function () {
 
                 var jqInputs = $('input', nEditing);
                 if(jqInputs[0].value==null||jqInputs[0].value==""){
-                    alert("问题不能为空");
+                    Dialog.showWarning("问题不能为空","提示");
+                    // alert("问题不能为空");
                     flag=false;
                 }else{
                     saveRow(oTable, nEditing); // save
@@ -232,11 +234,13 @@ var Page=function() {
     };
     var checkInput=function(){
         if(question_list.length<1){
-            alert("需要设置至少一个问题");
+            Dialog.showWarning("需要设置至少一个问题","提示");
+            // alert("需要设置至少一个问题");
             return false;
         }
         if($("#title").val().length<1){
-            alert("输入标题");
+            Dialog.showWarning("输入标题","提示");
+            // alert("输入标题");
             return false;
         }
         return true;

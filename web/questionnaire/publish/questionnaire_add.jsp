@@ -23,10 +23,7 @@
     <link rel="icon" type="../../image/png" sizes="16x16" href="../../images/favicon.png">
     <title>移动互动课堂 | 问卷管理</title>
     <!-- Custom CSS -->
-    <link href="../../css/lib/amchart/export.css" rel="stylesheet">
-    <link href="../../css/lib/owl.carousel.min.css" rel="stylesheet" />
-    <link href="../../css/lib/owl.theme.default.min.css" rel="stylesheet" />
-    <link href="../../css/style.css" rel="stylesheet">
+    <%@include file="../../page_css.jsp"%>
     <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker.min.css" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/css/lib/bootstrap-datepicker/bootstrap-datepicker.standalone.css" rel="stylesheet">

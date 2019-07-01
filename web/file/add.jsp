@@ -13,7 +13,7 @@
                         <div class="row">
                             <div class="col-md-12 ">
                                 <div class="form-group">
-                                    <label>问卷名</label>
+                                    <label>文件名</label>
                                     <input type="text" id="title" name="title" class="form-control" required>
                                 </div>
                             </div>

@@ -20,15 +20,10 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="../../image/png" sizes="16x16" href="../../images/favicon.png">
+    <link rel="icon" type="<%=request.getContextPath()%>/image/png" sizes="16x16" href="<%=request.getContextPath()%>/images/favicon.png">
     <title>移动互动课堂 | 文件管理</title>
     <!-- Custom CSS -->
-    <link href="../../css/lib/amchart/export.css" rel="stylesheet">
-    <link href="../../css/lib/owl.carousel.min.css" rel="stylesheet" />
-    <link href="../../css/lib/owl.theme.default.min.css" rel="stylesheet" />
-    <link href="../../css/lib/dropzone/dropzone.css" rel="stylesheet">
-
-    <link href="../../css/style.css" rel="stylesheet">
+    <%@include file="../page_css.jsp"%>
 </head>
 
 <body class="header-fix fix-sidebar">

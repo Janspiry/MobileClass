@@ -28,7 +28,9 @@ $("#myDropzone").dropzone({
         //为上传按钮添加点击事件
         submitButton.on("click", function () {
             myDropzone.options.url = addr;
-            if (myDropzone.getAcceptedFiles().length != 0) {
+            if(title==""||title.length()<1){
+                Dialog.showWarning("文件名不能为空哦","提示");
+            }else if (myDropzone.getAcceptedFiles().length != 0) {
                 //手动指定
                 console.log("addr"+addr);
                 myDropzone.processQueue();
@@ -84,6 +86,7 @@ function Record(){
             });
         });
     });
+    $.fn.dataTable.ext.errMode = "none";
     var dataTable=$('#example23').DataTable({
         dom: 'Bfrtip',
         // buttons: [
@@ -234,12 +237,25 @@ function Record(){
         var valid_flag=1;
         $.each(tds, function (i, val) {
             var jqob = $(val);
-            if (!jqob.has('button').length) {
+            if(i==2){
+                var txt = jqob.children("input").val();
+                console.log("length"+txt.length);
+                if(txt.length<1){
+                    Dialog.showWarning("文件名不能为空哦","提示");
+                    valid_flag=0;
+                }else{
+                    jqob.html(txt);
+                    dataTable.cell(jqob).data(txt);
+                }
+            }else if (!jqob.has('button').length) {
                 var txt = jqob.children("input").val();
                 jqob.html(txt);
                 dataTable.cell(jqob).data(txt);
             }
         });
+        if(!valid_flag){
+            return;
+        }
         var data = row.data();
         var guid = data[0];
         var title = data[2];
