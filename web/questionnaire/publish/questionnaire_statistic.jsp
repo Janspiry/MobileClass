@@ -68,7 +68,7 @@
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-title">
-                            <h4>文件统计</h4>
+                            <h4>问卷统计</h4>
                         </div>
                         <div class="card-body">
                             <div id="chartdiv"></div>

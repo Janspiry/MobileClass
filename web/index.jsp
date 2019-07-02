@@ -45,6 +45,17 @@
             <div class="container-fluid">
                 <!-- Start Page Content -->
                 <div class="row">
+                    <div class="col-12">
+                        <div class="crypto-ticker m-b-15">
+                            <ul id="webticker-dark-icons">
+                                <li data-update="item1"><i class="cc NOTE"></i> 这里是主要模块(存在二级模块)的界面入口</li>
+                                <li data-update="item2">同时可以通过侧边导航栏进入相关模块</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-6 col-lg-3">
                         <div class="card">
                             <a href="<%=request.getContextPath()%>/userinfo/index.jsp"></a>
@@ -78,7 +89,7 @@
                             <a href="<%=request.getContextPath()%>/file/file_list.jsp"></a>
                             <div class="stat-widget-five">
                                 <div class="stat-icon">
-                                    <i class="ti-info bg-danger"></i>
+                                    <i class="ti-zip bg-danger"></i>
                                 </div>
                                 <div class="stat-content">
                                     <div class="stat-heading color-danger">文件管理</div>
@@ -101,6 +112,62 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card">
+                            <a href="<%=request.getContextPath()%>/classgroup/index.jsp"></a>
+                            <div class="stat-widget-five">
+                                <div class="stat-icon bg-dark">
+                                    <i class="ti-arrow-circle-down"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-heading text-dark">分组管理</div>
+                                    <div class="stat-text">用户分组概览</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card">
+                            <a href="<%=request.getContextPath()%>/work/work_list.jsp"></a>
+                            <div class="stat-widget-five">
+                                <div class="stat-icon bg-info">
+                                    <i class="ti-angle-double-left"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-heading text-info">学生作业管理</div>
+                                    <div class="stat-text">作业管理学生端</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card">
+                            <a href="<%=request.getContextPath()%>/publishing/publishing_list.jsp"></a>
+                            <div class="stat-widget-five">
+                                <div class="stat-icon bg-secondary">
+                                    <i class="ti-angle-double-right"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-heading text-secondary">老师作业管理</div>
+                                    <div class="stat-text">作业管理老师端</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card">
+                            <a href="<%=request.getContextPath()%>/weather/index.jsp"></a>
+                            <div class="stat-widget-five">
+                                <div class="stat-icon bg-primary">
+                                    <i class="ti-arrow-circle-up"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-heading color-primary">天气管理</div>
+                                    <div class="stat-text">天气预览</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <!-- End PAge Content -->
             </div>
@@ -113,6 +180,9 @@
     <%@include file="page_js.jsp"%>
     <%@include file="js/mobileclass.jsp"%>
     <%@include file="js/index_js.jsp"%>
+    <script src="js/lib/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="js/lib/webticker/jquery.webticker.min.js"></script>
+
 </body>
 
 </html>

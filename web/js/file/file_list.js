@@ -28,7 +28,9 @@ $("#myDropzone").dropzone({
         //为上传按钮添加点击事件
         submitButton.on("click", function () {
             myDropzone.options.url = addr;
-            if(title==""||title.length()<1){
+            tmp=document.getElementById("myDropzone");
+            title=tmp.title.value
+            if(title.length<1){
                 Dialog.showWarning("文件名不能为空哦","提示");
             }else if (myDropzone.getAcceptedFiles().length != 0) {
                 //手动指定
@@ -155,13 +157,13 @@ function Record(){
                         // console.log("这是文件url:"+data);
                         // console.log("这是文件full:"+full);
                         sReturn=""
-                            if(full[9]==1) {
-                                sReturn = sReturn +
-                                    "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改</button>" +
-                                    "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除</button>"
-                            }
-                            // sReturn=sReturn+"<button type=\"button\" onclick=\"downloadRecord('"+data+"')\" class=\"download-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
-                            sReturn=sReturn+"<button type=\"button\" class=\"download-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
+                        if(full[9]==1) {
+                            sReturn = sReturn +
+                                "<button type=\"button\" class=\"edit-button btn btn-success btn-sm btn-rounded m-b-10 m-l-5\">修改</button>" +
+                                "<button type=\"button\" class=\"delete-button btn btn-info btn-sm btn-rounded m-b-10 m-l-5\">删除</button>"
+                        }
+                        // sReturn=sReturn+"<button type=\"button\" onclick=\"downloadRecord('"+data+"')\" class=\"download-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
+                        sReturn=sReturn+"<button type=\"button\" class=\"download-button btn btn-primary btn-sm btn-rounded m-b-10 m-l-5\">下载</button>";
                         return sReturn;
                     },
             },
@@ -294,6 +296,9 @@ function deleteRecord(id) {
 }
 function getAllRecord(){
     var dataTable = $('#example23').DataTable();
+
+    $("#title").val("");
+    $("#user_name").val("");
     dataTable.clear().draw(); //清除表格数据
     var url=ContextPath+module+"?action=get_record";
     $.post(url, function (json) {

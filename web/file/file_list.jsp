@@ -20,7 +20,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <!-- Favicon icon -->
-    <link rel="icon" type="../../image/png" sizes="16x16" href="<%=request.getContextPath()%>/images/favicon.png">
+    <link rel="icon" type="<%=request.getContextPath()%>/image/png" sizes="16x16" href="<%=request.getContextPath()%>/images/favicon.png">
     <title>移动互动课堂 | 文件管理</title>
     <link href="<%=request.getContextPath()%>/css/lib/dropzone/dropzone.css" rel="stylesheet">
     <!-- Custom CSS -->
