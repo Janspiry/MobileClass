@@ -25,6 +25,17 @@
         }
 
         var bindValidation = function(){
+
+            $.validator.addMethod("id",function(value,element,params){
+                var checkId = /^[_a-zA-Z0-9]+$/;
+                return this.optional(element)||(checkId.test(value));
+            },"ID格式不正确");
+
+            $.validator.addMethod("id_zh",function(value,element,params){
+                var checkIdzh = /^[\u4e00-\u9fa5_a-zA-Z0-9]+$/;
+                return this.optional(element)||(checkIdzh.test(value));
+            },"中文ID格式不正确");
+
             $(".register-form").validate({
                 errorElement: 'span', //default input error message container
                 errorClass: 'color-danger', // default input error message class
@@ -32,6 +43,7 @@
                 ignore: "",
                 rules: {
                     username: {
+                        id: true,
                         required: true
                     },
                     password: {
@@ -51,6 +63,7 @@
                         rangelength: [3, 15]
                     },
                     fullname: {
+                        id_zh: true,
                         required: true
                     },
                     gender: {
@@ -58,9 +71,11 @@
                         min: 1
                     },
                     schoolnum: {
+                        id: true,
                         required: true
                     },
                     nativeplace: {
+                        id_zh: true,
                         required: true
                     },
                     tnc: {
@@ -70,6 +85,7 @@
 
                 messages: { // custom messages for radio buttons and checkboxes
                     username: {
+                        id: "用户名只能包含英文、数字、下划线",
                         required: "请输入用户名"
                     },
                     password: {
@@ -96,9 +112,11 @@
                         min: "请选择性别"
                     },
                     schoolnum: {
+                        id: "学号只能包含英文、数字、下划线",
                         required: "请输入学号"
                     },
                     nativeplace: {
+                        id_zh: "籍贯只能包含英文、数字、下划线、中文",
                         required: "请输入籍贯"
                     },
                     tnc: {

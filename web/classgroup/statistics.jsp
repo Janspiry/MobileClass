@@ -21,7 +21,7 @@
     <meta name="author" content="">
     <!-- Favicon icon -->
     <link rel="icon" type="../../image/png" sizes="16x16" href="<%=request.getContextPath()%>/images/favicon.png">
-    <title>移动互动课堂 | 权限管理 | 统计</title>
+    <title>移动互动课堂 | 分组管理 | 成员性别统计</title>
     <!-- Custom CSS -->
     <link href="<%=request.getContextPath()%>/css/lib/amchart/export.css" rel="stylesheet">
     <link href="<%=request.getContextPath()%>/css/lib/owl.carousel.min.css" rel="stylesheet" />
@@ -43,19 +43,20 @@
             <div class="col-md-7 align-self-center">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/index.jsp">移动互动课堂</a></li>
-                    <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/auth/index.jsp">权限管理</a></li>
+                    <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/classgroup/index.jsp">分组管理</a></li>
+                    <li class="breadcrumb-item"><a href="<%=request.getContextPath()%>/classgroup/member.jsp">分组成员</a></li>
                     <li class="breadcrumb-item active">统计</li>
                 </ol>
             </div>
         </div>
 
         <div class="container-fluid">
-            <button type="button" onclick="returnBack()" class="btn btn-success m-b-10 m-l-5">返回</button>
+            <button type="button" onclick="window.history.back(-1);" class="btn btn-success m-b-10 m-l-5">返回</button>
             <div class="row">
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-title">
-                            <h4>用户权限分布</h4>
+                            <h4>成员性别统计</h4>
                         </div>
                         <div class="card-body">
                             <div id="chartdiv"></div>
@@ -83,7 +84,7 @@
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="<%=request.getContextPath()%>/js/lib/datatables/cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 <%@include file="../js/mobileclass.jsp"%>
-<%@include file="../js/auth/statistics_js.jsp"%>
+<%@include file="../js/classgroup/statistics_js.jsp"%>
 
 </body>
 

@@ -170,13 +170,12 @@ public class AccountAction extends HttpServlet
         HttpSession session = request.getSession();
         DatabaseHelper db=new DatabaseHelper();
 
-//        if(session.getAttribute("guid")==null)
-//        {
-//            System.out.println("Authorization.getMenu: error: not login");
-//            return;
-//        }
-//        int auth=(int)session.getAttribute("authorization");
-        int auth=15;
+        if(session.getAttribute("guid")==null)
+        {
+            System.out.println("Authorization.getMenu: error: not login");
+            return;
+        }
+        int auth=(int)session.getAttribute("authorization");
         System.out.printf("auth = %d\n", auth);
 
         String sql=String.format("select * from `menu_tree` where authorization&%d>0", auth);

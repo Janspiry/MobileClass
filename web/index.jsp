@@ -100,7 +100,7 @@
                     </div>
                     <div class="col-md-6 col-lg-3">
                         <div class="card">
-                            <a href="<%=request.getContextPath()%>/userinfo/index.jsp"></a>
+                            <a href="<%=request.getContextPath()%>/auth/index.jsp"></a>
                             <div class="stat-widget-five">
                                 <div class="stat-icon bg-warning">
                                     <i class="ti-world"></i>
